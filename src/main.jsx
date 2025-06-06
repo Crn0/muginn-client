@@ -1,18 +1,14 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { env } from './configs';
-import App from './app';
-import './app/index.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./app";
+import "./app/index.css";
 
-const root = document.getElementById('root');
+const root = document.getElementById("root");
 
-if (!root) throw new Error('No root element found');
-
-env.initEnv();
+if (!root) throw new Error("No root element found");
 
 createRoot(root).render(
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
 );
-

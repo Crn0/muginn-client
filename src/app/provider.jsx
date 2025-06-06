@@ -1,23 +1,28 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ErrorBoundary } from 'react-error-boundary';
-import queryConfig from '../lib/react-query'
+import PropTypes from "prop-types";
+import { Suspense, useState } from "react";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ErrorBoundary } from "react-error-boundary";
+
+import { queryConfig } from "../lib";
 
 export default function AppProvider({ children }) {
-  const [queryClient] = React.useState(
+  const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: queryConfig,
-      }),
+      })
   );
 
   return (
-    <React.Suspense>
-      <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <Suspense fallback={<p>loading....</p>}>
+      <ErrorBoundary fallback={<p>error</p>}>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools />
+          {children}
+        </QueryClientProvider>
       </ErrorBoundary>
-    </React.Suspense>
+    </Suspense>
   );
 }
 
