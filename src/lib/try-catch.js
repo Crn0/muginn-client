@@ -1,5 +1,5 @@
 export default async function tryCatch(promise) {
-  const thing = typeof promise === 'function' ? promise() : promise;
+  const thing = typeof promise === "function" ? promise() : promise;
 
   try {
     const data = await thing;

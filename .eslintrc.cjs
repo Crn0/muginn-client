@@ -17,11 +17,8 @@ module.exports = {
     "react/jsx-no-target-blank": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "on",
-    "react-refresh/only-export-components": [
-      "warn",
-      { allowConstantExport: true },
-    ],
-    quotes: ["error", "single"],
+    "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+    quotes: ["error", "double"],
     "no-unused-vars": [
       "error",
       {
