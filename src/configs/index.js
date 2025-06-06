@@ -1,4 +1,2 @@
-import * as env from './env';
-import paths from './paths';
-
-export { env, paths };
+export * as env from "./env";
+export * as paths from "./paths";
