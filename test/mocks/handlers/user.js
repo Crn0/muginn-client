@@ -59,7 +59,6 @@ export default [
       });
 
       delete user.password;
-      delete user.email;
 
       user.profile = {
         avatar: null,
@@ -67,7 +66,13 @@ export default [
         aboutMe: profile.aboutMe,
       };
 
-      return HttpResponse.json(user, { status: 200 });
+      return HttpResponse.json(
+        {
+          ...user,
+          email: user.email.length <= 1 ? null : user.email,
+        },
+        { status: 200 }
+      );
     } catch (e) {
       return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
     }
