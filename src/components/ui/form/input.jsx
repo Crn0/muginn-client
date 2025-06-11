@@ -5,6 +5,17 @@ import { useFormContext } from "react-hook-form";
 import FieldWrapper from "./field-wrapper";
 import errorHandler from "./error-handler";
 
+const invalidCredential = (error) =>
+  error?.message === "Invalid user credentials" ? { message: error.message } : null;
+
+function errorHandler(field, { formError, serverError }) {
+  return (
+    formError?.[field] ||
+    serverError?.fields?.find?.((e) => e.path.includes(field)) ||
+    invalidCredential(serverError)
+  );
+}
+
 const Input = forwardRef(
   ({ label, serverError, className, type, name, required, onBlur = () => () => {} }, ref) => {
     const {
