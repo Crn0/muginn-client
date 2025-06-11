@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
 
 import { env, paths } from "../../../configs";
-import { errorHandler } from "../utils/index";
 import { useLogin } from "../../../lib/auth";
 import { loginSchema } from "../schema";
 import { Form, Input } from "../../../components/ui/form/index";
@@ -26,7 +25,7 @@ export default function LoginForm({ onSuccess }) {
   const onFocus = () => {
     login.reset();
   };
-  const onBlur = (field, trigger) => () => {
+  const onBlur = (trigger) => (field) => () => {
     trigger(field);
   };
 
@@ -34,66 +33,54 @@ export default function LoginForm({ onSuccess }) {
     <>
       <div>
         <Form onSubmit={onSubmit} id='Login-Form' schema={loginSchema}>
-          {({ register, trigger, formState: { errors } }) => (
-            <>
-              <div>
-                <Input
-                  type='text'
-                  name='username'
-                  label='USERNAME'
-                  onFocus={onFocus}
-                  onBlur={onBlur("username", trigger)}
-                  error={errorHandler("username", {
-                    formError: errors,
-                    fieldErrors: login?.error?.fields,
-                  })}
-                  registration={{ ...register("username") }}
-                  required
-                />
+          <>
+            <div>
+              <Input
+                type='text'
+                name='username'
+                label='USERNAME'
+                onFocus={onFocus}
+                onBlur={onBlur}
+                serverError={login?.error}
+                required
+              />
 
-                <Input
-                  type='password'
-                  name='password'
-                  label='PASSWORD'
-                  onFocus={onFocus}
-                  onBlur={onBlur("password", trigger)}
-                  error={errorHandler("password", {
-                    formError: errors,
-                    fieldErrors: login?.error?.fields,
-                    credentialError: login.error,
-                  })}
-                  registration={{ ...register("password") }}
-                  required
-                />
-              </div>
+              <Input
+                type='password'
+                name='password'
+                label='PASSWORD'
+                onFocus={onFocus}
+                onBlur={onBlur}
+                required
+              />
+            </div>
 
-              <div className='grid'>
+            <div className='grid'>
+              <Button
+                type='submit'
+                size='m'
+                variant='default'
+                isLoading={login.isPending}
+                disabled={login.isPending}
+                testId='login_btn'
+              >
+                Log in
+              </Button>
+
+              <a href={GOOGLE_URL}>
                 <Button
-                  type='submit'
+                  type='button'
                   size='m'
                   variant='default'
                   isLoading={login.isPending}
                   disabled={login.isPending}
-                  testId='login_btn'
+                  testId='google_btn'
                 >
-                  Log in
+                  Log in with Google
                 </Button>
-
-                <a href={GOOGLE_URL}>
-                  <Button
-                    type='button'
-                    size='m'
-                    variant='default'
-                    isLoading={login.isPending}
-                    disabled={login.isPending}
-                    testId='google_btn'
-                  >
-                    Log in with Google
-                  </Button>
-                </a>
-              </div>
-            </>
-          )}
+              </a>
+            </div>
+          </>
         </Form>
       </div>
       <div>
