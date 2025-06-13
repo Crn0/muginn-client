@@ -14,7 +14,7 @@ export default function FileWrapper({ label, className, error, onKeyDown, childr
         >
           {label}
         </span>
-        <div className='mt-1'>{children}</div>{" "}
+        <div className='h-0 w-0'>{children}</div>
       </label>
       <Error errorMessage={error?.message} />
     </div>
