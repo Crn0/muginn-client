@@ -4,21 +4,20 @@ import client from "./api-client";
 import { queryConfig } from "./react-query";
 import generateHeader from "./generate-header";
 import formatApiError from "./format-api-error";
+import tryCatch from "./try-catch";
 
 export const getUser = async () => {
   const headers = generateHeader(["Content-Type", "application/json"]);
 
-  const res = await client.callApi("users/me", {
-    headers,
-    authenticatedRequest: true,
-    method: "GET",
-  });
+  const { error, data: res } = await tryCatch(
+    client.callApi("users/me", {
+      headers,
+      authenticatedRequest: true,
+      method: "GET",
+    })
+  );
 
-  if (!res.ok) {
-    const errorData = await res.json();
-
-    const error = formatApiError(res, errorData);
-
+  if (error) {
     throw error;
   }
 
