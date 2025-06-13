@@ -2,10 +2,6 @@ import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
 
 import { env, paths } from "../../../configs";
-<<<<<<< HEAD
-=======
-import { errorHandler } from "../utils/index";
->>>>>>> 3946459 (feat(auth): add register and login forms with schema validation)
 import { useLogin } from "../../../lib/auth";
 import { loginSchema } from "../schema";
 import { Form, Input } from "../../../components/ui/form/index";
@@ -29,14 +25,17 @@ export default function LoginForm({ onSuccess }) {
   const onFocus = () => {
     login.reset();
   };
-  const onBlur = (trigger) => (field) => () => {
-    trigger(field);
-  };
 
   return (
     <>
       <div>
-        <Form onSubmit={onSubmit} id='Login-Form' schema={loginSchema}>
+        <Form
+          onSubmit={onSubmit}
+          id='Login-Form'
+          schema={loginSchema}
+          mode='onBlur'
+          defaultValues={{ username: "", password: "" }}
+        >
           <>
             <div>
               <Input
@@ -44,19 +43,11 @@ export default function LoginForm({ onSuccess }) {
                 name='username'
                 label='USERNAME'
                 onFocus={onFocus}
-                onBlur={onBlur}
                 serverError={login?.error}
                 required
               />
 
-              <Input
-                type='password'
-                name='password'
-                label='PASSWORD'
-                onFocus={onFocus}
-                onBlur={onBlur}
-                required
-              />
+              <Input type='password' name='password' label='PASSWORD' onFocus={onFocus} required />
             </div>
 
             <div className='grid'>
@@ -78,7 +69,6 @@ export default function LoginForm({ onSuccess }) {
                   variant='default'
                   isLoading={login.isPending}
                   disabled={login.isPending}
-<<<<<<< HEAD
                   testId='google_btn'
                 >
                   Log in with Google
@@ -86,28 +76,6 @@ export default function LoginForm({ onSuccess }) {
               </a>
             </div>
           </>
-=======
-                  testId='login_btn'
-                >
-                  Log in
-                </Button>
-
-                <a href={GOOGLE_URL}>
-                  <Button
-                    type='button'
-                    size='m'
-                    variant='default'
-                    isLoading={login.isPending}
-                    disabled={login.isPending}
-                    testId='google_btn'
-                  >
-                    Log in with Google
-                  </Button>
-                </a>
-              </div>
-            </>
-          )}
->>>>>>> 3946459 (feat(auth): add register and login forms with schema validation)
         </Form>
       </div>
       <div>

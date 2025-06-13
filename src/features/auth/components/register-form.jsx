@@ -18,9 +18,6 @@ export default function RegisterForm({ onSuccess }) {
 
   const redirectTo = searchParams.get("redirectTo");
 
-  const onBlur = (trigger) => (field) => () => {
-    trigger(field);
-  };
   const onSubmit = (data) => {
     registering.mutate(data);
   };
@@ -28,14 +25,13 @@ export default function RegisterForm({ onSuccess }) {
   return (
     <>
       <div>
-        <Form onSubmit={onSubmit} id='Register-Form' schema={registerSchema}>
+        <Form onSubmit={onSubmit} id='Register-Form' schema={registerSchema} mode='onBlur'>
           <>
             <div>
               <Input
                 type='text'
                 name='displayName'
                 label='DISPLAY NAME'
-                onBlur={onBlur}
                 serverError={registering?.error}
               />
 
@@ -43,7 +39,6 @@ export default function RegisterForm({ onSuccess }) {
                 type='text'
                 name='username'
                 label='USERNAME'
-                onBlur={onBlur}
                 serverError={registering?.error}
                 required
               />
@@ -52,7 +47,6 @@ export default function RegisterForm({ onSuccess }) {
                 type='password'
                 name='password'
                 label='PASSWORD'
-                onBlur={onBlur}
                 serverError={registering?.error}
                 required
               />
@@ -61,7 +55,6 @@ export default function RegisterForm({ onSuccess }) {
                 type='password'
                 name='confirmPassword'
                 label='CONFIRM PASSWORD'
-                onBlur={onBlur}
                 serverError={registering?.error}
                 required
               />
