@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
 
-const Label = forwardRef(({ label, isRequired, className, children }, ref) => (
-  <label className={`${className}`} ref={ref}>
+const Label = forwardRef(({ label, isRequired, className, children, ...props }, ref) => (
+  <label className={`${className}`} ref={ref} {...props}>
     <span className={`${isRequired ? "after:text-red-600 after:content-['*']" : ""}`}>{label}</span>
     {children}
   </label>

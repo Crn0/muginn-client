@@ -5,22 +5,10 @@ import { useFormContext } from "react-hook-form";
 import FieldWrapper from "./field-wrapper";
 import errorHandler from "./error-handler";
 
-const invalidCredential = (error) =>
-  error?.message === "Invalid user credentials" ? { message: error.message } : null;
-
-function errorHandler(field, { formError, serverError }) {
-  return (
-    formError?.[field] ||
-    serverError?.fields?.find?.((e) => e.path.includes(field)) ||
-    invalidCredential(serverError)
-  );
-}
-
 const Input = forwardRef(
-  ({ label, serverError, className, type, name, required, onBlur = () => () => {} }, ref) => {
+  ({ label, serverError, className, type, name, required, ...props }, ref) => {
     const {
       register,
-      trigger,
       formState: { errors },
     } = useFormContext();
 
@@ -36,9 +24,9 @@ const Input = forwardRef(
           type={type}
           className={className}
           aria-invalid={error?.message ? "true" : "false"}
-          onBlur={onBlur(trigger)(name)}
           ref={ref}
           {...register(name)}
+          {...props}
         />
       </FieldWrapper>
     );
@@ -54,7 +42,6 @@ Input.propTypes = {
   name: PropTypes.string.isRequired,
   required: PropTypes.bool,
   serverError: PropTypes.instanceOf(Error),
-  onBlur: PropTypes.func,
 };
 
 export default Input;
