@@ -68,9 +68,9 @@ class ApiClient {
     let token = this.#provider.getToken();
 
     if (refreshPromise !== null) {
-      const { e } = await tryCatch(refreshPromise);
+      const { error } = await tryCatch(refreshPromise);
 
-      if (e.code === 401) throw e;
+      if (error?.code === 401 || error?.message === "Failed to fetch") throw error;
 
       token = this.#provider.getToken();
       refreshPromise = null;
@@ -80,9 +80,9 @@ class ApiClient {
     if (!token) {
       refreshPromise = this.#provider.refreshToken();
 
-      const { e, data: newToken } = await tryCatch(refreshPromise);
+      const { error, data: newToken } = await tryCatch(refreshPromise);
 
-      if (e.code === 401) throw e;
+      if (error?.code === 401 || error?.message === "Failed to fetch") throw error;
 
       this.#provider.setToken(newToken);
 
@@ -98,12 +98,12 @@ class ApiClient {
       return firstRes;
     }
 
-    if (invalidAccessTokenError.code === 401) {
+    if (invalidAccessTokenError?.code === 401) {
       refreshPromise = this.#provider.refreshToken();
 
-      const { e, data: newToken } = await tryCatch(refreshPromise);
+      const { error, data: newToken } = await tryCatch(refreshPromise);
 
-      if (e.code === 401) throw e;
+      if (error?.code === 401 || error?.message === "Failed to fetch") throw error;
 
       this.#provider.setToken(newToken);
 
