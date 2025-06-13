@@ -3,7 +3,7 @@ import { ZodSchema } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider } from "react-hook-form";
 
-export default function Form({ schema, onSubmit, className, id, options, children }) {
+export default function Form({ schema, onSubmit, className, id, children, ...options }) {
   const methods = useForm({ ...options, resolver: zodResolver(schema) });
 
   return (
