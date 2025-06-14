@@ -18,7 +18,7 @@ export const useAuthStore = create(
 );
 
 export const getToken = () => useAuthStore.getState().token;
-export const getIsRefreshingToken = () => useAuthStore.getState().token;
+export const getIsRefreshingToken = () => useAuthStore.getState().isRefreshingToken;
 
 export const setToken = (token) => useAuthStore.setState({ token });
 export const setIsRefreshingToken = (isRefreshingToken) =>
