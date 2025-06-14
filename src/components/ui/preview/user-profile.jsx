@@ -38,6 +38,10 @@ export default function UserProfilePreview({ user, renderProfileButton, children
               <span>{user.username}</span>
             </div>
           </div>
+
+          <div>
+            <p>{user.profile.aboutMe}</p>
+          </div>
         </main>
 
         <footer>
