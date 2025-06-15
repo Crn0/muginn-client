@@ -16,9 +16,9 @@ export default {
       path: "/users/me",
       getHref: () => "/users/me",
     },
-    profile: {
+    userSettings: {
       path: "profile",
-      getHref: () => "/users/me/profile",
+      getHref: () => "/users/me/user-settings",
     },
   },
   dashboard: {
