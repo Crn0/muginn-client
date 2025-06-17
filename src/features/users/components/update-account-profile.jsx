@@ -90,6 +90,7 @@ export default function UpdateAccountProfile({ user }) {
                     type='button'
                     testId='edit-username'
                     onClick={isFullMember ? options.onClick : () => {}}
+                    ref={options.triggerRef}
                   >
                     Edit
                   </Button>
@@ -157,6 +158,7 @@ export default function UpdateAccountProfile({ user }) {
                 type='button'
                 testId='edit-password'
                 onClick={isFullMember ? options.onClick : () => {}}
+                ref={options.triggerRef}
               >
                 Edit
               </Button>
