@@ -5,7 +5,10 @@ import FileWrapper from "./file-wrapper";
 import errorHandler from "./error-handler";
 
 const File = forwardRef(
-  ({ label, renderFieldButton, serverError, className, name, accept, onKeyDown }, ref) => {
+  (
+    { label, renderFieldButton, serverError, className, name, accept, onKeyDown, required },
+    ref
+  ) => {
     const {
       register,
       formState: { errors },
@@ -22,15 +25,22 @@ const File = forwardRef(
     return (
       <div>
         {fieldButton}
-        <FileWrapper label={label} className={className} error={error} onKeyDown={onKeyDown}>
+        <FileWrapper
+          label={label}
+          className={className}
+          error={error}
+          onKeyDown={onKeyDown}
+          isRequired={required}
+        >
           <input
             {...rest}
             type='file'
             name={name}
             className='h-0 w-0 cursor-none opacity-0'
-            aria-invalid={error?.[name] ? "true" : "false"}
+            aria-invalid={error ? "true" : "false"}
             accept={accept}
             ref={ref(inputRef)}
+            onBlur={required ? rest.onBlur : () => {}}
           />
         </FileWrapper>
       </div>
