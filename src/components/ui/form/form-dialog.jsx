@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { ZodSchema } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRef } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 
 import { cn } from "../../../utils";
@@ -20,8 +21,9 @@ export default function FormDialog({
   initial = false,
   ...options
 }) {
+  const ref = useRef();
   const methods = useForm({ ...options, resolver: zodResolver(schema) });
-  const { isOpen, open, close } = useOutSideDisclosure(initial);
+  const { isOpen, open, close } = useOutSideDisclosure(initial, ref);
 
   const buttonTrigger = renderButtonTrigger({
     onClick: () => open(),
@@ -57,6 +59,7 @@ export default function FormDialog({
               className={cn(className)}
               id={id}
               aria-label='form'
+              ref={ref}
             >
               <div>{children}</div>
               <div>
