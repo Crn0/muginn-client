@@ -82,6 +82,7 @@ export default function UpdateAccountProfile({ user }) {
               id='update-username'
               title='Change your username'
               descriptions={["Enter a new username"]}
+              mode='onBlur'
               schema={usernameSchema}
               onSubmit={onSubmit}
               renderButtonTrigger={(options) => (
@@ -150,6 +151,7 @@ export default function UpdateAccountProfile({ user }) {
           id='update-password'
           title='Update your password'
           descriptions={["Enter your current password and a new password."]}
+          mode='onBlur'
           schema={passwordSchema}
           onSubmit={onSubmit}
           renderButtonTrigger={(options) => (
