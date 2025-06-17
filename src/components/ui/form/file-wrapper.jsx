@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
 
 import Error from "./error";
+import { cn } from "../../../utils";
 
-export default function FileWrapper({ label, className, error, onKeyDown, children }) {
+export default function FileWrapper({ label, className, error, onKeyDown, isRequired, children }) {
   return (
     <div>
-      <label className={`${className}`}>
+      <label className={cn(isRequired ? "after:text-red-600 after:content-['*']" : "", className)}>
         <span
           role='button'
           className='rounded-sm bg-blue-500 p-2 text-white'
@@ -27,4 +28,5 @@ FileWrapper.propTypes = {
   error: PropTypes.shape({ message: PropTypes.string }),
   onKeyDown: PropTypes.func.isRequired,
   children: PropTypes.element,
+  isRequired: PropTypes.bool,
 };
