@@ -79,8 +79,9 @@ export default function UpdateAccountProfile({ user }) {
             </div>
 
             <FormDialog
+              id='update-username'
               title='Change your username'
-              descriptions={["Enter a new username and your existing password."]}
+              descriptions={["Enter a new username"]}
               schema={usernameSchema}
               onSubmit={onSubmit}
               renderButtonTrigger={(options) => (
@@ -114,15 +115,17 @@ export default function UpdateAccountProfile({ user }) {
                 </div>
               )}
             >
-              <input type='hidden' name='intent' value='username' />
+              <>
+                <input type='hidden' name='intent' value='username' />
 
-              <Input
-                type='text'
-                name='username'
-                label='Username'
-                serverError={updatedSecurity?.error}
-                required
-              />
+                <Input
+                  type='text'
+                  name='username'
+                  label='Username'
+                  serverError={updatedSecurity?.error}
+                  required
+                />
+              </>
             </FormDialog>
           </div>
 
@@ -143,6 +146,7 @@ export default function UpdateAccountProfile({ user }) {
         <h2>Password and Authentication</h2>
 
         <FormDialog
+          id='update-password'
           title='Update your password'
           descriptions={["Enter your current password and a new password."]}
           schema={passwordSchema}
@@ -178,31 +182,33 @@ export default function UpdateAccountProfile({ user }) {
             </div>
           )}
         >
-          <input type='hidden' name='intent' value='password' />
+          <>
+            <input type='hidden' name='intent' value='password' />
 
-          <Input
-            type='password'
-            name='oldPassword'
-            label='Old Password'
-            serverError={updatedSecurity?.error}
-            required
-          />
+            <Input
+              type='password'
+              name='oldPassword'
+              label='Old Password'
+              serverError={updatedSecurity?.error}
+              required
+            />
 
-          <Input
-            type='password'
-            name='currentPassword'
-            label='Current Password'
-            serverError={updatedSecurity?.error}
-            required
-          />
+            <Input
+              type='password'
+              name='currentPassword'
+              label='Current Password'
+              serverError={updatedSecurity?.error}
+              required
+            />
 
-          <Input
-            type='password'
-            name='confirmPassword'
-            label='Confirm Password'
-            serverError={updatedSecurity?.error}
-            required
-          />
+            <Input
+              type='password'
+              name='confirmPassword'
+              label='Confirm Password'
+              serverError={updatedSecurity?.error}
+              required
+            />
+          </>
         </FormDialog>
       </div>
     </>
