@@ -19,7 +19,6 @@ export default function useOutsideDisclosure(initial, ref, triggerRef) {
     };
 
     document.addEventListener("mousedown", listener, { signal });
-    document.addEventListener("click", listener, { signal });
     document.addEventListener("touchstart", listener, { signal });
 
     return () => {
