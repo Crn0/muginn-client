@@ -22,10 +22,12 @@ export default function FormDialog({
   ...options
 }) {
   const ref = useRef();
+  const triggerRef = useRef();
   const methods = useForm({ ...options, resolver: zodResolver(schema) });
-  const { isOpen, open, close } = useOutSideDisclosure(initial, ref);
+  const { isOpen, open, close } = useOutSideDisclosure(initial, ref, triggerRef);
 
   const buttonTrigger = renderButtonTrigger({
+    triggerRef,
     onClick: () => open(),
   });
 

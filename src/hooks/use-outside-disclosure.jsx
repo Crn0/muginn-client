@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-export default function useOutsideDisclosure(initial, ref) {
+export default function useOutsideDisclosure(initial, ref, triggerRef) {
   const [isOpen, setIsOpen] = useState(initial);
 
   const open = useCallback(() => setIsOpen(true), []);
@@ -12,6 +12,7 @@ export default function useOutsideDisclosure(initial, ref) {
     const { signal } = ctr;
 
     const listener = (e) => {
+      if (triggerRef?.current === e.target) return;
       if (!ref.current || ref.current.contains(e.target)) return;
 
       close();
@@ -24,7 +25,7 @@ export default function useOutsideDisclosure(initial, ref) {
     return () => {
       ctr.abort();
     };
-  }, [close, ref]);
+  }, [close, ref, triggerRef]);
 
   return { isOpen, open, close, toggle };
 }
