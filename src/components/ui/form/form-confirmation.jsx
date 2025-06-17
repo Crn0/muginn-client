@@ -27,7 +27,13 @@ export default function FormConfirmation({ message, renderSubmitButton }) {
 
       <div>
         <div>
-          <Button type='button' onClick={reset}>
+          <Button
+            type='button'
+            onClick={() => {
+              reset();
+              setHasMadeChange(false);
+            }}
+          >
             Reset
           </Button>
         </div>
