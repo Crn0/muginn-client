@@ -32,6 +32,7 @@ export default function UpdateUserMainProfile({ user }) {
     >
       <>
         <div>
+          <input type='hidden' name='intent' value='update:mainProfile' />
           <div>
             <Input
               type='text'

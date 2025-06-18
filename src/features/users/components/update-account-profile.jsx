@@ -118,7 +118,7 @@ export default function UpdateAccountProfile({ user }) {
               )}
             >
               <>
-                <input type='hidden' name='intent' value='username' />
+                <input type='hidden' name='intent' value='update:username' />
 
                 <Input
                   type='text'
@@ -187,7 +187,7 @@ export default function UpdateAccountProfile({ user }) {
           )}
         >
           <>
-            <input type='hidden' name='intent' value='password' />
+            <input type='hidden' name='intent' value='update:password' />
 
             <Input
               type='password'
