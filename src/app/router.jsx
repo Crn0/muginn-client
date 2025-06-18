@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { QueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { paths } from "../configs";
 
 const convert = (queryClient) => async (m) => {
@@ -25,7 +26,7 @@ const createRouter = (queryClient) =>
   ]);
 
 export default function AppRouter() {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const router = createRouter(queryClient);
 
