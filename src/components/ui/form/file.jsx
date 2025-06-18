@@ -6,7 +6,7 @@ import errorHandler from "./error-handler";
 
 const File = forwardRef(
   (
-    { label, renderFieldButton, serverError, className, name, accept, onKeyDown, required },
+    { label, renderFieldButton, serverError, className, name, accept, testId, onKeyDown, required },
     ref
   ) => {
     const {
@@ -37,6 +37,7 @@ const File = forwardRef(
             type='file'
             name={name}
             className='h-0 w-0 cursor-none opacity-0'
+            data-testid={testId}
             aria-invalid={error ? "true" : "false"}
             accept={accept}
             ref={ref(inputRef)}
@@ -61,6 +62,7 @@ File.propTypes = {
   serverError: PropTypes.instanceOf(Error),
   onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,
+  testId: PropTypes.string,
 };
 
 export default File;
