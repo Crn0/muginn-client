@@ -16,10 +16,12 @@ export default function UpdateUserMainProfile({ user }) {
   const avatarRef = useRef();
   const backgroundAvatarRef = useRef();
 
-  const isIdle = navigate.state === "idle";
   const isSubmitting = navigate.state === "submitting";
 
-  const onSubmit = (data) => submit(data, { method: "POST", encType: "multipart/form-data" });
+  const onSubmit = (methods) => (data) => {
+    submit(data, { method: "POST", encType: "multipart/form-data" });
+    methods.reset();
+  };
 
   return (
     <Form
@@ -32,7 +34,6 @@ export default function UpdateUserMainProfile({ user }) {
     >
       <>
         <div>
-          <input type='hidden' name='intent' value='update:mainProfile' />
           <div>
             <Input
               type='text'
@@ -47,7 +48,6 @@ export default function UpdateUserMainProfile({ user }) {
               <File
                 name='avatar'
                 label='Change Avatar'
-                testId='user-avatar'
                 accept={ACCEPTED_IMAGE_TYPES.join(",")}
                 onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
                 serverError={updatedProfile?.error}
@@ -67,7 +67,6 @@ export default function UpdateUserMainProfile({ user }) {
               <File
                 name='backgroundAvatar'
                 label='Change Avatar'
-                testId='user-background-avatar'
                 accept={ACCEPTED_IMAGE_TYPES.join(",")}
                 onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
                 serverError={updatedProfile?.error}
@@ -97,18 +96,17 @@ export default function UpdateUserMainProfile({ user }) {
             />
           </div>
 
-          {isIdle && (
-            <div>
-              <FormConfirmation
-                message='Careful — you have unsaved changes!'
-                renderSubmitButton={() => (
-                  <Button type='submit' isLoading={isSubmitting} disabled={isSubmitting}>
-                    <span>Save Changes</span>
-                  </Button>
-                )}
-              />
-            </div>
-          )}
+          <div>
+            <FormConfirmation
+              message='Careful — you have unsaved changes!'
+              isSubmitting={isSubmitting}
+              renderSubmitButton={() => (
+                <Button type='submit' isLoading={isSubmitting} disabled={isSubmitting}>
+                  <span>Save Changes</span>
+                </Button>
+              )}
+            />
+          </div>
         </div>
 
         <div>

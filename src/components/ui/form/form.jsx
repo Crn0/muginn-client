@@ -9,7 +9,7 @@ export default function Form({ schema, onSubmit, className, id, children, ...opt
   return (
     <FormProvider {...methods}>
       <form
-        onSubmit={methods.handleSubmit(onSubmit)}
+        onSubmit={methods.handleSubmit(onSubmit(methods))}
         className={className}
         id={id}
         aria-label='form'
