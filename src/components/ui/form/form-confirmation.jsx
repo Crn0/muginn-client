@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 
 import { Button } from "../button";
 
-export default function FormConfirmation({ message, renderSubmitButton }) {
+export default function FormConfirmation({ message, isSubmitting, renderSubmitButton }) {
   const {
     reset,
     formState: { isDirty },
@@ -12,10 +12,16 @@ export default function FormConfirmation({ message, renderSubmitButton }) {
   const [hasMadeChange, setHasMadeChange] = useState(false);
 
   useEffect(() => {
+    if (isSubmitting) return;
+
+    if (hasMadeChange && !isDirty) {
+      setHasMadeChange(false);
+    }
+
     if (!hasMadeChange && isDirty) {
       setHasMadeChange(true);
     }
-  }, [hasMadeChange, isDirty]);
+  }, [hasMadeChange, isDirty, isSubmitting]);
 
   if (!hasMadeChange) return null;
 
@@ -45,5 +51,6 @@ export default function FormConfirmation({ message, renderSubmitButton }) {
 
 FormConfirmation.propTypes = {
   message: PropTypes.string.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
   renderSubmitButton: PropTypes.func.isRequired,
 };

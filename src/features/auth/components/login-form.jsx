@@ -19,7 +19,7 @@ export default function LoginForm({ onSuccess }) {
 
   const redirectTo = searchParams.get("redirectTo");
 
-  const onSubmit = (data) => {
+  const onSubmit = () => (data) => {
     login.mutate(data);
   };
   const onFocus = () => {
