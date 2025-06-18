@@ -8,14 +8,13 @@ export default factory({
     username: String,
     email: nullable(String),
     password: String,
-    accountLevel: 1,
+    accountLevel: Number,
     createdAt: () => new Date().toISOString(),
     updatedAt: nullable(Date),
     lastSeenAt: nullable(Date),
     status: "Online",
     profile: oneOf("profile"),
   },
-
   profile: {
     id: primaryKey(faker.string.uuid),
     displayName: nullable(String),
@@ -23,7 +22,8 @@ export default factory({
     createdAt: () => new Date().toISOString(),
     updatedAt: nullable(Date),
     lastSeenAt: nullable(Date),
-
+    avatar: null,
+    backgroundAvatar: null,
     user: oneOf("user"),
   },
 });
