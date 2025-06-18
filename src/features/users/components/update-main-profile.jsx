@@ -46,6 +46,7 @@ export default function UpdateUserMainProfile({ user }) {
               <File
                 name='avatar'
                 label='Change Avatar'
+                testId='user-avatar'
                 accept={ACCEPTED_IMAGE_TYPES.join(",")}
                 onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
                 serverError={updatedProfile?.error}
@@ -65,6 +66,7 @@ export default function UpdateUserMainProfile({ user }) {
               <File
                 name='backgroundAvatar'
                 label='Change Avatar'
+                testId='user-background-avatar'
                 accept={ACCEPTED_IMAGE_TYPES.join(",")}
                 onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
                 serverError={updatedProfile?.error}
