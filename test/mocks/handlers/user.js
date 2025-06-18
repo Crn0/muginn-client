@@ -62,6 +62,7 @@ export default [
 
       user.profile = {
         avatar: null,
+        backgroundAvatar: null,
         displayName: profile.displayName,
         aboutMe: profile.aboutMe,
       };
