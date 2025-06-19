@@ -3,17 +3,19 @@ import { forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
 
 import FieldWrapper from "./field-wrapper";
-import errorHandler from "./error-handler";
+import { useInputErrorHandler } from "../../../hooks";
 
 const TextArea = forwardRef(
   ({ label, serverError, className, name, maxLength, required, ...props }, ref) => {
     const {
       register,
+      setError,
       formState: { errors },
     } = useFormContext();
 
-    const error = errorHandler(name, {
+    const error = useInputErrorHandler(name, {
       serverError,
+      setError,
       formError: errors,
     });
 
