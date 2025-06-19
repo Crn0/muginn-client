@@ -1,10 +1,13 @@
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, it, expect } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 
 import UpdateAccountProfile from "../update-account-profile";
 import { userData as user } from "./data";
 import { paths } from "../../../../configs";
+
+const queryClient = new QueryClient();
 
 const router = createMemoryRouter(
   [
@@ -16,7 +19,12 @@ const router = createMemoryRouter(
   { initialEntries: [paths.user.userSettings.getHref()] }
 );
 
-const renderRouteComponent = () => render(<RouterProvider router={router} />);
+const renderRouteComponent = () =>
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 
 describe("Account Profile", () => {
   it("renders the account profile", () => {
