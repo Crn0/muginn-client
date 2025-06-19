@@ -19,7 +19,18 @@ export default function UpdateUserMainProfile({ user }) {
   const isSubmitting = navigate.state === "submitting";
 
   const onSubmit = (methods) => (data) => {
-    submit(data, { method: "POST", encType: "multipart/form-data" });
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (["avatar", "backgroundAvatar"].includes(key)) {
+        formData.append(key, value[0]);
+      } else {
+        formData.append(key, value);
+      }
+    });
+
+    submit(formData, { method: "PATCH", encType: "multipart/form-data" });
+
     methods.reset();
   };
 
@@ -48,6 +59,7 @@ export default function UpdateUserMainProfile({ user }) {
               <File
                 name='avatar'
                 label='Change Avatar'
+                testId='user-avatar'
                 accept={ACCEPTED_IMAGE_TYPES.join(",")}
                 onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
                 serverError={updatedProfile?.error}
@@ -67,6 +79,7 @@ export default function UpdateUserMainProfile({ user }) {
               <File
                 name='backgroundAvatar'
                 label='Change Avatar'
+                testId='user-background-avatar'
                 accept={ACCEPTED_IMAGE_TYPES.join(",")}
                 onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
                 serverError={updatedProfile?.error}
