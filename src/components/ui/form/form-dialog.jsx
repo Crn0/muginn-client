@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { ZodSchema } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 
 import { cn } from "../../../utils";
@@ -19,6 +19,7 @@ export default function FormDialog({
   renderButtonSubmit,
   children,
   initial = false,
+  done = false,
   ...options
 }) {
   const ref = useRef();
@@ -38,6 +39,12 @@ export default function FormDialog({
   const buttonSubmit = renderButtonSubmit({
     close,
   });
+
+  useEffect(() => {
+    if (done) {
+      close();
+    }
+  }, [close, done]);
 
   return (
     <>
@@ -88,6 +95,7 @@ FormDialog.propTypes = {
   id: PropTypes.string.isRequired,
   schema: PropTypes.instanceOf(ZodSchema).isRequired,
   initial: PropTypes.bool,
+  done: PropTypes.bool,
   options: PropTypes.exact({
     mode: PropTypes.oneOf(["onChange", "onBlur", "onSubmit", "onTouched", "all"]),
     reValidateMode: PropTypes.oneOf(["onChange", "onBlur", "onSubmit"]),
