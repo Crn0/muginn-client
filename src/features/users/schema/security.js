@@ -11,6 +11,7 @@ const password = z.string().refine((val) => passwordRegex.test(val), {
 });
 
 export const usernameSchema = z.object({
+  intent: z.string().default("update:accountProfile:username"),
   username: z
     .string()
     .min(4)
@@ -23,6 +24,7 @@ export const usernameSchema = z.object({
 
 export const passwordSchema = z
   .object({
+    intent: z.string().default("update:accountProfile:password"),
     oldPassword: password,
     currentPassword: password,
     confirmPassword: z.string(),
