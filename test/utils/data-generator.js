@@ -1,4 +1,8 @@
 import { faker } from "@faker-js/faker";
+import jwt from "jsonwebtoken";
+import { db } from "../mocks";
+
+import { env } from "../../src/configs";
 
 export const generateRandomPassword = () => {
   // https://regexr.com/8dm04
@@ -23,4 +27,25 @@ export const createUser = () => {
   const password = generateRandomPassword();
 
   return Object.freeze({ displayName, username, password });
+};
+
+export const generateAccessToken = (username) => {
+  const secret = env.getValue("tokenSecret");
+
+  const user = db.user.findFirst({
+    where: {
+      username: {
+        equals: username,
+      },
+    },
+  });
+
+  if (!user) throw new Error("User does not exist");
+
+  const token = jwt.sign({}, secret, {
+    expiresIn: "15m",
+    subject: user.id,
+  });
+
+  return token;
 };
