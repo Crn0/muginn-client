@@ -53,9 +53,11 @@ export default [
           },
         });
 
-        delete user.password;
+        const data = { ...user };
 
-        user.profile = {
+        delete data.password;
+
+        data.profile = {
           avatar: null,
           backgroundAvatar: null,
           displayName: profile.displayName,
@@ -64,8 +66,8 @@ export default [
 
         return HttpResponse.json(
           {
-            ...user,
-            email: user.email.length <= 1 ? null : user.email,
+            ...data,
+            email: data.email.length <= 1 ? null : data.email,
           },
           { status: 200 }
         );
