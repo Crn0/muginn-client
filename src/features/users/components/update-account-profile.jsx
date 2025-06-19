@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
 import PropTypes from "prop-types";
+import { useQueryClient } from "@tanstack/react-query";
 import { useActionData, useNavigation, useSubmit } from "react-router-dom";
 
+import { getAuthUserQueryOptions } from "../../../lib";
 import { useUserSettingsTabStore } from "../../../stores";
 import { usernameSchema, passwordSchema } from "../schema";
 import { FormDialog, Input } from "../../../components/ui/form/index";
@@ -11,11 +13,17 @@ import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
 
 export default function UpdateAccountProfile({ user }) {
+  const queryClient = useQueryClient();
   const updatedSecurity = useActionData();
   const navigate = useNavigation();
   const submit = useSubmit();
 
-  const isSubmitting = navigate.state === "submitting";
+  const isUserBeingRefetched =
+    queryClient.isFetching({ queryKey: getAuthUserQueryOptions().queryKey }) > 0;
+  const isFormSubmitting = navigate.state === "submitting";
+  const isDialogDone = !isUserBeingRefetched && !isFormSubmitting;
+  const isFormBusy = isUserBeingRefetched || isFormSubmitting;
+
   const isFullMember = typeof user.accountLevel === "number" && user.accountLevel > 0;
 
   const onSubmit = (data) => submit(data, { method: "POST" });
@@ -85,6 +93,7 @@ export default function UpdateAccountProfile({ user }) {
               mode='onBlur'
               schema={usernameSchema}
               onSubmit={onSubmit}
+              done={isDialogDone}
               renderButtonTrigger={(options) => (
                 <div>
                   <Button
@@ -109,8 +118,8 @@ export default function UpdateAccountProfile({ user }) {
                   <Button
                     type='submit'
                     testId='edit-username-submit'
-                    isLoading={isSubmitting}
-                    disabled={isSubmitting}
+                    isLoading={isFormBusy}
+                    disabled={isFormBusy}
                   >
                     Submit
                   </Button>
@@ -150,6 +159,7 @@ export default function UpdateAccountProfile({ user }) {
           mode='onBlur'
           schema={passwordSchema}
           onSubmit={onSubmit}
+          done={isDialogDone}
           renderButtonTrigger={(options) => (
             <div>
               <Button
@@ -158,7 +168,7 @@ export default function UpdateAccountProfile({ user }) {
                 onClick={isFullMember ? options.onClick : () => {}}
                 ref={options.triggerRef}
               >
-                Edit
+                Change Password
               </Button>
             </div>
           )}
@@ -174,8 +184,8 @@ export default function UpdateAccountProfile({ user }) {
               <Button
                 type='submit'
                 testId='edit-password-submit'
-                isLoading={isSubmitting}
-                disabled={isSubmitting}
+                isLoading={isFormBusy}
+                disabled={isFormBusy}
               >
                 Submit
               </Button>
@@ -194,7 +204,7 @@ export default function UpdateAccountProfile({ user }) {
             <Input
               type='password'
               name='currentPassword'
-              label='Current Password'
+              label='New Password'
               serverError={updatedSecurity?.error}
               required
             />
