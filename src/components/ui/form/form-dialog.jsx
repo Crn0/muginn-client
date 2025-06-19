@@ -41,10 +41,10 @@ export default function FormDialog({
   });
 
   useEffect(() => {
-    if (done) {
+    if (Object.entries(methods.formState.errors).length === 0 && done) {
       close();
     }
-  }, [close, done]);
+  }, [close, done, methods.formState.errors]);
 
   return (
     <>

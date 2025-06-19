@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
 import FileWrapper from "./file-wrapper";
-import errorHandler from "./error-handler";
+import { useInputErrorHandler } from "../../../hooks";
 
 const File = forwardRef(
   (
@@ -11,14 +11,16 @@ const File = forwardRef(
   ) => {
     const {
       register,
+      setError,
       formState: { errors },
     } = useFormContext();
     const fieldButton = renderFieldButton();
 
     const { ref: inputRef, ...rest } = register(name);
 
-    const error = errorHandler(name, {
+    const error = useInputErrorHandler(name, {
       serverError,
+      setError,
       formError: errors,
     });
 
