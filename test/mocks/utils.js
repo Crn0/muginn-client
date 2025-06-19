@@ -1,5 +1,5 @@
 import { delay } from "msw";
-import jwt, { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const createAccessTokenGenerator = (secret) => (id, expiresInMinutes) =>
   jwt.sign({}, secret, {
@@ -16,7 +16,7 @@ const createRefreshTokenGenerator =
       expiresIn: `${expiresInDays}d`,
     });
 
-const createVerifyToken = (secret) => (token) => jwt.verify(token, secret);
+export const createVerifyToken = (secret) => (token) => jwt.verify(token, secret);
 
 export const networkDelay = () => delay(200);
 

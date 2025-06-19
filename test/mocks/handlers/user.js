@@ -1,6 +1,8 @@
 import { http, HttpResponse } from "msw";
+
 import db from "../db";
 import { env } from "../../../src/configs";
+import { withAuth } from "./middleware";
 import { networkDelay, tokenFactor } from "../utils";
 
 const baseUrl = `${env.getValue("serverUrl")}/api/v${env.getValue("apiVersion")}/users/me`;
@@ -9,73 +11,147 @@ const tokenSecret = env.getValue("tokenSecret");
 const Token = tokenFactor({ secret: tokenSecret });
 
 export default [
-  http.get(baseUrl, async ({ request }) => {
-    try {
-      await networkDelay();
+  http.get(
+    baseUrl,
+    withAuth(async ({ request }) => {
+      try {
+        await networkDelay();
 
-      const bearerHeader = request.headers.get("Authorization");
+        const bearerHeader = request.headers.get("Authorization");
 
-      if (typeof bearerHeader === "undefined") {
-        return HttpResponse.json(
-          { message: "Required 'Authorization' header is missing" },
-          {
-            status: 401,
-          }
-        );
-      }
+        const bearer = bearerHeader?.split?.(" ");
+        const accessToken = bearer[1];
 
-      const bearer = bearerHeader?.split?.(" ");
-      const accessToken = bearer[1];
+        const verifiedToken = Token.verifyToken(accessToken);
 
-      const verifiedToken = Token.verifyToken(accessToken);
+        const { sub } = verifiedToken;
 
-      const { sub } = verifiedToken;
-
-      const user = db.user.findFirst({
-        where: {
-          id: {
-            equals: sub,
-          },
-        },
-      });
-
-      if (!user) {
-        return HttpResponse.json(
-          { message: "User not found" },
-          {
-            status: 404,
-          }
-        );
-      }
-
-      const profile = db.profile.findFirst({
-        where: {
-          user: {
+        const user = db.user.findFirst({
+          where: {
             id: {
-              equals: user.id,
+              equals: sub,
             },
           },
-        },
-      });
+        });
 
-      delete user.password;
+        if (!user) {
+          return HttpResponse.json(
+            { message: "User not found" },
+            {
+              status: 404,
+            }
+          );
+        }
 
-      user.profile = {
-        avatar: null,
-        backgroundAvatar: null,
-        displayName: profile.displayName,
-        aboutMe: profile.aboutMe,
-      };
+        const profile = db.profile.findFirst({
+          where: {
+            user: {
+              id: {
+                equals: user.id,
+              },
+            },
+          },
+        });
 
-      return HttpResponse.json(
-        {
-          ...user,
-          email: user.email.length <= 1 ? null : user.email,
-        },
-        { status: 200 }
-      );
-    } catch (e) {
-      return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
-    }
-  }),
+        delete user.password;
+
+        user.profile = {
+          avatar: null,
+          backgroundAvatar: null,
+          displayName: profile.displayName,
+          aboutMe: profile.aboutMe,
+        };
+
+        return HttpResponse.json(
+          {
+            ...user,
+            email: user.email.length <= 1 ? null : user.email,
+          },
+          { status: 200 }
+        );
+      } catch (e) {
+        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+      }
+    })
+  ),
+  http.patch(
+    `${baseUrl}/username`,
+    withAuth(async ({ request }) => {
+      try {
+        const body = await request.clone().json();
+
+        const bearerHeader = request.headers.get("Authorization");
+
+        const bearer = bearerHeader?.split?.(" ");
+        const accessToken = bearer[1];
+
+        const verifiedToken = Token.verifyToken(accessToken);
+
+        const { sub } = verifiedToken;
+
+        const updatedUser = db.user.update({
+          where: {
+            id: {
+              equals: sub,
+            },
+          },
+          data: {
+            username: body.username,
+          },
+        });
+
+        return HttpResponse.json(
+          { id: updatedUser.id, username: updatedUser.username },
+          {
+            status: 200,
+          }
+        );
+      } catch (e) {
+        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+      }
+    })
+  ),
+  http.patch(
+    `${baseUrl}/profile`,
+    withAuth(async ({ request }) => {
+      try {
+        const formData = await request.clone().formData();
+
+        const data = { displayName: formData.get("displayName") };
+
+        const bearerHeader = request.headers.get("Authorization");
+
+        const bearer = bearerHeader?.split?.(" ");
+        const accessToken = bearer[1];
+
+        const verifiedToken = Token.verifyToken(accessToken);
+
+        const { sub } = verifiedToken;
+
+        if (data.displayName) {
+          db.profile.update({
+            where: {
+              user: {
+                id: {
+                  equals: sub,
+                },
+              },
+            },
+            data: {
+              displayName: data.displayName,
+            },
+          });
+        }
+
+        return HttpResponse.json(
+          { id: sub },
+          {
+            status: 200,
+          }
+        );
+      } catch (e) {
+        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+      }
+    })
+  ),
 ];
