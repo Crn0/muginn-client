@@ -1,0 +1,94 @@
+import { useQuery } from "@tanstack/react-query";
+import PropTypes from "prop-types";
+
+import { getAuthUserQueryOptions } from "../../lib/auth";
+import { Spinner } from "../ui/spinner";
+
+export default function UserSettingLayout({
+  title,
+  leftTab,
+  rightTab,
+  setLeftTab,
+  setRightTab,
+  leftNavButtons,
+  rightNavButtons,
+}) {
+  const user = useQuery({ ...getAuthUserQueryOptions() });
+  const visibleRightNavButtons = rightNavButtons.filter((btn) => btn.section === leftTab);
+  const ActiveContent = visibleRightNavButtons.find(({ name }) => name === rightTab)?.content;
+
+  return (
+    <div>
+      <header>
+        <aside>
+          <h1>{title}</h1>
+
+          <nav aria-label='left-navigation'>
+            {leftNavButtons.map(({ name, defaultContent, buttonText, button: Component }) => (
+              <Component
+                key={name}
+                name={name}
+                tab={leftTab}
+                buttonText={buttonText}
+                setTab={() => setLeftTab(name, defaultContent)}
+              />
+            ))}
+          </nav>
+        </aside>
+      </header>
+
+      <main>
+        <aside>
+          <nav aria-label='right-navigation'>
+            {visibleRightNavButtons.map(({ name, buttonText, button: Component }) => (
+              <Component
+                key={name}
+                name={name}
+                tab={rightTab}
+                buttonText={buttonText}
+                setTab={setRightTab}
+              />
+            ))}
+          </nav>
+        </aside>
+
+        <section>
+          {(() => {
+            if (user.isLoading && !user.data) return <Spinner />;
+
+            return ActiveContent ? (
+              <ActiveContent user={user.data} />
+            ) : (
+              <p>No content available.</p>
+            );
+          })()}
+        </section>
+      </main>
+    </div>
+  );
+}
+
+UserSettingLayout.propTypes = {
+  title: PropTypes.string.isRequired,
+  leftTab: PropTypes.string.isRequired,
+  rightTab: PropTypes.string.isRequired,
+  setRightTab: PropTypes.func.isRequired,
+  setLeftTab: PropTypes.func,
+  leftNavButtons: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      defaultContent: PropTypes.string.isRequired,
+      buttonText: PropTypes.string.isRequired,
+      button: PropTypes.elementType.isRequired,
+    })
+  ).isRequired,
+  rightNavButtons: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      buttonText: PropTypes.string.isRequired,
+      button: PropTypes.elementType.isRequired,
+      section: PropTypes.elementType.isRequired,
+      content: PropTypes.elementType.isRequired,
+    })
+  ).isRequired,
+};
