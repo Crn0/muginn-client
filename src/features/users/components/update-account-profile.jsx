@@ -18,7 +18,7 @@ export default function UpdateAccountProfile({ user }) {
   const isSubmitting = navigate.state === "submitting";
   const isFullMember = typeof user.accountLevel === "number" && user.accountLevel > 0;
 
-  const onSubmit = (data) => submit(data, { method: "POST", encType: "multipart/form-data" });
+  const onSubmit = (data) => submit(data, { method: "POST" });
 
   const setTabs = useUserSettingsTabStore((state) => state.setTabs);
 
@@ -117,17 +117,13 @@ export default function UpdateAccountProfile({ user }) {
                 </div>
               )}
             >
-              <>
-                <input type='hidden' name='intent' value='update:username' />
-
-                <Input
-                  type='text'
-                  name='username'
-                  label='Username'
-                  serverError={updatedSecurity?.error}
-                  required
-                />
-              </>
+              <Input
+                type='text'
+                name='username'
+                label='Username'
+                serverError={updatedSecurity?.error}
+                required
+              />
             </FormDialog>
           </div>
 
@@ -187,8 +183,6 @@ export default function UpdateAccountProfile({ user }) {
           )}
         >
           <>
-            <input type='hidden' name='intent' value='update:password' />
-
             <Input
               type='password'
               name='oldPassword'
