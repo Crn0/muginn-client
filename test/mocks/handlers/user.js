@@ -114,6 +114,64 @@ export default [
     })
   ),
   http.patch(
+    `${baseUrl}/password`,
+    withAuth(async ({ request }) => {
+      try {
+        const body = await request.clone().json();
+
+        const bearerHeader = request.headers.get("Authorization");
+
+        const bearer = bearerHeader?.split?.(" ");
+        const accessToken = bearer[1];
+
+        const verifiedToken = Token.verifyToken(accessToken);
+
+        const { sub } = verifiedToken;
+
+        const user = db.user.findFirst({
+          where: {
+            id: {
+              equals: sub,
+            },
+          },
+        });
+
+        if (user.password !== body.oldPassword) {
+          return HttpResponse.json(
+            {
+              message: "Validation Error",
+              errors: [
+                {
+                  code: "custom",
+                  message: "The old password provided is incorrect",
+                  path: ["oldPassword"],
+                },
+              ],
+            },
+            { status: 422 }
+          );
+        }
+
+        db.user.update({
+          where: {
+            id: {
+              equals: sub,
+            },
+          },
+          data: {
+            password: body.currentPassword,
+          },
+        });
+
+        document.cookie = null;
+
+        return new HttpResponse(null, { status: 204 });
+      } catch (e) {
+        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+      }
+    })
+  ),
+  http.patch(
     `${baseUrl}/profile`,
     withAuth(async ({ request }) => {
       try {
