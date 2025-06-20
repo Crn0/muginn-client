@@ -1,2 +1,2 @@
 export { default as AuthLayout } from "./auth-layout";
-export { default as UserSettingLayout } from "./user-setting-layout";
+export { default as SettingLayout } from "./setting-layout";
