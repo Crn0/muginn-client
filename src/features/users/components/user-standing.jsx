@@ -1,4 +1,7 @@
-import PropTypes from "prop-types";
+import { useQuery } from "@tanstack/react-query";
+
+import { getAuthUserQueryOptions } from "../../../lib";
+import { Spinner } from "../../../components/ui/spinner";
 
 const reasons = [
   "Changing your username is not allowed",
@@ -7,8 +10,14 @@ const reasons = [
   "Account deletion is not allowed",
 ];
 
-export default function UserStanding({ accountLevel }) {
-  const isFullMember = typeof accountLevel === "number" && accountLevel > 0;
+export default function UserStanding() {
+  const { isLoading, data: user } = useQuery({ ...getAuthUserQueryOptions() });
+
+  if (isLoading && !user) {
+    return <Spinner />;
+  }
+
+  const isFullMember = typeof user.accountLevel === "number" && user.accountLevel > 0;
 
   return (
     <div>
@@ -34,7 +43,3 @@ export default function UserStanding({ accountLevel }) {
     </div>
   );
 }
-
-UserStanding.propTypes = {
-  accountLevel: PropTypes.number.isRequired,
-};
