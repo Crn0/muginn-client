@@ -12,12 +12,8 @@ export default {
   },
   app: { path: "/app", getHref: () => "/app" },
   user: {
-    root: {
-      path: "/users/me",
-      getHref: () => "/users/me",
-    },
     settings: {
-      path: "user-settings",
+      path: "users/me/user-settings",
       getHref: () => "/users/me/user-settings",
     },
   },
