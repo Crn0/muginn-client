@@ -13,11 +13,11 @@ const queryClient = new QueryClient();
 const router = createMemoryRouter(
   [
     {
-      path: paths.user.userSettings.getHref(),
+      path: paths.user.settings.getHref(),
       element: <UpdateAccountProfile />,
     },
   ],
-  { initialEntries: [paths.user.userSettings.getHref()] }
+  { initialEntries: [paths.user.settings.getHref()] }
 );
 
 const renderRouteComponent = () =>

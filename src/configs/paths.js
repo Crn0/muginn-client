@@ -16,8 +16,8 @@ export default {
       path: "/users/me",
       getHref: () => "/users/me",
     },
-    userSettings: {
-      path: "profile",
+    settings: {
+      path: "user-settings",
       getHref: () => "/users/me/user-settings",
     },
   },
