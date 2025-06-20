@@ -1,20 +1,29 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
 import PropTypes from "prop-types";
 import { useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useActionData, useNavigation, useSubmit } from "react-router-dom";
 
 import { userMainProfileSchema, ACCEPTED_IMAGE_TYPES, MAX_ABOUT_ME_LEN } from "../schema";
+import { getAuthUserQueryOptions } from "../../../lib";
 import { Form, Input, File, TextArea, FormConfirmation } from "../../../components/ui/form/index";
 import { Button } from "../../../components/ui/button";
+import { Spinner } from "../../../components/ui/spinner";
 import { NameplatePreview, UserProfilePreview } from "../../../components/ui/preview";
 
-export default function UpdateUserMainProfile({ user }) {
+export default function UpdateUserMainProfile() {
+  const { isLoading, data: user } = useQuery({ ...getAuthUserQueryOptions() });
+
   const updatedProfile = useActionData();
   const navigate = useNavigation();
   const submit = useSubmit();
 
   const avatarRef = useRef();
   const backgroundAvatarRef = useRef();
+
+  if (isLoading && !user) {
+    return <Spinner />;
+  }
 
   const isSubmitting = navigate.state === "submitting";
 
@@ -138,33 +147,3 @@ export default function UpdateUserMainProfile({ user }) {
     </Form>
   );
 }
-
-UpdateUserMainProfile.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    profile: PropTypes.shape({
-      displayName: PropTypes.string.isRequired,
-      aboutMe: PropTypes.string,
-      avatar: PropTypes.shape({
-        url: PropTypes.string,
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            size: PropTypes.number,
-            format: PropTypes.string,
-          })
-        ),
-      }),
-      backgroundAvatar: PropTypes.shape({
-        url: PropTypes.string,
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            size: PropTypes.number,
-            format: PropTypes.string,
-          })
-        ),
-      }),
-    }).isRequired,
-  }).isRequired,
-};

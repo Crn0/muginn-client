@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
 import PropTypes from "prop-types";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useActionData, useNavigation, useSubmit } from "react-router-dom";
 
 import { getAuthUserQueryOptions } from "../../../lib";
@@ -9,17 +9,24 @@ import { usernameSchema, passwordSchema } from "../schema";
 import { FormDialog, Input } from "../../../components/ui/form/index";
 import { LazyImage } from "../../../components/ui/image";
 import { Button } from "../../../components/ui/button";
+import { Spinner } from "../../../components/ui/spinner";
 import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
 
-export default function UpdateAccountProfile({ user }) {
-  const queryClient = useQueryClient();
+export default function UpdateAccountProfile() {
+  const { isFetching, isLoading, data: user } = useQuery({ ...getAuthUserQueryOptions() });
+
   const updatedSecurity = useActionData();
   const navigate = useNavigation();
   const submit = useSubmit();
 
-  const isUserBeingRefetched =
-    queryClient.isFetching({ queryKey: getAuthUserQueryOptions().queryKey }) > 0;
+  const setTabs = useUserSettingsTabStore((state) => state.setTabs);
+
+  if (isLoading && !user) {
+    return <Spinner />;
+  }
+
+  const isUserBeingRefetched = isFetching > 0;
   const isFormSubmitting = navigate.state === "submitting";
   const isDialogDone = !isUserBeingRefetched && !isFormSubmitting;
   const isFormBusy = isUserBeingRefetched || isFormSubmitting;
@@ -27,8 +34,6 @@ export default function UpdateAccountProfile({ user }) {
   const isFullMember = typeof user.accountLevel === "number" && user.accountLevel > 0;
 
   const onSubmit = (data) => submit(data, { method: "POST" });
-
-  const setTabs = useUserSettingsTabStore((state) => state.setTabs);
 
   return (
     <>
@@ -222,35 +227,3 @@ export default function UpdateAccountProfile({ user }) {
     </>
   );
 }
-
-UpdateAccountProfile.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    email: PropTypes.string,
-    accountLevel: PropTypes.number.isRequired,
-    profile: PropTypes.shape({
-      displayName: PropTypes.string.isRequired,
-      aboutMe: PropTypes.string,
-      avatar: PropTypes.shape({
-        url: PropTypes.string,
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            size: PropTypes.number,
-            format: PropTypes.string,
-          })
-        ),
-      }),
-      backgroundAvatar: PropTypes.shape({
-        url: PropTypes.string,
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            size: PropTypes.number,
-            format: PropTypes.string,
-          })
-        ),
-      }),
-    }).isRequired,
-  }).isRequired,
-};
