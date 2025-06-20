@@ -1,10 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
-import { getAuthUserQueryOptions } from "../../lib/auth";
-import { Spinner } from "../ui/spinner";
-
-export default function UserSettingLayout({
+export default function SettingLayout({
   title,
   leftTab,
   rightTab,
@@ -12,10 +8,9 @@ export default function UserSettingLayout({
   setRightTab,
   leftNavButtons,
   rightNavButtons,
+  children,
 }) {
-  const user = useQuery({ ...getAuthUserQueryOptions() });
   const visibleRightNavButtons = rightNavButtons.filter((btn) => btn.section === leftTab);
-  const ActiveContent = visibleRightNavButtons.find(({ name }) => name === rightTab)?.content;
 
   return (
     <div>
@@ -52,23 +47,13 @@ export default function UserSettingLayout({
           </nav>
         </aside>
 
-        <section>
-          {(() => {
-            if (user.isLoading && !user.data) return <Spinner />;
-
-            return ActiveContent ? (
-              <ActiveContent user={user.data} />
-            ) : (
-              <p>No content available.</p>
-            );
-          })()}
-        </section>
+        <section>{typeof children === "function" ? children() : children}</section>
       </main>
     </div>
   );
 }
 
-UserSettingLayout.propTypes = {
+SettingLayout.propTypes = {
   title: PropTypes.string.isRequired,
   leftTab: PropTypes.string.isRequired,
   rightTab: PropTypes.string.isRequired,
@@ -88,7 +73,7 @@ UserSettingLayout.propTypes = {
       buttonText: PropTypes.string.isRequired,
       button: PropTypes.elementType.isRequired,
       section: PropTypes.elementType.isRequired,
-      content: PropTypes.elementType.isRequired,
     })
   ).isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
