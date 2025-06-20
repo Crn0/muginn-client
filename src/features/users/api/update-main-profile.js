@@ -3,14 +3,14 @@ import { useMutation } from "@tanstack/react-query";
 import { ApiClient, generateHeader, getAuthUserQueryOptions, tryCatch } from "../../../lib";
 
 export const updateMainProfile = async (data) => {
-  const headers = generateHeader(["Content-Type", "multipart/form-data"]);
+  const headers = generateHeader();
 
   const { error, data: res } = await tryCatch(
     ApiClient.callApi("users/me/profile", {
       headers,
       authenticatedRequest: true,
-      method: "POST",
-      body: JSON.stringify(data),
+      method: "PATCH",
+      body: data,
     })
   );
 
@@ -19,28 +19,24 @@ export const updateMainProfile = async (data) => {
   return res.json();
 };
 
-export const updateMainProfileAction =
-  (queryClient) =>
-  async ({ request }) => {
-    const formData = await request.formData();
+export const updateMainProfileAction = (queryClient) => async (formData) => {
+  formData.delete("intent");
 
-    const updates = Object.fromEntries(formData);
+  const { error, data } = await tryCatch(updateMainProfile(formData));
 
-    const { error, data } = await tryCatch(updateMainProfile(updates));
+  if (
+    (typeof error?.code === "number" && error?.code !== 422) ||
+    error?.message === "Failed to fetch"
+  ) {
+    throw error;
+  }
 
-    if (
-      (typeof error?.code === "number" && error?.code !== 422) ||
-      error?.message === "Failed to fetch"
-    ) {
-      throw error;
-    }
+  if (data) {
+    queryClient.invalidateQueries({ queryKey: getAuthUserQueryOptions().queryKey });
+  }
 
-    if (data) {
-      queryClient.invalidateQueries({ queryKey: getAuthUserQueryOptions().queryKey });
-    }
-
-    return { error, data };
-  };
+  return { error, data };
+};
 
 export const useUpdateMainProfile = (options) => {
   const { onSuccess, onError, ...restConfig } = options || {};
