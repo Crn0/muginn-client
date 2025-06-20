@@ -26,7 +26,7 @@ const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false 
 
 const routes = [
   {
-    path: paths.user.userSettings.getHref(),
+    path: paths.user.settings.getHref(),
     errorElement: <ErrorElement />,
     action: async ({ request }) => clientAction(queryClient)({ request }),
     element: (
@@ -42,7 +42,7 @@ const routes = [
 ];
 
 const router = createMemoryRouter(routes, {
-  initialEntries: [paths.user.userSettings.getHref()],
+  initialEntries: [paths.user.settings.getHref()],
 });
 
 describe("User Settings Page", () => {
