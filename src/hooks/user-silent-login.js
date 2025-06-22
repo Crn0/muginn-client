@@ -11,11 +11,13 @@ export default function useSilentLogin() {
   const navigate = useNavigate();
 
   const setToken = useAuthStore((state) => state.setToken);
+  const setIsRefreshingToken = useAuthStore((state) => state.setIsRefreshingToken);
   const resetAuthState = useAuthStore((state) => state.reset);
 
   const redirectTo = searchParams.get("redirectTo");
 
   const isAuth = useAuthStore((state) => state.token) !== null;
+  const isRefreshingToken = useAuthStore((state) => state.isRefreshingToken);
 
   const { mutate, isError, isPending } = useRefreshToken({
     onSuccess: (token) => {
@@ -28,7 +30,8 @@ export default function useSilentLogin() {
   });
 
   useEffect(() => {
-    if (!isAuth && (!isPending || !isError)) {
+    if (!isRefreshingToken && !isAuth && (!isPending || !isError)) {
+      setIsRefreshingToken(true);
       mutate();
     }
 
