@@ -10,6 +10,11 @@ export default {
     getHref: (redirectTo) =>
       `/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
   },
+  silentLogin: {
+    path: "/silent-login",
+    getHref: (redirectTo) =>
+      `/silent-login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+  },
   app: { path: "/app", getHref: () => "/app" },
   user: {
     settings: {
