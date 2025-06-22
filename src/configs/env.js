@@ -47,7 +47,8 @@ ${Object.entries(parsedEnv.error.flatten().fieldErrors)
 };
 
 const getValue = (key) => {
-  if (!(key in envMap)) throw new Error(`Missing environment variable: ${key}`);
+  if (!Object.prototype.hasOwnProperty.call(envMap, key))
+    throw new Error(`Missing environment variable: ${key}`);
 
   return envMap[key];
 };
