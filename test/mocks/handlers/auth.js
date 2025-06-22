@@ -89,4 +89,32 @@ export default [
       return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
     }
   }),
+  http.post(`${baseUrl}/refresh-tokens`, async () => {
+    try {
+      const refreshTokenCookie = document.cookie.split("=")[1];
+
+      if (typeof refreshTokenCookie === "undefined") {
+        return HttpResponse.json({ message: "Invalid or expired token" }, { status: 401 });
+      }
+
+      const verifiedToken = Token.verifyToken(refreshTokenCookie);
+
+      const { sub } = verifiedToken;
+
+      const refreshToken = Token.refreshToken(sub, "1");
+      const accessToken = Token.accessToken(sub, "5");
+
+      return HttpResponse.json(accessToken, {
+        status: 200,
+        headers: {
+          "Set-Cookie": `refreshToken=${refreshToken}`,
+        },
+      });
+    } catch (e) {
+      return HttpResponse.json(
+        { message: e?.message || "Server Error" },
+        { status: e?.message ? 401 : 500 }
+      );
+    }
+  }),
 ];
