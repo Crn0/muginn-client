@@ -10,7 +10,7 @@ export const getRefreshToken = async (request) => {
 
   const redirectTo = new URL(request.url).pathname;
 
-  if (error?.code >= 500 || error?.message === "Failed to Fetch") throw error;
+  if (error?.code >= 500 || error?.message?.toLowerCase() === "failed to fetch") throw error;
 
   if (error?.code === 401) return replace(paths.login.getHref(redirectTo));
 
