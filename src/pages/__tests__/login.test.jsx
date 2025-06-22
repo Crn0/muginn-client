@@ -7,6 +7,8 @@ import setupRouter from "./mocks/utils/setup-router";
 import { paths } from "../../configs/index";
 import LoginPage from "../login";
 import DashBoard, { dashBoardLoader } from "./mocks/dash-board";
+import { setToken } from "../../stores";
+import { generateAccessToken } from "../../../test/utils";
 
 function ErrorBoundary() {
   const error = useRouteError();
@@ -145,6 +147,10 @@ describe("Login page", () => {
     });
 
     it("redirects the user to dashboard when theres' a authenticated user", async () => {
+      const token = generateAccessToken(form.valid.username);
+
+      setToken(token);
+
       const { valid } = form;
 
       const router = createMemoryRouter(routes, {
