@@ -2,26 +2,43 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { paths } from "../configs";
+import rootLoader from "./root/loader";
+import { clientLoader as silentLoginLoader } from "../features/auth/api/index";
 
-const convert = (queryClient) => async (m) => {
-  const { clientAction, clientLoader, default: Component } = m;
+import { clientAction as userAction } from "../features/users/api";
 
-  return {
-    loader: clientLoader?.(queryClient),
-    action: clientAction?.(queryClient),
-    element: <Component />,
-  };
-};
+import AppRoot from "./root";
+import LoginPage from "../pages/login";
+import RegisterPage from "../pages/register";
+import UserSettingsPage from "../pages/user-settings";
+import SilentLoginPage from "../pages/silent-login";
 
 const createRouter = (queryClient) =>
   createBrowserRouter([
     {
       path: paths.register.path,
-      lazy: () => import("../pages/register").then(convert(queryClient)),
+      element: <RegisterPage />,
     },
     {
       path: paths.login.path,
-      lazy: () => import("../pages/login").then(convert(queryClient)),
+      element: <LoginPage />,
+    },
+    {
+      path: paths.silentLogin.path,
+      loader: silentLoginLoader,
+      element: <SilentLoginPage />,
+    },
+    {
+      path: paths.home.path,
+      loader: rootLoader(queryClient),
+      element: <AppRoot />,
+      children: [
+        {
+          path: paths.user.settings.path,
+          action: userAction(queryClient),
+          element: <UserSettingsPage />,
+        },
+      ],
     },
   ]);
 
