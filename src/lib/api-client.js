@@ -1,4 +1,4 @@
-import { env } from "../configs";
+import { env, paths } from "../configs";
 import refreshToken from "./refresh-token";
 import { setToken, getToken } from "../stores";
 import formatApiError from "./format-api-error";
@@ -78,16 +78,20 @@ class ApiClient {
 
     // when the user authenticated using google auth get a new accessToken
     if (!token) {
-      refreshPromise = this.#provider.refreshToken();
+      // refreshPromise = this.#provider.refreshToken();
 
-      const { error, data: newToken } = await tryCatch(refreshPromise);
+      // const { error, data: newToken } = await tryCatch(refreshPromise);
 
-      if (error?.code === 401 || error?.message === "Failed to fetch") throw error;
+      // if (error?.code === 401 || error?.message === "Failed to fetch") throw error;
 
-      this.#provider.setToken(newToken);
+      // this.#provider.setToken(newToken);
 
-      token = newToken;
-      refreshPromise = null;
+      // token = newToken;
+      // refreshPromise = null;
+
+      const redirectTo = window.location.pathname + window.location.search;
+
+      return window.location.replace(paths.silentLogin.getHref(redirectTo));
     }
 
     const { error: invalidAccessTokenError, data: firstRes } = await tryCatch(() =>
