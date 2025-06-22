@@ -3,7 +3,7 @@ import { devtools } from "zustand/middleware";
 
 const initialState = {
   token: null,
-  isRefreshingToken: null,
+  isRefreshingToken: false,
 };
 
 export const useAuthStore = create(
