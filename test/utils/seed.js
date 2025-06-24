@@ -1,14 +1,22 @@
 import { db } from "../mocks";
 
 export const seedUser = () => {
-  const user = db.user.create({
-    username: ".crno.",
-    password: "Crnocrno123",
-    accountLevel: 1,
-  });
+  const users = [
+    { username: ".crno.", displayName: "crno", password: "Crnocrno123", accountLevel: 1 },
+    { username: ".noir.", displayName: "crnoirno", password: "Noirnoir123", accountLevel: 1 },
+  ];
 
-  db.profile.create({
-    user,
-    displayName: "crno",
+  users.forEach((data) => {
+    const { username, displayName, password, accountLevel } = data;
+    const user = db.user.create({
+      username,
+      password,
+      accountLevel,
+    });
+
+    db.profile.create({
+      user,
+      displayName,
+    });
   });
 };
