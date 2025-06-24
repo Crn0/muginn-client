@@ -14,7 +14,7 @@ import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
 
 export default function UpdateAccountProfile() {
-  const { isFetching, isLoading, data: user } = useQuery({ ...getAuthUserQueryOptions() });
+  const { isLoading, isFetching, data: user } = useQuery({ ...getAuthUserQueryOptions() });
 
   const updatedSecurity = useActionData();
   const navigate = useNavigation();
@@ -26,10 +26,9 @@ export default function UpdateAccountProfile() {
     return <Spinner />;
   }
 
-  const isUserBeingRefetched = isFetching > 0;
   const isFormSubmitting = navigate.state === "submitting";
-  const isDialogDone = !isUserBeingRefetched && !isFormSubmitting;
-  const isFormBusy = isUserBeingRefetched || isFormSubmitting;
+  const isDialogDone = !isFetching && !isFormSubmitting;
+  const isFormBusy = isFetching || isFormSubmitting;
 
   const isFullMember = typeof user.accountLevel === "number" && user.accountLevel > 0;
 
