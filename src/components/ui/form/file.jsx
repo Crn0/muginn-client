@@ -14,7 +14,7 @@ const File = forwardRef(
       setError,
       formState: { errors },
     } = useFormContext();
-    const fieldButton = renderFieldButton();
+    const fieldButton = typeof renderFieldButton === "function" ? renderFieldButton() : null;
 
     const { ref: inputRef, ...rest } = register(name);
 
@@ -55,7 +55,7 @@ File.displayName = "File";
 
 File.propTypes = {
   label: PropTypes.string.isRequired,
-  renderFieldButton: PropTypes.func.isRequired,
+  renderFieldButton: PropTypes.func,
   registration: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.func])),
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
