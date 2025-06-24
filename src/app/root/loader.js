@@ -5,16 +5,14 @@ import { getAuthUserQueryOptions } from "../../lib";
 
 export default function loader(queryClient) {
   return ({ request }) => {
-    const { searchParams } = new URL(request.url);
-
-    const redirectTo = searchParams.get("redirectTo");
-
     const user = queryClient.getQueryData(getAuthUserQueryOptions().queryKey);
+
+    const redirectTo = new URL(request.url).pathname;
 
     if (!user) {
       return replace(paths.silentLogin.getHref(redirectTo));
     }
 
-    return replace(redirectTo || paths.dashboard.getHref());
+    return null;
   };
 }
