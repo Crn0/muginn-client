@@ -289,6 +289,7 @@ describe("User Settings Page", () => {
 
       await waitFor(() => {
         expect(queryClient.isFetching({ queryKey: getAuthUserQueryOptions().queryKey })).toBe(0);
+        expect(input).not.toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Submit" })).not.toBeInTheDocument();
 
         const section = screen.getByTestId("username");
