@@ -58,5 +58,5 @@ LazyImage.propTypes = {
   fallBackAsset: PropTypes.shape({
     image: PropTypes.string.isRequired,
     lazyImage: PropTypes.string.isRequired,
-  }).isRequired,
+  }),
 };
