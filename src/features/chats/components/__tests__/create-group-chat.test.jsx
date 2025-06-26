@@ -3,9 +3,9 @@ import { createMemoryRouter } from "react-router-dom";
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 
-import { paths } from "../../../configs";
+import { paths } from "../../../../configs";
 import { setupRouter } from "./mocks/utils/setup";
-import CreateGroupChat from "../components/create-group-chat";
+import CreateGroupChat from "../create-group-chat";
 
 const queryClient = new QueryClient({
   defaultOptions: {

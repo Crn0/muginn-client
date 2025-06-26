@@ -3,13 +3,13 @@ import { createMemoryRouter } from "react-router-dom";
 import { describe, it, expect, beforeAll, afterEach } from "vitest";
 import { screen } from "@testing-library/react";
 
-import { db } from "../../../../test/mocks";
-import { paths } from "../../../configs";
-import { getChatsQueryOptions } from "../api/get-chats";
+import { db } from "../../../../../test/mocks";
+import { paths } from "../../../../configs";
+import { getChatsQueryOptions } from "../../api/get-chats";
 import { createChats } from "./data";
 import { setupRouter } from "./mocks/utils/setup";
-import DirectChatList from "../components/direct-chat-list";
-import { RouteErrorElement } from "../../../components/errors";
+import { RouteErrorElement } from "../../../../components/errors";
+import DirectChatList from "../direct-chat-list";
 
 const queryClient = new QueryClient({
   defaultOptions: {

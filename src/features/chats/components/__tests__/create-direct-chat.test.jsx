@@ -4,9 +4,9 @@ import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import { faker } from "@faker-js/faker";
 
-import { paths } from "../../../configs";
+import { paths } from "../../../../configs";
 import { setupRouter } from "./mocks/utils/setup";
-import CreateDirectChat from "../components/create-direct-chat";
+import CreateDirectChat from "../create-direct-chat";
 
 const queryClient = new QueryClient({
   defaultOptions: {
