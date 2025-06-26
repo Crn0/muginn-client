@@ -14,7 +14,7 @@ export default function Form({ schema, onSubmit, className, id, children, ...opt
         id={id}
         aria-label='form'
       >
-        {children}
+        {typeof children === "function" ? children(methods) : children}
       </form>
     </FormProvider>
   );
