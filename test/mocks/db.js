@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { factory, nullable, primaryKey, oneOf } from "@mswjs/data";
+import { factory, nullable, primaryKey, oneOf, manyOf } from "@mswjs/data";
 import { faker } from "@faker-js/faker";
 
 export default factory({
@@ -21,9 +21,47 @@ export default factory({
     aboutMe: nullable(String),
     createdAt: () => new Date().toISOString(),
     updatedAt: nullable(Date),
-    lastSeenAt: nullable(Date),
     avatar: null,
     backgroundAvatar: null,
     user: oneOf("user"),
+  },
+  chat: {
+    id: primaryKey(faker.string.uuid),
+    name: nullable(String),
+    avatar: null,
+    isPrivate: Boolean,
+    type: String,
+    owner: nullable(oneOf("user")),
+    members: manyOf("userOnChat"),
+    createdAt: () => new Date().toISOString(),
+    updatedAt: nullable(Date),
+    chatRoleCounter: nullable(Number),
+  },
+  role: {
+    id: primaryKey(faker.string.uuid),
+    name: String,
+    roleLevel: Number,
+    isDefaultRole: Boolean,
+    chat: oneOf("chat"),
+    members: manyOf("userOnChat"),
+    permissions: manyOf("permission"),
+    createdAt: () => new Date().toISOString(),
+    updatedAt: nullable(Date),
+  },
+  permission: {
+    id: primaryKey(faker.string.uuid),
+    name: String,
+    members: manyOf("userOnChat"),
+    roles: manyOf("role"),
+    createdAt: () => new Date().toISOString(),
+    updatedAt: nullable(Date),
+  },
+  userOnChat: {
+    id: primaryKey(faker.string.uuid),
+    user: oneOf("user"),
+    chat: oneOf("chat"),
+    roles: manyOf("role"),
+    joinedAt: () => new Date().toISOString(),
+    mutedUntil: nullable(Date),
   },
 });

@@ -20,3 +20,21 @@ export const seedUser = () => {
     });
   });
 };
+
+export const seedPermissions = () => {
+  const perms = [
+    "admin",
+    "manage_chat",
+    "manage_role",
+    "manage_message",
+    "kick_member",
+    "mute_member",
+    "send_message",
+  ];
+
+  perms.forEach((name) => {
+    db.permission.create({
+      name,
+    });
+  });
+};
