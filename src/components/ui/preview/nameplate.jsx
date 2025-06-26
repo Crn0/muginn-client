@@ -1,8 +1,13 @@
 import PropTypes from "prop-types";
 
-import { LazyImage } from "../image";
+import { Avatar } from "../image";
 import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
+
+const fallback = {
+  image: avatar,
+  lazyImage: avatarLazy,
+};
 
 export default function NameplatePreview({ username, displayName, asset }) {
   return (
@@ -12,10 +17,11 @@ export default function NameplatePreview({ username, displayName, asset }) {
       </div>
       <div>
         <div>
-          <LazyImage
+          <Avatar
             asset={asset}
-            fallBackAsset={{ image: avatar, lazyImage: avatarLazy }}
+            fallback={fallback}
             alt={`${displayName || username}'s nameplate avatar`}
+            type='user'
           />
         </div>
         <div>
