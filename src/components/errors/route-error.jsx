@@ -6,7 +6,7 @@ export default function RouteErrorElement() {
   return (
     <div role='alert'>
       <p>Something went wrong:</p>
-      <pre className='text-red-600'>{error.message}</pre>
+      <pre className='text-red-600'>{error?.message || error.statusText}</pre>
     </div>
   );
 }
