@@ -1,8 +1,13 @@
 import PropTypes from "prop-types";
 
-import { LazyImage } from "../image";
+import { Avatar, BackgroundAvatar } from "../image";
 import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
+
+const fallback = {
+  image: avatar,
+  lazyImage: avatarLazy,
+};
 
 export default function UserProfilePreview({ user, renderProfileButton, children }) {
   const profileButton = renderProfileButton();
@@ -12,20 +17,19 @@ export default function UserProfilePreview({ user, renderProfileButton, children
       <div>
         <header>
           <div>
-            <LazyImage
+            <BackgroundAvatar
               asset={user.profile.backgroundAvatar}
-              fallBackAsset={{
-                image: avatar,
-                lazyImage: avatarLazy,
-              }}
+              fallback={fallback}
               alt='Profile background'
+              type='user'
             />
           </div>
           <div>
-            <LazyImage
+            <Avatar
               asset={user.profile.avatar}
-              fallBackAsset={{ image: avatar, lazyImage: avatarLazy }}
+              fallback={{ image: avatar, lazyImage: avatarLazy }}
               alt={`${user.profile.displayName || user.username}'s avatar`}
+              type='user'
             />
           </div>
         </header>
