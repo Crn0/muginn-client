@@ -1,44 +1,35 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { useAuthStore } from "../stores";
-import { useGetUser, useRefreshToken } from "../lib/auth";
 import { paths } from "../configs";
+import { useAuthStore } from "../stores";
+import { useGetUser } from "../lib/auth";
+import useRefreshToken from "./use-refresh-token";
 
 export default function useSilentLogin() {
   const [searchParams] = useSearchParams();
 
-  const navigate = useNavigate();
+  const { refresh, isRefreshingToken, isError, isSuccess, isPending } = useRefreshToken();
 
-  const setToken = useAuthStore((state) => state.setToken);
-  const setIsRefreshingToken = useAuthStore((state) => state.setIsRefreshingToken);
-  const resetAuthState = useAuthStore((state) => state.reset);
+  const navigate = useNavigate();
 
   const redirectTo = searchParams.get("redirectTo");
 
-  const isAuth = useAuthStore((state) => state.token) !== null;
-  const isRefreshingToken = useAuthStore((state) => state.isRefreshingToken);
-
-  const { mutate, isError, isPending } = useRefreshToken({
-    onSuccess: (token) => {
-      setToken(token);
-    },
-  });
+  const hasToken = useAuthStore((state) => state.token) !== null;
 
   const user = useGetUser({
-    enabled: isAuth,
+    enabled: hasToken,
   });
 
-  useEffect(() => {
-    if (!isRefreshingToken && !isAuth && (!isPending || !isError)) {
-      setIsRefreshingToken(true);
-      mutate();
-    }
+  const isAuth = user.data && hasToken;
 
-    if (user.data) {
-      navigate(redirectTo ?? paths.dashboard.getHref(), {
-        replace: true,
-      });
+  useEffect(() => {
+    const ctr = new AbortController();
+
+    const { signal } = ctr;
+
+    if (!isRefreshingToken && !isAuth && !isPending && !isError && !isSuccess) {
+      refresh(signal);
     }
 
     if (user.isSuccess) {
@@ -47,20 +38,16 @@ export default function useSilentLogin() {
       });
     }
 
-    if (user.isError) {
-      resetAuthState();
-    }
+    return () => ctr.abort();
   }, [
     isAuth,
-    redirectTo,
-    navigate,
-    setToken,
-    resetAuthState,
-    user.data,
-    user.isSuccess,
-    user.isError,
-    mutate,
     isPending,
     isError,
+    isSuccess,
+    isRefreshingToken,
+    redirectTo,
+    navigate,
+    refresh,
+    user.isSuccess,
   ]);
 }
