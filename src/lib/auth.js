@@ -52,6 +52,7 @@ export const login = async (data) => {
     headers,
     authenticatedRequest: false,
     method: "POST",
+    credentials: "include",
     body: JSON.stringify(data),
   });
 
