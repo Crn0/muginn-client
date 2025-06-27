@@ -15,9 +15,8 @@ export default function LoginPage() {
 
   const setToken = useAuthStore((state) => state.setToken);
 
-  const onSuccess = (token) => {
+  const onSuccess = ({ token }) => {
     setToken(token);
-
     navigate(redirectTo || paths.dashboard.getHref(), { replace: true });
   };
 
