@@ -5,7 +5,6 @@ import { queryConfig } from "./react-query";
 import generateHeader from "./generate-header";
 import formatApiError from "./format-api-error";
 import tryCatch from "./try-catch";
-import refreshToken from "./refresh-token";
 
 export const getUser = async () => {
   const headers = generateHeader(["Content-Type", "application/json"]);
@@ -139,23 +138,6 @@ export const useLogout = (options) => {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: getAuthUserQueryOptions().queryKey });
       options?.onSuccess?.();
-    },
-    onError: (e) => {
-      options?.onError?.(e);
-    },
-  });
-
-  return mutation;
-};
-
-export const useRefreshToken = (options) => {
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: (data) => refreshToken(data),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: getAuthUserQueryOptions().queryKey });
-      options?.onSuccess?.(data);
     },
     onError: (e) => {
       options?.onError?.(e);
