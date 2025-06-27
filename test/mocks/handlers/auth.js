@@ -77,14 +77,17 @@ export default [
       }
 
       const refreshToken = Token.refreshToken(user.id, "1");
-      const accessToken = Token.accessToken(user.id, "5");
+      const token = Token.accessToken(user.id, "5");
 
-      return HttpResponse.json(accessToken, {
-        status: 200,
-        headers: {
-          "Set-Cookie": `refreshToken=${refreshToken}`,
-        },
-      });
+      return HttpResponse.json(
+        { token },
+        {
+          status: 200,
+          headers: {
+            "Set-Cookie": `refreshToken=${refreshToken}`,
+          },
+        }
+      );
     } catch (e) {
       return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
     }
@@ -102,14 +105,17 @@ export default [
       const { sub } = verifiedToken;
 
       const refreshToken = Token.refreshToken(sub, "1");
-      const accessToken = Token.accessToken(sub, "5");
+      const token = Token.accessToken(sub, "5");
 
-      return HttpResponse.json(accessToken, {
-        status: 200,
-        headers: {
-          "Set-Cookie": `refreshToken=${refreshToken}`,
-        },
-      });
+      return HttpResponse.json(
+        { token },
+        {
+          status: 200,
+          headers: {
+            "Set-Cookie": `refreshToken=${refreshToken}`,
+          },
+        }
+      );
     } catch (e) {
       return HttpResponse.json(
         { message: e?.message || "Server Error" },
