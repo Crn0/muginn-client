@@ -90,7 +90,7 @@ FormDialog.propTypes = {
   renderButtonCancel: PropTypes.func.isRequired,
   renderButtonSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
   className: PropTypes.string,
   id: PropTypes.string.isRequired,
   schema: PropTypes.instanceOf(ZodSchema).isRequired,
