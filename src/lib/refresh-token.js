@@ -1,13 +1,10 @@
 import { env } from "../configs";
 import formatApiError from "./format-api-error";
-import generateHeader from "./generate-header";
 
-export default async function refreshToken() {
+export default async function refreshToken(signal) {
   const url = `${env.getValue("serverUrl")}/api/v${env.getValue("apiVersion")}/auth/refresh-tokens`;
 
-  const headers = generateHeader(["Content-Type", "application/json"]);
-
-  const res = await fetch(url, { headers, method: "POST", credentials: "include" });
+  const res = await fetch(url, { signal, method: "POST", credentials: "include" });
 
   if (!res.ok) {
     const errorData = await res.json();
@@ -17,5 +14,7 @@ export default async function refreshToken() {
     throw error;
   }
 
-  return res.json();
+  const { token } = await res.json();
+
+  return token;
 }
