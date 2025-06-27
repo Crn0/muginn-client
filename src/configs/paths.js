@@ -27,8 +27,10 @@ export default {
     getHref: () => "/chats/me",
   },
   chat: {
-    path: "/chats/me/:chatId",
-    getHref: (id) => `/chats/me/${id}`,
+    groupChat: {
+      path: "/chats/:chatId",
+      getHref: (id) => `/chats/${id}`,
+    },
   },
   discovery: {
     root: {
