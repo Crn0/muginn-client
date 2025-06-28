@@ -19,7 +19,7 @@ export default function GroupChatList() {
     );
   }
 
-  const chats = chatsQuery.data.filter((chat) => chat.type === "GroupChat");
+  const chats = chatsQuery?.data?.filter?.((chat) => chat.type === "GroupChat") ?? [];
 
   if (chats.length === 0) {
     return null;
