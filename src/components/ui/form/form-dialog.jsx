@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 
 import { cn } from "../../../utils";
-import { useOutSideDisclosure } from "../../../hooks";
+import { useDisclosureWithClickOutside } from "../../../hooks";
 
 export default function FormDialog({
   title,
@@ -25,7 +25,7 @@ export default function FormDialog({
   const ref = useRef();
   const triggerRef = useRef();
   const methods = useForm({ ...options, resolver: zodResolver(schema) });
-  const { isOpen, open, close } = useOutSideDisclosure(initial, ref, triggerRef);
+  const { isOpen, open, close } = useDisclosureWithClickOutside(initial, ref, triggerRef);
 
   const buttonTrigger = renderButtonTrigger({
     triggerRef,
