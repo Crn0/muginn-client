@@ -3,11 +3,11 @@ import { describe, it, expect } from "vitest";
 import { act, render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import useOutsideDisclosure from "../use-outside-disclosure";
+import useDisclosureWithClickOutside from "../use-disclosure-click-outside";
 
 function TestComponent() {
   const dialogRef = useRef(null);
-  const { isOpen, open, close } = useOutsideDisclosure(true, dialogRef);
+  const { isOpen, open, close } = useDisclosureWithClickOutside(true, dialogRef);
 
   return (
     <div>
@@ -29,9 +29,9 @@ function TestComponent() {
   );
 }
 
-describe("useOutsideDisclosure hook", () => {
+describe("useDisclosureWithClickOutside hook", () => {
   it("should open the state", async () => {
-    const { result } = renderHook(() => useOutsideDisclosure(false));
+    const { result } = renderHook(() => useDisclosureWithClickOutside(false));
 
     expect(result.current.isOpen).toBe(false);
 
@@ -43,7 +43,7 @@ describe("useOutsideDisclosure hook", () => {
   });
 
   it("should close the state", async () => {
-    const { result } = renderHook(() => useOutsideDisclosure(true));
+    const { result } = renderHook(() => useDisclosureWithClickOutside(true));
 
     expect(result.current.isOpen).toBe(true);
 
@@ -55,7 +55,7 @@ describe("useOutsideDisclosure hook", () => {
   });
 
   it("should toggle the state", () => {
-    const { result } = renderHook(() => useOutsideDisclosure(false));
+    const { result } = renderHook(() => useDisclosureWithClickOutside(false));
 
     expect(result.current.isOpen).toBe(false);
 
@@ -73,7 +73,7 @@ describe("useOutsideDisclosure hook", () => {
   });
 });
 
-describe("useOutsideDisclosure - integration", () => {
+describe("useDisclosureWithClickOutside - integration", () => {
   it("should close the dialog when clicking outside", async () => {
     render(<TestComponent />);
 
