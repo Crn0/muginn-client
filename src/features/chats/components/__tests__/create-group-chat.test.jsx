@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
 
 const routes = [
   {
-    path: paths.dashboard.getHref(),
+    path: paths.dashboard.index.getHref(),
     element: <CreateGroupChat />,
   },
 ];
@@ -23,7 +23,7 @@ const routes = [
 describe("GroupChat Creation", () => {
   it("renders the form dialog trigger", () => {
     const router = createMemoryRouter(routes, {
-      initialEntries: [paths.dashboard.getHref()],
+      initialEntries: [paths.dashboard.index.getHref()],
     });
 
     setupRouter(router, queryClient);
@@ -33,7 +33,7 @@ describe("GroupChat Creation", () => {
 
   it("renders the form when the user clicked the trigger button", async () => {
     const router = createMemoryRouter(routes, {
-      initialEntries: [paths.dashboard.getHref()],
+      initialEntries: [paths.dashboard.index.getHref()],
     });
 
     const { user } = setupRouter(router, queryClient);

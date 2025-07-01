@@ -22,12 +22,12 @@ let user;
 const router = createMemoryRouter(
   [
     {
-      path: paths.dashboard.getHref(),
+      path: paths.dashboard.index.getHref(),
       errorElement: <RouteErrorElement />,
       element: <GroupChatList />,
     },
   ],
-  { initialEntries: [paths.dashboard.getHref()] }
+  { initialEntries: [paths.dashboard.index.getHref()] }
 );
 
 beforeAll(() => {

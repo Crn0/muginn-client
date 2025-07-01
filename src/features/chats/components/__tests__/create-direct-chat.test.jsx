@@ -18,7 +18,7 @@ const memberIds = [faker.string.uuid(), faker.string.uuid()];
 
 const routes = [
   {
-    path: paths.dashboard.getHref(),
+    path: paths.dashboard.index.getHref(),
     element: <CreateDirectChat memberIds={memberIds} />,
   },
 ];
@@ -26,7 +26,7 @@ const routes = [
 describe("DirectChat Creation", () => {
   it("renders the form", () => {
     const router = createMemoryRouter(routes, {
-      initialEntries: [paths.dashboard.getHref()],
+      initialEntries: [paths.dashboard.index.getHref()],
     });
 
     setupRouter(router, queryClient);
