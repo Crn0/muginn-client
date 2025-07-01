@@ -32,6 +32,6 @@ describe("DirectChat Creation", () => {
     setupRouter(router, queryClient);
 
     expect(screen.getByRole("form")).toBeInTheDocument();
-    expect(screen.getByTestId("chat-form-submit")).toBeInTheDocument();
+    expect(screen.getByTestId("create-chat-form-submit")).toBeInTheDocument();
   });
 });

@@ -65,7 +65,7 @@ export default function GroupChatView() {
                 <div>
                   <Button
                     type='button'
-                    testId='chat-form-trigger'
+                    testId='leave-chat-form-trigger'
                     onClick={options.onClick}
                     ref={options.triggerRef}
                   >
@@ -75,7 +75,7 @@ export default function GroupChatView() {
               )}
               renderButtonCancel={(options) => (
                 <div>
-                  <Button type='button' testId='chat-form-cancel' onClick={options.onClick}>
+                  <Button type='button' testId='leave-chat-form-cancel' onClick={options.onClick}>
                     Cancel
                   </Button>
                 </div>
@@ -84,7 +84,7 @@ export default function GroupChatView() {
                 <div>
                   <Button
                     type='submit'
-                    testId='chat-form-submit'
+                    testId='leave-chat-form-submit'
                     isLoading={isFormSubmitting}
                     disabled={isFormSubmitting}
                   >

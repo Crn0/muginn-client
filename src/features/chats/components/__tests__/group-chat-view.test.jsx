@@ -45,7 +45,7 @@ describe("GroupChat View", () => {
 
     await waitFor(() => {
       expect(screen.getByAltText(`${chat.name}'s avatar`)).toBeInTheDocument();
-      expect(screen.getByTestId("chat-form-trigger")).toBeInTheDocument();
+      expect(screen.getByTestId("leave-chat-form-trigger")).toBeInTheDocument();
       expect(screen.getByRole("heading", { level: 2, name: chat.name })).toBeInTheDocument();
       expect(screen.getByRole("note")).toBeInTheDocument();
     });

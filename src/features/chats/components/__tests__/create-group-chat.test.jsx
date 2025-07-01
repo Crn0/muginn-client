@@ -28,7 +28,7 @@ describe("GroupChat Creation", () => {
 
     setupRouter(router, queryClient);
 
-    expect(screen.getByTestId("chat-form-trigger")).toBeInTheDocument();
+    expect(screen.getByTestId("create-chat-form-trigger")).toBeInTheDocument();
   });
 
   it("renders the form when the user clicked the trigger button", async () => {
@@ -38,11 +38,11 @@ describe("GroupChat Creation", () => {
 
     const { user } = setupRouter(router, queryClient);
 
-    await user.click(screen.getByTestId("chat-form-trigger"));
+    await user.click(screen.getByTestId("create-chat-form-trigger"));
 
     expect(screen.getByRole("form")).toBeInTheDocument();
-    expect(screen.getByTestId("chat-form-submit")).toBeInTheDocument();
-    expect(screen.getByTestId("chat-form-cancel")).toBeInTheDocument();
+    expect(screen.getByTestId("create-chat-form-submit")).toBeInTheDocument();
+    expect(screen.getByTestId("create-chat-form-cancel")).toBeInTheDocument();
     expect(screen.getByLabelText("Chat Name")).toBeInTheDocument();
     expect(screen.getByLabelText("Upload Avatar")).toBeInTheDocument();
   });

@@ -32,7 +32,7 @@ export default function DirectChatList() {
   }
 
   return (
-    <div>
+    <div data-testid='direct-chat-list'>
       {chats.map((chat) => (
         <Link key={chat.id} to={`/chats/${chat.id}`}>
           <Avatar
