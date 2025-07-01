@@ -18,7 +18,7 @@ export default function CreateDirectChat({ memberIds }) {
       mode='onBlur'
       defaultValues={{ memberIds }}
     >
-      <Button type='submit' testId='chat-form-submit'>
+      <Button type='submit' testId='create-chat-form-submit'>
         <span>Message</span>
       </Button>
     </Form>

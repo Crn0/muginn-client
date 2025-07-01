@@ -54,7 +54,7 @@ export default function CreateGroupChat() {
         <div>
           <Button
             type='button'
-            testId='chat-form-trigger'
+            testId='create-chat-form-trigger'
             onClick={options.onClick}
             ref={options.triggerRef}
           >
@@ -64,7 +64,7 @@ export default function CreateGroupChat() {
       )}
       renderButtonCancel={(options) => (
         <div>
-          <Button type='button' testId='chat-form-cancel' onClick={options.onClick}>
+          <Button type='button' testId='create-chat-form-cancel' onClick={options.onClick}>
             Cancel
           </Button>
         </div>
@@ -73,7 +73,7 @@ export default function CreateGroupChat() {
         <div>
           <Button
             type='submit'
-            testId='chat-form-submit'
+            testId='create-chat-form-submit'
             isLoading={isFormBusy}
             disabled={isFormBusy}
           >
