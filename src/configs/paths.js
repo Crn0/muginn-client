@@ -23,12 +23,20 @@ export default {
     },
   },
   dashboard: {
-    path: "/chats/me",
-    getHref: () => "/chats/me",
-  },
-  chat: {
+    root: {
+      path: "/chats",
+      getHref: () => "/chats",
+    },
+    index: {
+      path: "me",
+      getHref: () => "/chats/me",
+      directChat: {
+        path: ":chatId",
+        getHref: (id) => `/chats/me/${id}`,
+      },
+    },
     groupChat: {
-      path: "/chats/:chatId",
+      path: ":chatId",
       getHref: (id) => `/chats/${id}`,
     },
   },

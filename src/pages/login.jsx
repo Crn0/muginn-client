@@ -17,7 +17,7 @@ export default function LoginPage() {
 
   const onSuccess = ({ token }) => {
     setToken(token);
-    navigate(redirectTo || paths.dashboard.getHref(), { replace: true });
+    navigate(redirectTo || paths.dashboard.index.getHref(), { replace: true });
   };
 
   return (
