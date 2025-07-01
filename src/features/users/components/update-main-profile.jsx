@@ -136,11 +136,17 @@ export default function UpdateUserMainProfile() {
             user={user}
             renderProfileButton={() => <Button type='button'>Example Button</Button>}
           >
-            <NameplatePreview
-              username={user.username}
-              displayName={user.profile.displayName}
-              asset={user.profile.avatar}
-            />
+            <>
+              <div>
+                <h4>NAMEPLATE PREVIEW</h4>
+              </div>
+
+              <NameplatePreview
+                username={user.username}
+                displayName={user.profile.displayName}
+                asset={user.profile.avatar}
+              />
+            </>
           </UserProfilePreview>
         </div>
       </>
