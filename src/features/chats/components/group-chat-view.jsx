@@ -1,8 +1,8 @@
 import { useNavigation, useParams, useSubmit } from "react-router-dom";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { leaveChatSchema } from "../schema";
-import { useChat } from "../api/get-chat";
-import { Spinner } from "../../../components/ui/spinner";
+import { getChatQueryOptions } from "../api/get-chat";
 import { ChatLayout } from "../../../components/layouts";
 import { Avatar } from "../../../components/ui/image";
 import { FormDialog } from "../../../components/ui/form";
@@ -17,18 +17,12 @@ const fallback = {
 
 export default function GroupChatView() {
   const { chatId } = useParams();
-  const { isLoading, data: chat } = useChat(chatId);
+  const { data: chat } = useSuspenseQuery({
+    ...getChatQueryOptions(chatId),
+  });
 
   const navigate = useNavigation();
   const submit = useSubmit();
-
-  if (isLoading) {
-    return (
-      <div>
-        <Spinner />
-      </div>
-    );
-  }
 
   if (!chat) {
     return (
@@ -44,9 +38,7 @@ export default function GroupChatView() {
 
   const isFormSubmitting = navigate.state === "submitting";
 
-  const descriptions = [
-    `Are you sure you want to leave ${chat.name} ? You won't be able to rejoin this server unless you are re-invited.`,
-  ];
+  const descriptions = [`Are you sure you want to leave ${chat.name}?`];
 
   const onSubmit = (data) => submit(data, { method: "DELETE" });
 
