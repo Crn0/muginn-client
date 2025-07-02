@@ -8,6 +8,7 @@ export default function SettingLayout({
   setRightTab,
   leftNavButtons,
   rightNavButtons,
+  headerContent,
   children,
 }) {
   const visibleRightNavButtons = rightNavButtons.filter((btn) => btn.section === leftTab);
@@ -15,21 +16,21 @@ export default function SettingLayout({
   return (
     <div>
       <header>
-        <aside>
-          <h1>{title}</h1>
+        <h1>{title}</h1>
 
-          <nav aria-label='left-navigation'>
-            {leftNavButtons.map(({ name, defaultContent, buttonText, button: Component }) => (
-              <Component
-                key={name}
-                name={name}
-                tab={leftTab}
-                buttonText={buttonText}
-                setTab={() => setLeftTab(name, defaultContent)}
-              />
-            ))}
-          </nav>
-        </aside>
+        <nav aria-label='left-navigation'>
+          {leftNavButtons.map(({ name, defaultContent, buttonText, button: Component }) => (
+            <Component
+              key={name}
+              name={name}
+              tab={leftTab}
+              buttonText={buttonText}
+              setTab={() => setLeftTab(name, defaultContent)}
+            />
+          ))}
+        </nav>
+
+        {headerContent}
       </header>
 
       <main>
@@ -76,4 +77,5 @@ SettingLayout.propTypes = {
     })
   ).isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+  headerContent: PropTypes.element,
 };
