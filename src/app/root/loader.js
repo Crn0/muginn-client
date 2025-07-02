@@ -12,7 +12,9 @@ export default function loader(queryClient) {
       return replace(paths.silentLogin.getHref(redirectTo));
     }
 
-    queryClient.ensureQueryData(getAuthUserQueryOptions().queryKey);
+    queryClient.ensureQueryData({
+      ...getAuthUserQueryOptions(),
+    });
 
     return null;
   };
