@@ -30,14 +30,14 @@ function Wrapper() {
   const redirectTo = searchParams.get("redirectTo");
 
   useEffect(() => {
-    if (user.isError) {
+    if (!token) {
       navigate(paths.login.getHref(redirectTo), { replace: true });
     }
 
     if (user.data) {
       navigate(redirectTo || paths.dashboard.me.getHref(), { replace: true });
     }
-  }, [navigate, redirectTo, user.data, user.isError]);
+  }, [navigate, redirectTo, token, user.data, user.isError]);
 
   return <Spinner />;
 }
