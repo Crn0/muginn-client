@@ -37,7 +37,7 @@ describe("Dashboard Content", () => {
     const router = createMemoryRouter(
       [
         {
-          path: paths.dashboard.root.path,
+          path: paths.dashboard.root.getHref(),
           element: (
             <ErrorBoundary FallbackComponent={ErrorElement}>
               <DashboardContent />
@@ -51,7 +51,7 @@ describe("Dashboard Content", () => {
           ],
         },
       ],
-      { initialEntries: [`${paths.dashboard.root.path}/me`] }
+      { initialEntries: [paths.dashboard.me.getHref()] }
     );
 
     setupRouter(router, queryClient);

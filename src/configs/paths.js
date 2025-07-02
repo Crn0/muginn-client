@@ -24,7 +24,7 @@ export default {
   },
   dashboard: {
     root: {
-      path: "/chats",
+      path: "chats",
       getHref: () => "/chats",
     },
     me: {
