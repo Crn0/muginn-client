@@ -27,7 +27,7 @@ export default {
       path: "/chats",
       getHref: () => "/chats",
     },
-    index: {
+    me: {
       path: "me",
       getHref: () => "/chats/me",
       directChat: {

@@ -23,12 +23,12 @@ let chats;
 const router = createMemoryRouter(
   [
     {
-      path: paths.dashboard.index.getHref(),
+      path: paths.dashboard.me.getHref(),
       errorElement: <RouteErrorElement />,
       element: <DirectChatList />,
     },
   ],
-  { initialEntries: [paths.dashboard.index.getHref()] }
+  { initialEntries: [paths.dashboard.me.getHref()] }
 );
 
 beforeAll(() => {
