@@ -15,7 +15,7 @@ const queryClient = new QueryClient();
 
 const routes = [
   {
-    path: paths.dashboard.index.getHref(),
+    path: paths.dashboard.me.getHref(),
     loader: dashBoardLoader,
     element: <DashBoard />,
   },
