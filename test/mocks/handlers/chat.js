@@ -86,14 +86,9 @@ export default [
     withAuth(
       withUser(async ({ request, user }) => {
         await networkDelay();
-        let body;
         let createdChat;
         try {
-          if (request.headers.get("Content-type").includes("multipart/form-data")) {
-            body = requestBodySchema.safeParse(await request.clone().formData());
-          } else {
-            body = requestBodySchema.safeParse(await request.clone().json());
-          }
+          const body = requestBodySchema.safeParse(await request.clone().json());
 
           if (!body.success) {
             return HttpResponse.json(
