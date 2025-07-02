@@ -3,27 +3,33 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiClient, generateHeader, tryCatch } from "../../../lib";
 import { getChatsQueryOptions } from "./get-chats";
 
-export const createChat = async (request) => {
+export const createChat = (queryClient) => async (request) => {
   const headers = generateHeader();
 
   const contentType = request.headers.get("Content-type");
 
   const isMultiForm = contentType.includes("multipart/form-data");
 
-  const data = await request.clone().formData();
+  const formData = await request.clone().formData();
 
   const { error, data: res } = await tryCatch(
     ApiClient.callApi("chats", {
       headers,
       authenticatedRequest: true,
       method: "POST",
-      body: isMultiForm ? data : JSON.stringify(data),
+      body: isMultiForm ? formData : JSON.stringify(Object.fromEntries(formData)),
     })
   );
 
   if (error) throw error;
 
-  return res.json();
+  const resData = await res.json();
+
+  if (resData) {
+    queryClient.invalidateQueries({ queryKey: getChatsQueryOptions().queryKey });
+  }
+
+  return resData;
 };
 
 export const useCreateChat = (options) => {

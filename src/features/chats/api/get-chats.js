@@ -28,7 +28,7 @@ const chatSchema = z.object({
     .nullable(),
 });
 
-export const chatResponseSchema = z.array(chatSchema);
+export const chatsResponseSchema = z.array(chatSchema);
 
 export const getChats = async () => {
   const headers = generateHeader();
@@ -45,7 +45,7 @@ export const getChats = async () => {
 
   const resData = await res.clone().json();
 
-  const parsedData = chatResponseSchema.safeParse(resData);
+  const parsedData = chatsResponseSchema.safeParse(resData);
 
   if (!parsedData.success) {
     const e = formatApiError(res, {
