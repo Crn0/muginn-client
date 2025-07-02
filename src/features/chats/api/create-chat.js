@@ -12,12 +12,18 @@ export const createChat = (queryClient) => async (request) => {
 
   const formData = await request.clone().formData();
 
+  formData.delete("intent");
+
+  if (!isMultiForm) {
+    formData.delete("avatar");
+  }
+
   const { error, data: res } = await tryCatch(
     ApiClient.callApi("chats", {
       headers,
       authenticatedRequest: true,
       method: "POST",
-      body: isMultiForm ? formData : JSON.stringify(Object.fromEntries(formData)),
+      body: formData,
     })
   );
 
