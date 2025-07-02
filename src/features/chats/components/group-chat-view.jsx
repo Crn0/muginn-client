@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { leaveChatSchema } from "../schema";
 import { getChatQueryOptions } from "../api/get-chat";
-import { ChatLayout } from "../../../components/layouts";
+import { ContentLayout } from "../../../components/layouts";
 import { Avatar } from "../../../components/ui/image";
 import { FormDialog } from "../../../components/ui/form";
 import { Button } from "../../../components/ui/button";
@@ -43,7 +43,7 @@ export default function GroupChatView() {
   const onSubmit = (data) => submit(data, { method: "DELETE" });
 
   return (
-    <ChatLayout
+    <ContentLayout
       header={
         <>
           <div>
@@ -112,6 +112,6 @@ export default function GroupChatView() {
           </div>
         </section>
       </>
-    </ChatLayout>
+    </ContentLayout>
   );
 }
