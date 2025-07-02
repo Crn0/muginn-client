@@ -8,7 +8,7 @@ import { networkDelay } from "../utils";
 
 const chatType = z.enum(["DirectChat", "GroupChat"]);
 
-const baseUrl = `${env.getValue("serverUrl")}/api/v${env.getValue("apiVersion")}/users/me`;
+const baseUrl = `${env.getValue("serverUrl")}/api/v${env.getValue("apiVersion")}/chats`;
 
 const directChatCondition = (data, ctx) => {
   const dataSchema = z.object({
@@ -46,7 +46,7 @@ const requestBodySchema = z
   .object({
     type: chatType,
     name: z.string().max(100, { message: "Name must contain at most 100 character(s)" }),
-    membersId: z.array(z.string().uuid()),
+    membersId: z.array(z.string().uuid()).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.type === "DirectChat") {
@@ -57,6 +57,30 @@ const requestBodySchema = z
   });
 
 export default [
+  http.get(
+    baseUrl,
+    withAuth(
+      withUser(async ({ user }) => {
+        await networkDelay();
+
+        const chats =
+          db.userOnChat.findMany(user).map(({ chat }) => ({
+            id: chat.id,
+            name: chat.name ?? "",
+            avatar: chat.avatar ?? null,
+            type: chat.type,
+            isPrivate: chat.isPrivate,
+            createdAt: chat.createdAt,
+            updatedAt: chat.updatedAt,
+            ownerId: chat?.owner?.id ?? null,
+          })) ?? [];
+
+        return HttpResponse.json(chats, {
+          status: 200,
+        });
+      })
+    )
+  ),
   http.post(
     baseUrl,
     withAuth(
@@ -82,26 +106,28 @@ export default [
             );
           }
 
-          const permissions = db.permissions.findMany({
+          const { data } = body;
+
+          const permissions = db.permission.findMany({
             name: {
               in: ["send_message", "view_chat"],
             },
           });
 
-          const roles = [
-            db.role.create({
-              permissions,
-              chat: createdChat,
-            }),
-          ];
-
-          if (body.type === "GroupChat") {
+          if (data.type === "GroupChat") {
             createdChat = db.chat.create({
               owner: user,
-              name: body.name,
-              type: body.type,
+              name: data.name,
+              type: data.type,
               isPrivate: false,
             });
+
+            const roles = [
+              db.role.create({
+                permissions,
+                chat: createdChat,
+              }),
+            ];
 
             db.userOnChat.create({
               user,
@@ -110,11 +136,18 @@ export default [
             });
           } else {
             createdChat = db.chat.create({
-              type: body.type,
+              type: data.type,
               isPrivate: true,
             });
 
-            const users = db.user.findMany({ where: { id: { in: [body.memberIds] } } });
+            const users = db.user.findMany({ where: { id: { in: [data.memberIds] } } });
+
+            const roles = [
+              db.role.create({
+                permissions,
+                chat: createdChat,
+              }),
+            ];
 
             users.forEach((u) =>
               db.userOnChat.create({
