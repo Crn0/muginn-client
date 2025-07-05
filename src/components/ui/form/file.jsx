@@ -4,9 +4,36 @@ import { useFormContext } from "react-hook-form";
 import FileWrapper from "./file-wrapper";
 import { useInputErrorHandler } from "../../../hooks";
 
+const mergeRefs =
+  (...refs) =>
+  (value) => {
+    refs.forEach((ref) => {
+      if (!ref) return;
+      if (typeof ref === "function") {
+        ref(value);
+      } else {
+        const clone = ref;
+
+        clone.current = value;
+      }
+    });
+  };
+
 const File = forwardRef(
   (
-    { label, renderFieldButton, serverError, className, name, accept, testId, onKeyDown, required },
+    {
+      label,
+      renderFieldButton,
+      serverError,
+      className,
+      name,
+      accept,
+      testId,
+      onKeyDown,
+      onChange,
+      required,
+      multiple = false,
+    },
     ref
   ) => {
     const {
@@ -42,8 +69,10 @@ const File = forwardRef(
             data-testid={testId}
             aria-invalid={error ? "true" : "false"}
             accept={accept}
-            ref={ref(inputRef)}
+            ref={mergeRefs(ref, inputRef)}
             onBlur={required ? rest.onBlur : () => {}}
+            onChange={typeof onChange === "function" ? onChange : rest.onChange}
+            multiple={multiple}
           />
         </FileWrapper>
       </div>
@@ -64,7 +93,9 @@ File.propTypes = {
   serverError: PropTypes.instanceOf(Error),
   onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,
+  onChange: PropTypes.func,
   testId: PropTypes.string,
+  multiple: PropTypes.bool,
 };
 
 export default File;
