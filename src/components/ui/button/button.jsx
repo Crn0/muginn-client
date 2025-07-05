@@ -47,7 +47,7 @@ Button.propTypes = {
   type: PropTypes.string.isRequired,
   size: PropTypes.string,
   variant: PropTypes.string,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   className: PropTypes.string,
   disabled: PropTypes.bool,
   testId: PropTypes.string,
