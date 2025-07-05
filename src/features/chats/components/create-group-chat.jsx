@@ -90,10 +90,7 @@ export default function CreateGroupChat() {
           accept={ACCEPTED_IMAGE_TYPES.join(",")}
           onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
           serverError={createdChat?.error}
-          ref={(inputRef) => (e) => {
-            inputRef(e);
-            avatarRef.current = e;
-          }}
+          ref={avatarRef}
         />
         <Input type='text' name='name' label='Chat Name' serverError={createdChat?.error} />
       </>
