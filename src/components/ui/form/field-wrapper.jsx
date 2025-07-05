@@ -15,7 +15,7 @@ export default function FieldWrapper({ label, isRequired, error, children }) {
 }
 
 FieldWrapper.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node,
   error: PropTypes.shape({ message: PropTypes.string }),
   children: PropTypes.element,
   isRequired: PropTypes.bool,
