@@ -51,6 +51,7 @@ export default function UpdateUserMainProfile() {
       mode='onBlur'
       defaultValues={{ displayName: "", aboutMe: "" }}
       values={{ displayName: user?.profile?.displayName, aboutMe: user?.profile?.aboutMe }}
+      isCurried
     >
       <>
         <div>

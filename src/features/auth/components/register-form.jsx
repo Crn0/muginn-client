@@ -18,7 +18,7 @@ export default function RegisterForm({ onSuccess }) {
 
   const redirectTo = searchParams.get("redirectTo");
 
-  const onSubmit = () => (data) => {
+  const onSubmit = (data) => {
     registering.mutate(data);
   };
 
