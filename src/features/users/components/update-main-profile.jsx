@@ -77,10 +77,7 @@ export default function UpdateUserMainProfile() {
                     <p>Avatar</p>
                   </Button>
                 )}
-                ref={(inputRef) => (e) => {
-                  inputRef(e);
-                  avatarRef.current = e;
-                }}
+                ref={avatarRef}
               />
             </div>
 
@@ -101,10 +98,7 @@ export default function UpdateUserMainProfile() {
                     <p>Background Avatar</p>
                   </Button>
                 )}
-                ref={(inputRef) => (e) => {
-                  inputRef(e);
-                  backgroundAvatarRef.current = e;
-                }}
+                ref={backgroundAvatarRef}
               />
             </div>
           </div>
