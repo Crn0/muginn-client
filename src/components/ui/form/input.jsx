@@ -38,7 +38,7 @@ const Input = forwardRef(
 Input.displayName = "Input";
 
 Input.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node,
   className: PropTypes.string,
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,

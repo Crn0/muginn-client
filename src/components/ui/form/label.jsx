@@ -11,7 +11,7 @@ const Label = forwardRef(({ label, isRequired, className, children, ...props }, 
 Label.displayName = Label;
 
 Label.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node,
   className: PropTypes.string,
   children: PropTypes.element,
   isRequired: PropTypes.bool,
