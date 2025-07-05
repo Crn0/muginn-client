@@ -31,6 +31,7 @@
     "react-router-dom": "^6.28.0",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.7",
+    "uuid": "^11.1.0",
     "zod": "^3.25.32",
     "zustand": "^5.0.5"
   },
