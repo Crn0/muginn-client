@@ -8,7 +8,7 @@ import { Button } from "../../../components/ui/button";
 export default function CreateDirectChat({ memberIds }) {
   const submit = useSubmit();
 
-  const onSubmit = () => (data) => submit(data, { method: "POST" });
+  const onSubmit = (data) => submit(data, { method: "POST" });
 
   return (
     <Form
