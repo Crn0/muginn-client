@@ -4,3 +4,4 @@ export { default as tryCatch } from "./try-catch";
 export { default as ApiClient } from "./api-client";
 export { default as generateHeader } from "./generate-header";
 export { default as refreshToken } from "./refresh-token";
+export { default as generateId } from "./generate-id";
