@@ -42,6 +42,7 @@ const messageSchema = z.object({
     z.object({
       id: z.string().uuid(),
       url: z.string(),
+      type: z.enum(["Image", "Epub", "Pdf"]),
       images: z
         .array(
           z.object({
