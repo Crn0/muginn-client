@@ -8,7 +8,7 @@ import { createMessageSchema, ACCEPTED_ATTACHMENTS_TYPES } from "../schema";
 import { useCreateMessage } from "../api/create-message";
 import { File, Form, FormError, Input } from "../../../components/ui/form";
 import { DropDownMenu } from "../../../components/ui/dropdown";
-import { Attachment } from "../../../components/ui/preview";
+import { MessageAttachment } from "../../../components/ui/preview";
 import { Button } from "../../../components/ui/button";
 
 export default function CreateMessage({ chatId }) {
@@ -30,7 +30,7 @@ export default function CreateMessage({ chatId }) {
                 <div>
                   {selectedFiles.map(({ id, file }) => (
                     <div key={id}>
-                      <Attachment attachment={file} />
+                      <MessageAttachment attachment={file} />
                       <Button
                         type='button'
                         size='sm'
