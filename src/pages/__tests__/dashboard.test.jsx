@@ -11,9 +11,7 @@ import { generateAccessToken } from "../../../test/utils/data-generator";
 import { createChats } from "./data";
 import { setToken } from "../../stores";
 import setupRouter from "./mocks/utils/setup-router";
-import { ContentLayout } from "../../components/layouts";
 import DashBoard from "../dashboard";
-import DirectChatList from "../../features/chats/components/direct-chat-list";
 import GroupChatView from "../../features/chats/components/group-chat-view";
 import DashBoardMe from "../../features/dashboard/components/dashboard-me";
 
@@ -161,7 +159,7 @@ describe("Dashboard page", () => {
     });
   });
 
-  describe("GroupChat Creation", () => {
+  describe.only("GroupChat Creation", () => {
     describe("Success Case", () => {
       it("should create a new group chat on form submit and refetch user's chats", async () => {
         const token = generateAccessToken(".crno.");
@@ -190,8 +188,8 @@ describe("Dashboard page", () => {
 
         await waitFor(() => {
           expect(form).not.toBeInTheDocument();
-          // expect(spinner).not.toBeInTheDocument();
-          // expect(screen.getByText(/c-g-c/i)).toBeInTheDocument();
+          expect(spinner).not.toBeInTheDocument();
+          expect(screen.getByText(/c-g-c/i)).toBeInTheDocument();
         });
       });
     });

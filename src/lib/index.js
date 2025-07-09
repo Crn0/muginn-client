@@ -6,3 +6,4 @@ export { default as generateHeader } from "./generate-header";
 export { default as refreshToken } from "./refresh-token";
 export { default as generateId } from "./generate-id";
 export { default as InfiniteScroll } from "./infinite-scroll";
+export { default as errorHandler } from "./error-handler";

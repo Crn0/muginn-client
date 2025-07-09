@@ -8,7 +8,8 @@ import { Avatar } from "../../../components/ui/image";
 export default function GroupChatList() {
   const chatsQuery = useQuery({
     ...getChatsQueryOptions(),
-    // throwOnError: (e) => e.response?.status >= 500 || e.message.toLowerCase() === "failed to fetch",
+    throwOnError: (e) =>
+      e.response?.status >= 500 || e?.code === 422 || e.message.toLowerCase() === "failed to fetch",
   });
 
   if (chatsQuery.isLoading && !chatsQuery.data) {

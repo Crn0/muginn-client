@@ -2,7 +2,7 @@ import { env, paths } from "../configs";
 import generateHeader from "./generate-header";
 import refreshToken from "./refresh-token";
 import { setToken, getToken } from "../stores";
-import formatApiError from "./format-api-error";
+import errorHandler from "./error-handler";
 import tryCatch from "./try-catch";
 
 let refreshPromise = null;
@@ -19,9 +19,7 @@ const callAPIWithToken = async (url, token, configs) => {
   if (!res.ok) {
     const data = await res.json();
 
-    const error = formatApiError(res, data);
-
-    throw error;
+    errorHandler(res, data);
   }
 
   return res;
@@ -35,9 +33,7 @@ const callAPIWithoutToken = async (url, configs) => {
   if (!res.ok) {
     const data = await res.json();
 
-    const error = formatApiError(res, data);
-
-    throw error;
+    errorHandler(res, data);
   }
 
   return res;

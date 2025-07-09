@@ -1,8 +1,7 @@
 import z from "zod";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
-import { ApiClient, generateHeader, queryConfig, tryCatch } from "../../../lib";
-import formatApiError from "../../../lib/format-api-error";
+import { ApiClient, generateHeader, queryConfig, tryCatch, errorHandler } from "../../../lib";
 
 export const chatResponseSchema = z.object({
   id: z.string().uuid(),
@@ -46,12 +45,10 @@ export const getChat = async (chatId) => {
   const parsedData = chatResponseSchema.safeParse(resData);
 
   if (!parsedData.success) {
-    const e = formatApiError(res, {
+    errorHandler(res, {
       data: resData,
       ...parsedData.error,
     });
-
-    throw e;
   }
 
   return parsedData.data;

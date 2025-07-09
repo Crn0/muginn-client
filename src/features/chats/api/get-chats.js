@@ -1,8 +1,7 @@
 import z from "zod";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
-import { ApiClient, generateHeader, queryConfig, tryCatch } from "../../../lib";
-import formatApiError from "../../../lib/format-api-error";
+import { ApiClient, generateHeader, queryConfig, tryCatch, errorHandler } from "../../../lib";
 
 const chatSchema = z.object({
   id: z.string().uuid(),
@@ -48,12 +47,12 @@ export const getChats = async () => {
   const parsedData = chatsResponseSchema.safeParse(resData);
 
   if (!parsedData.success) {
-    const e = formatApiError(res, {
+    errorHandler(res, {
+      code: 422,
       data: resData,
+      message: `Validation failed: ${parsedData.error.issues.length} errors detected in body`,
       ...parsedData.error,
     });
-
-    throw e;
   }
 
   return parsedData.data;

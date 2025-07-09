@@ -3,7 +3,7 @@ import { useMutation, useQuery, queryOptions, useQueryClient } from "@tanstack/r
 import client from "./api-client";
 import { queryConfig } from "./react-query";
 import generateHeader from "./generate-header";
-import formatApiError from "./format-api-error";
+import errorHandler from "./error-handler";
 import tryCatch from "./try-catch";
 
 export const getUser = async () => {
@@ -37,9 +37,7 @@ export const register = async (data) => {
   if (!res.ok) {
     const errorData = await res.json();
 
-    const error = formatApiError(res, errorData);
-
-    throw error;
+    errorHandler(res, errorData);
   }
 
   return null;
@@ -59,9 +57,7 @@ export const login = async (data) => {
   if (!res.ok) {
     const errorData = await res.json();
 
-    const error = formatApiError(res, errorData);
-
-    throw error;
+    errorHandler(res, errorData);
   }
 
   return res.json();
@@ -80,9 +76,7 @@ export const logout = async () => {
   if (!res.ok) {
     const errorData = await res.json();
 
-    const error = formatApiError(res, errorData);
-
-    throw error;
+    errorHandler(res, errorData);
   }
 };
 

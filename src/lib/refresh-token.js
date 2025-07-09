@@ -1,5 +1,5 @@
 import { env } from "../configs";
-import formatApiError from "./format-api-error";
+import errorHandler from "./error-handler";
 
 export default async function refreshToken(signal) {
   const url = `${env.getValue("serverUrl")}/api/v${env.getValue("apiVersion")}/auth/refresh-tokens`;
@@ -9,9 +9,7 @@ export default async function refreshToken(signal) {
   if (!res.ok) {
     const errorData = await res.json();
 
-    const error = formatApiError(res, errorData);
-
-    throw error;
+    errorHandler(res, errorData);
   }
 
   const { token } = await res.json();
