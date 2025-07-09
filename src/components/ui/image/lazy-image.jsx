@@ -17,7 +17,7 @@ export default function LazyImage({ asset, fallBackAsset, className, variant, si
 
   const sortedImages = [...(asset?.images || [])].sort((a, b) => a.size - b.size);
   const blurImage = sortedImages[0]?.url ?? fallBackAsset.lazyImage;
-  const mainImage = sortedImages[sortedImages.length - 1]?.url;
+  const mainImage = sortedImages[sortedImages.length - 1]?.url ?? asset?.url;
 
   const imageContent =
     mainImage === blurImage
