@@ -8,14 +8,14 @@ import { getAuthUserQueryOptions } from "../../lib";
 import { ErrorElement } from "../../components/errors";
 import { Spinner } from "../../components/ui/spinner";
 
-export default function AppRoot() {
+export default function ProtectedRoot() {
   const navigate = useNavigate();
 
   const { isLoading, data } = useQuery({ ...getAuthUserQueryOptions() });
 
   useEffect(() => {
     if (data) {
-      navigate(paths.dashboard.me.getHref());
+      navigate(paths.protected.dashboard.me.getHref());
     }
   }, [data, navigate]);
 

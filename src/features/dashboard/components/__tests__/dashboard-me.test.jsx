@@ -5,7 +5,6 @@ import { screen, within } from "@testing-library/react";
 
 import { paths } from "../../../../configs";
 import { getChatsQueryOptions } from "../../../chats/api/get-chats";
-import { getAuthUserQueryOptions } from "../../../../lib";
 import { createChats } from "./data";
 import { setupRouter } from "./mocks/utils/setup";
 import { RouteErrorElement } from "../../../../components/errors";
@@ -21,12 +20,12 @@ const chats = createChats({
 const router = createMemoryRouter(
   [
     {
-      path: paths.dashboard.me.getHref(),
+      path: paths.protected.dashboard.me.getHref(),
       errorElement: <RouteErrorElement />,
       element: <DashBoardMe />,
     },
   ],
-  { initialEntries: [paths.dashboard.me.getHref()] }
+  { initialEntries: [paths.protected.dashboard.me.getHref()] }
 );
 
 beforeAll(() => {

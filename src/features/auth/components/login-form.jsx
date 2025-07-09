@@ -81,7 +81,7 @@ export default function LoginForm({ onSuccess }) {
       <div>
         <p>
           Don&apos;t have an account yet?{" "}
-          <Link to={paths.register.getHref(redirectTo)}>Register</Link>
+          <Link to={paths.register.getHref({ redirectTo })}>Register</Link>
         </p>
       </div>
     </>

@@ -20,7 +20,7 @@ const queryClient = new QueryClient();
 
 const routes = [
   {
-    path: paths.dashboard.me.getHref(),
+    path: paths.protected.dashboard.me.getHref(),
     loader: dashBoardLoader(queryClient),
     errorElement: <ErrorBoundary />,
     element: <DashBoard />,
@@ -54,7 +54,7 @@ describe("Login page", () => {
   describe("UI Rendering", () => {
     it("renders the login page", async () => {
       const router = createMemoryRouter(routes, {
-        initialEntries: ["/login"],
+        initialEntries: [paths.login.getHref()],
       });
 
       setupRouter(router, queryClient);

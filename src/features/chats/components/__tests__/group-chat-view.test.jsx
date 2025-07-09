@@ -25,16 +25,16 @@ const chat = createChats({
 const router = createMemoryRouter(
   [
     {
-      path: paths.dashboard.root.path,
+      path: paths.protected.dashboard.root.path,
       children: [
         {
-          path: paths.dashboard.groupChat.path,
+          path: paths.protected.dashboard.groupChat.path,
           element: <GroupChatView />,
         },
       ],
     },
   ],
-  { initialEntries: [paths.dashboard.groupChat.getHref(chat.id)] }
+  { initialEntries: [paths.protected.dashboard.groupChat.getHref({ chatId: chat.id })] }
 );
 
 describe("GroupChat View", () => {

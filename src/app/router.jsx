@@ -3,14 +3,14 @@ import { QueryClientProvider } from "@tanstack/react-query";
 
 import { paths } from "../configs";
 import queryClient from "./query-client";
-import rootLoader from "./root/loader";
+import protectedLoader from "./root/loader";
 import { clientLoader as silentLoginLoader } from "../features/auth/api/index";
 
 import { clientAction as userAction } from "../features/users/api";
 import { clientAction as chatAction } from "../features/chats/api";
 
 import { RouteErrorElement } from "../components/errors";
-import AppRoot from "./root";
+import ProtectedRoot from "./root";
 import LoginPage from "../pages/login";
 import RegisterPage from "../pages/register";
 import UserSettingsPage from "../pages/user-settings";
@@ -49,13 +49,13 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: paths.home.path,
-    loader: rootLoader(queryClient),
-    element: <AppRoot />,
+    path: paths.protected.root.path,
+    loader: protectedLoader(queryClient),
+    element: <ProtectedRoot />,
     errorElement: <RouteErrorElement />,
     children: [
       {
-        path: paths.dashboard.root.path,
+        path: paths.protected.dashboard.root.path,
         action: chatAction(queryClient),
         errorElement: <RouteErrorElement />,
         element: <DashBoardPage />,
@@ -65,18 +65,18 @@ const router = createBrowserRouter([
             element: <DashBoardMe />,
           },
           {
-            path: paths.dashboard.me.path,
+            path: paths.protected.dashboard.me.path,
             action: chatAction(queryClient),
             element: <DashBoardMe />,
           },
           {
-            path: paths.dashboard.groupChat.path,
+            path: paths.protected.dashboard.groupChat.path,
             element: <GroupChatView />,
           },
         ],
       },
       {
-        path: paths.user.settings.path,
+        path: paths.protected.userSettings.path,
         action: userAction(queryClient),
         errorElement: <RouteErrorElement />,
         element: <UserSettingsPage />,

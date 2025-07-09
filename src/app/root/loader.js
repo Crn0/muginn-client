@@ -9,7 +9,7 @@ export default function loader(queryClient) {
     const redirectTo = new URL(request.url).pathname;
 
     if (!getToken()) {
-      return replace(paths.silentLogin.getHref(redirectTo));
+      return replace(paths.silentLogin.getHref({ redirectTo }));
     }
 
     queryClient.ensureQueryData({

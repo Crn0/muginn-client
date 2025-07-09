@@ -11,8 +11,6 @@ import { getChatsQueryOptions } from "../../../chats/api/get-chats";
 import { createChats } from "./data";
 import { setupRouter } from "./mocks/utils/setup";
 import { ErrorElement } from "../../../../components/errors";
-import { ContentLayout } from "../../../../components/layouts";
-import DirectChatList from "../../../chats/components/direct-chat-list";
 import GroupChatView from "../../../chats/components/group-chat-view";
 import DashboardContent from "../dashboard-content";
 import DashBoardMe from "../dashboard-me";
@@ -37,7 +35,7 @@ describe("Dashboard Content", () => {
     const router = createMemoryRouter(
       [
         {
-          path: paths.dashboard.root.getHref(),
+          path: paths.protected.dashboard.root.getHref(),
           element: (
             <ErrorBoundary FallbackComponent={ErrorElement}>
               <DashboardContent />
@@ -45,13 +43,13 @@ describe("Dashboard Content", () => {
           ),
           children: [
             {
-              path: paths.dashboard.me.path,
+              path: paths.protected.dashboard.me.path,
               element: <DashBoardMe />,
             },
           ],
         },
       ],
-      { initialEntries: [paths.dashboard.me.getHref()] }
+      { initialEntries: [paths.protected.dashboard.me.getHref()] }
     );
 
     setupRouter(router, queryClient);
@@ -72,7 +70,7 @@ describe("Dashboard Content", () => {
     const router = createMemoryRouter(
       [
         {
-          path: paths.dashboard.root.path,
+          path: paths.protected.dashboard.root.path,
           element: (
             <ErrorBoundary FallbackComponent={ErrorElement}>
               <DashboardContent />
@@ -80,13 +78,13 @@ describe("Dashboard Content", () => {
           ),
           children: [
             {
-              path: paths.dashboard.groupChat.path,
+              path: paths.protected.dashboard.groupChat.path,
               element: <GroupChatView />,
             },
           ],
         },
       ],
-      { initialEntries: [paths.dashboard.groupChat.getHref(chat.id)] }
+      { initialEntries: [paths.protected.dashboard.groupChat.getHref({ chatId: chat.id })] }
     );
 
     setupRouter(router, queryClient);

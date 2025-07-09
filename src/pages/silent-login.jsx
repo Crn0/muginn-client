@@ -35,7 +35,7 @@ function Wrapper() {
     }
 
     if (user.data) {
-      navigate(redirectTo || paths.dashboard.me.getHref(), { replace: true });
+      navigate(redirectTo || paths.protected.dashboard.me.getHref(), { replace: true });
     }
   }, [navigate, redirectTo, token, user.data, user.isError]);
 

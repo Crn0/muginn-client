@@ -32,7 +32,7 @@ const chats = [...groupChat, ...directChat];
 
 const routes = [
   {
-    path: paths.dashboard.root.getHref(),
+    path: paths.protected.dashboard.root.getHref(),
     action: clientAction(queryClient),
     element: (
       <QueryClientProvider client={queryClient}>
@@ -45,11 +45,11 @@ const routes = [
         element: <DashBoardMe />,
       },
       {
-        path: paths.dashboard.groupChat.path,
+        path: paths.protected.dashboard.groupChat.path,
         element: <GroupChatView />,
       },
       {
-        path: paths.dashboard.me.path,
+        path: paths.protected.dashboard.me.path,
         element: <DashBoardMe />,
       },
     ],
@@ -82,7 +82,7 @@ describe("Dashboard page", () => {
   describe("UI Rendering", () => {
     it("renders a group chats sidebar and a direct chats panel in the main content on '/chats'", () => {
       const router = createMemoryRouter(routes, {
-        initialEntries: [paths.dashboard.root.getHref()],
+        initialEntries: [paths.protected.dashboard.root.getHref()],
       });
 
       setupRouter(router, queryClient);
@@ -101,7 +101,7 @@ describe("Dashboard page", () => {
 
     it("renders a group chats sidebar and a direct chats panel in the main content on '/chats/me'", () => {
       const router = createMemoryRouter(routes, {
-        initialEntries: [paths.dashboard.me.getHref()],
+        initialEntries: [paths.protected.dashboard.me.getHref()],
       });
 
       setupRouter(router, queryClient);
@@ -124,7 +124,7 @@ describe("Dashboard page", () => {
       queryClient.setQueryData(getChatQueryOptions(chat.id).queryKey, chat);
 
       const router = createMemoryRouter(routes, {
-        initialEntries: [paths.dashboard.groupChat.getHref(chat.id)],
+        initialEntries: [paths.protected.dashboard.groupChat.getHref({ chatId: chat.id })],
       });
 
       setupRouter(router, queryClient);
@@ -144,7 +144,7 @@ describe("Dashboard page", () => {
       queryClient.setQueryData(getChatsQueryOptions().queryKey, chats);
 
       const router = createMemoryRouter(routes, {
-        initialEntries: [paths.dashboard.root.getHref()],
+        initialEntries: [paths.protected.dashboard.root.getHref()],
       });
 
       const { user } = setupRouter(router, queryClient);
@@ -169,7 +169,7 @@ describe("Dashboard page", () => {
         setToken(token);
 
         const router = createMemoryRouter(routes, {
-          initialEntries: [paths.dashboard.root.getHref()],
+          initialEntries: [paths.protected.dashboard.root.getHref()],
         });
 
         const { user } = setupRouter(router, queryClient);

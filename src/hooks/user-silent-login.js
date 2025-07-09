@@ -33,7 +33,7 @@ export default function useSilentLogin() {
     }
 
     if (user.isSuccess) {
-      navigate(redirectTo ?? paths.dashboard.me.getHref(), {
+      navigate(redirectTo ?? paths.protected.dashboard.me.getHref(), {
         replace: true,
       });
     }

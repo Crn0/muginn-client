@@ -15,7 +15,7 @@ const queryClient = new QueryClient();
 
 const routes = [
   {
-    path: paths.dashboard.me.getHref(),
+    path: paths.protected.dashboard.me.getHref(),
     loader: dashBoardLoader,
     element: <DashBoard />,
   },
@@ -52,7 +52,7 @@ describe("Register Page", () => {
   describe("UI Rendering", () => {
     it("renders the register page", async () => {
       const router = createMemoryRouter(routes, {
-        initialEntries: ["/register"],
+        initialEntries: [paths.register.getHref({ redirectTo: null })],
       });
 
       setupRouter(router, queryClient);

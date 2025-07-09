@@ -88,7 +88,7 @@ export default function RegisterForm({ onSuccess }) {
       </div>
       <div>
         <p>
-          Already have an account? <Link to={paths.login.getHref(redirectTo)}>Log in</Link>
+          Already have an account? <Link to={paths.login.getHref({ redirectTo })}>Log in</Link>
         </p>
       </div>
     </>

@@ -12,7 +12,7 @@ export default function DashBoardSideBar() {
     <aside>
       <nav>
         <div>
-          <Link to={paths.dashboard.me.getHref()}>DM</Link>
+          <Link to={paths.protected.dashboard.me.getHref()}>DM</Link>
         </div>
 
         <GroupChatList />

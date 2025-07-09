@@ -30,7 +30,7 @@ const createRouter = (initialEntries) =>
   createMemoryRouter(
     [
       {
-        path: paths.dashboard.me.getHref(),
+        path: paths.protected.dashboard.me.getHref(),
         loader: dashBoardLoader(queryClient),
         errorElement: <RouteErrorElement />,
         element: <DashBoard />,
