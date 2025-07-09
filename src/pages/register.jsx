@@ -2,12 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { paths } from "../configs";
+import { ErrorElement } from "../components/errors";
 import { AuthLayout } from "../components/layouts";
 import { RegisterForm } from "../features/auth/components";
-
-function ErrorElement({ error }) {
-  return <p>{error.message}</p>;
-}
 
 export default function RegisterPage() {
   const navigate = useNavigate();

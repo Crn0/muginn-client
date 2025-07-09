@@ -1,6 +1,7 @@
 import { ErrorBoundary } from "react-error-boundary";
 
 import { useUserSettingsTabStore } from "../stores";
+import { ErrorElement } from "../components/errors";
 import { SettingLayout } from "../components/layouts";
 import { ButtonTab } from "../components/ui/button";
 import {
@@ -59,10 +60,6 @@ const contents = [
     content: UpdateMainProfile,
   },
 ];
-
-function ErrorElement({ error }) {
-  return <p>{error.message}</p>;
-}
 
 export default function UserSettingsPage() {
   const leftTab = useUserSettingsTabStore((s) => s.leftTab);

@@ -1,3 +1,4 @@
+import { ErrorBoundary } from "react-error-boundary";
 import { createBrowserRouter } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 
@@ -9,7 +10,7 @@ import { clientLoader as silentLoginLoader } from "../features/auth/api/index";
 import { clientAction as userAction } from "../features/users/api";
 import { clientAction as chatAction } from "../features/chats/api";
 
-import { RouteErrorElement } from "../components/errors";
+import { ErrorElement, RouteErrorElement } from "../components/errors";
 import ProtectedRoot from "./root";
 import LoginPage from "../pages/login";
 import RegisterPage from "../pages/register";
@@ -25,7 +26,9 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorElement />,
     element: (
       <QueryClientProvider client={queryClient}>
-        <RegisterPage />,
+        <ErrorBoundary FallbackComponent={ErrorElement}>
+          <RegisterPage />,
+        </ErrorBoundary>
       </QueryClientProvider>
     ),
   },
@@ -34,7 +37,10 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorElement />,
     element: (
       <QueryClientProvider client={queryClient}>
-        <LoginPage />,
+        <ErrorBoundary FallbackComponent={ErrorElement}>
+          <LoginPage />
+        </ErrorBoundary>
+        ,
       </QueryClientProvider>
     ),
   },
@@ -51,7 +57,11 @@ const router = createBrowserRouter([
   {
     path: paths.protected.root.path,
     loader: protectedLoader(queryClient),
-    element: <ProtectedRoot />,
+    element: (
+      <ErrorBoundary FallbackComponent={ErrorElement}>
+        <ProtectedRoot />
+      </ErrorBoundary>
+    ),
     errorElement: <RouteErrorElement />,
     children: [
       {
