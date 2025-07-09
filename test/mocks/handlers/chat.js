@@ -88,7 +88,9 @@ export default [
         await networkDelay();
         let createdChat;
         try {
-          const body = requestBodySchema.safeParse(await request.clone().json());
+          const body = requestBodySchema.safeParse(
+            Object.fromEntries(await request.clone().formData())
+          );
 
           if (!body.success) {
             return HttpResponse.json(
