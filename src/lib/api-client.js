@@ -1,4 +1,5 @@
 import { env, paths } from "../configs";
+import generateHeader from "./generate-header";
 import refreshToken from "./refresh-token";
 import { setToken, getToken } from "../stores";
 import formatApiError from "./format-api-error";
@@ -60,6 +61,10 @@ class ApiClient {
   async callApi(resource, configs) {
     const conf = { ...configs };
     const url = `${this.#baseURL}${resource}`;
+
+    if (!(conf?.headers instanceof Headers)) {
+      conf.headers = generateHeader();
+    }
 
     const { authenticatedRequest } = conf;
 
