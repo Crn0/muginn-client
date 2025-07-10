@@ -22,12 +22,12 @@ export default function MessageList({ chatId }) {
 
   return (
     <>
-      {messagesQuery.hasPreviousPage && (
+      {messagesQuery.hasNextPage && (
         <InfiniteScroll
-          testId='load-previous-page'
-          loadMore={() => messagesQuery.fetchPreviousPage()}
-          isLoading={messagesQuery.isFetchingPreviousPage}
-          canLoadMore={messagesQuery.hasPreviousPage}
+          testId='load-next-page'
+          loadMore={() => messagesQuery.fetchNextPage()}
+          isLoading={messagesQuery.isFetchingNextPage}
+          canLoadMore={messagesQuery.hasNextPage}
         />
       )}
       <ul aria-label='messages'>
@@ -37,14 +37,6 @@ export default function MessageList({ chatId }) {
           </li>
         ))}
       </ul>
-      {messagesQuery.hasNextPage && (
-        <InfiniteScroll
-          testId='load-next-page'
-          loadMore={() => messagesQuery.fetchNextPage()}
-          isLoading={messagesQuery.isFetchingNextPage}
-          canLoadMore={messagesQuery.isFetchingNextPage}
-        />
-      )}
     </>
   );
 }

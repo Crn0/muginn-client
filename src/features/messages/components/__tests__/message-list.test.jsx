@@ -66,25 +66,6 @@ describe("Message List", () => {
     expect(screen.queryAllByRole("time").length).toBe(messages.length);
   });
 
-  it("should render the load older messages button when there's a previous page", () => {
-    queryClient.setQueryData(queryKey, {
-      pages: [
-        {
-          messages,
-          pagination: {
-            prevHref: `http://localhost:3000/api/v1/chats/${generateId()}/messages?before=${generateId()}`,
-            nextHref: null,
-          },
-        },
-      ],
-      pageParams: [],
-    });
-
-    renderComponent(<MessageList chatId={chatId} />, queryClient);
-
-    expect(screen.queryByTestId("load-previous-page")).toBeInTheDocument();
-  });
-
   it("should render the load more messages button when there's a next page", () => {
     queryClient.setQueryData(queryKey, {
       pages: [
