@@ -94,9 +94,9 @@ export const getMessages = async (chatId, cursorHref) => {
 
 export const getInfiniteMessagesQueryOptions = (chatId) =>
   infiniteQueryOptions({
-    initialPageParam: 0,
+    initialPageParam: null,
     queryKey: ["messages", chatId],
-    queryFn: () => getMessages({ chatId }),
+    queryFn: ({ pageParam: cursorHref }) => getMessages(chatId, cursorHref),
     getNextPageParam: ({ pagination }) => pagination.nextHref,
     getPreviousPageParam: ({ pagination }) => pagination.prevHref,
   });
