@@ -9,7 +9,7 @@ import useRefreshToken from "./use-refresh-token";
 export default function useSilentLogin() {
   const [searchParams] = useSearchParams();
 
-  const { refresh, isRefreshingToken, isError, isSuccess, isPending } = useRefreshToken();
+  const { refresh } = useRefreshToken();
 
   const navigate = useNavigate();
 
@@ -24,12 +24,8 @@ export default function useSilentLogin() {
   const isAuth = user.data && hasToken;
 
   useEffect(() => {
-    const ctr = new AbortController();
-
-    const { signal } = ctr;
-
-    if (!isRefreshingToken && !isAuth && !isPending && !isError && !isSuccess) {
-      refresh(signal);
+    if (!isAuth) {
+      refresh();
     }
 
     if (user.isSuccess) {
@@ -37,17 +33,5 @@ export default function useSilentLogin() {
         replace: true,
       });
     }
-
-    return () => ctr.abort();
-  }, [
-    isAuth,
-    isPending,
-    isError,
-    isSuccess,
-    isRefreshingToken,
-    redirectTo,
-    navigate,
-    refresh,
-    user.isSuccess,
-  ]);
+  }, [isAuth, navigate, redirectTo, refresh, user.isSuccess]);
 }
