@@ -136,6 +136,7 @@ describe("Dashboard page", () => {
       expect(screen.getByTestId("leave-chat-form-trigger")).toBeInTheDocument();
       expect(screen.getByRole("heading", { level: 2, name: chat.name })).toBeInTheDocument();
       expect(screen.getByRole("note")).toBeInTheDocument();
+      expect(screen.getByTestId("create-message-form")).toBeInTheDocument();
     });
 
     it("should open the chat form dialog on open trigger click and close it on cancel trigger click", async () => {

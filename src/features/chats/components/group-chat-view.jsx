@@ -7,6 +7,7 @@ import { ContentLayout } from "../../../components/layouts";
 import { Avatar } from "../../../components/ui/image";
 import { FormDialog } from "../../../components/ui/form";
 import { Button } from "../../../components/ui/button";
+import Messages from "../../messages/components/messages";
 import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
 
@@ -109,6 +110,10 @@ export default function GroupChatView() {
               <p>{chat.name}</p>
             </h3>
             <div>This is the beginning of the chat</div>
+          </div>
+
+          <div>
+            <Messages chatId={chat.id} />
           </div>
         </section>
       </>

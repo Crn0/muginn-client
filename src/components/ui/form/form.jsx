@@ -11,7 +11,7 @@ export default function Form({ schema, onSubmit, className, id, children, isCurr
       <form
         onSubmit={methods.handleSubmit(isCurried ? onSubmit(methods) : onSubmit)}
         className={className}
-        id={id}
+        data-testid={id}
         aria-label='form'
       >
         {typeof children === "function" ? children(methods) : children}
