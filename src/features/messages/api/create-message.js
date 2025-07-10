@@ -1,17 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { ApiClient, generateHeader, tryCatch } from "../../../lib";
+import { ApiClient, tryCatch } from "../../../lib";
 import { getInfiniteMessagesQueryOptions } from "./get-messages";
 
-export const createMessage = (chatId) => async (data) => {
-  const headers = generateHeader();
-
+export const createMessage = (chatId) => async (formData) => {
   const { error, data: res } = await tryCatch(
     ApiClient.callApi(`chats/${chatId}/messages`, {
-      headers,
-      authenticatedRequest: false,
+      authenticatedRequest: true,
       method: "POST",
-      body: data,
+      body: formData,
     })
   );
 

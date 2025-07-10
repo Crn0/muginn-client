@@ -16,12 +16,34 @@ export default function CreateMessage({ chatId }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const fileRef = useRef();
 
-  const onSubmit = (data) => {
-    createMessage.mutate(data);
-  };
+  const onSubmit =
+    ({ reset }) =>
+    (data) => {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          return value.forEach((v) => formData.append(key, v));
+        }
+        if (typeof value === "object") {
+          return formData.append(key, JSON.stringify(value));
+        }
+
+        return formData.append(key, value);
+      });
+
+      createMessage.mutate(formData);
+
+      reset();
+    };
 
   return (
-    <Form id='create-message-form' schema={createMessageSchema} onSubmit={onSubmit} mode='onBlur'>
+    <Form
+      id='create-message-form'
+      schema={createMessageSchema}
+      onSubmit={onSubmit}
+      mode='onBlur'
+      isCurried
+    >
       {({ setValue, formState: { errors } }) => (
         <>
           <div>
