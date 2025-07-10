@@ -67,11 +67,10 @@ export const messagesResponseSchema = z.object({
 
 export const getMessages = async (chatId, cursorHref) => {
   const { error, data: res } = await tryCatch(
-    ApiClient.callApi(cursorHref ?? `chats/${chatId}/messages`),
-    {
+    ApiClient.callApi(cursorHref ?? `chats/${chatId}/messages`, {
       authenticatedRequest: true,
       method: "GET",
-    }
+    })
   );
 
   if (error) throw error;
