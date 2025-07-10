@@ -17,7 +17,7 @@ export default function ProtectedRoot() {
   });
 
   useEffect(() => {
-    if (data) {
+    if (data && location.pathname === "/") {
       navigate(paths.protected.dashboard.me.getHref());
     }
 
