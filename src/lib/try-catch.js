@@ -1,4 +1,4 @@
-export default async function tryCatch(promise) {
+export default async function tryCatch(promise, onFinally = () => {}) {
   const thing = typeof promise === "function" ? promise() : promise;
 
   try {
@@ -6,5 +6,7 @@ export default async function tryCatch(promise) {
     return { data, error: null };
   } catch (error) {
     return { error, data: null };
+  } finally {
+    await Promise.resolve(onFinally()).catch(console.error);
   }
 }
