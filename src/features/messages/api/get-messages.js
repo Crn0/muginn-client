@@ -7,9 +7,9 @@ const messageSchema = z.object({
   id: z.string().uuid(),
   chatId: z.string().uuid(),
   content: z.string().nullable(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date().nullable(),
-  deletedAt: z.coerce.date().nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime().nullable(),
+  deletedAt: z.string().datetime().nullable(),
   user: z.object({
     id: z.string().uuid(),
     username: z.string(),
@@ -39,7 +39,7 @@ const messageSchema = z.object({
     .nullable(),
   attachments: z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.string(),
       url: z.string(),
       type: z.enum(["Image", "Epub", "Pdf"]),
       images: z
@@ -56,18 +56,20 @@ const messageSchema = z.object({
 });
 
 const paginationSchema = z.object({
-  prevHref: z.string().url(),
-  nextHref: z.string().url(),
+  prevHref: z.string().nullable(),
+  nextHref: z.string().nullable(),
 });
 
 export const messagesResponseSchema = z.object({
-  messages: messageSchema,
+  messages: z.array(messageSchema),
   pagination: paginationSchema,
 });
 
-export const getMessages = async (chatId, cursorHref) => {
+export const getMessages = async (chatId, cursor) => {
+  const resource = !cursor ? `chats/${chatId}/messages` : `chats/${chatId}${cursor}`;
+
   const { error, data: res } = await tryCatch(
-    ApiClient.callApi(cursorHref ?? `chats/${chatId}/messages`, {
+    ApiClient.callApi(resource, {
       authenticatedRequest: true,
       method: "GET",
     })
@@ -98,6 +100,10 @@ export const getInfiniteMessagesQueryOptions = (chatId) =>
     queryFn: ({ pageParam: cursorHref }) => getMessages(chatId, cursorHref),
     getNextPageParam: ({ pagination }) => pagination.nextHref,
     getPreviousPageParam: ({ pagination }) => pagination.prevHref,
+    select: (data) => ({
+      pages: [...data.pages].reverse(),
+      pageParams: [...data.pageParams].reverse(),
+    }),
   });
 
 export const useInfiniteMessages = (chatId) =>
