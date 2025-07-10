@@ -3,7 +3,11 @@ import { QueryClient } from "@tanstack/react-query";
 import { queryConfig } from "../lib";
 
 const queryClient = new QueryClient({
-  defaultOptions: queryConfig,
+  defaultOptions: {
+    queries: {
+      ...queryConfig,
+    },
+  },
 });
 
 export default queryClient;
