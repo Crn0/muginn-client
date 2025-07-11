@@ -34,6 +34,7 @@ export default function CreateMessage({ chatId }) {
       createMessage.mutate(formData);
 
       reset();
+      setSelectedFiles([]);
     };
 
   return (
