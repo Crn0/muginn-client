@@ -4,7 +4,7 @@ import { ApiClient, tryCatch } from "../../../lib";
 import { getInfiniteMessagesQueryOptions } from "./get-messages";
 
 export const deleteMessage = async ({ chatId, messageId }) => {
-  const { error, data: res } = await tryCatch(
+  const { error } = await tryCatch(
     ApiClient.callApi(`chats/${chatId}/messages/${messageId}`, {
       authenticatedRequest: true,
       method: "DELETE",
@@ -12,8 +12,6 @@ export const deleteMessage = async ({ chatId, messageId }) => {
   );
 
   if (error) throw error;
-
-  return res.json();
 };
 
 export const useDeleteMessage = ({ chatId }, options = {}) => {
