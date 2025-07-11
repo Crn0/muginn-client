@@ -8,7 +8,6 @@ import protectedLoader from "./root/loader";
 import { clientLoader as silentLoginLoader } from "../features/auth/api/index";
 
 import { clientAction as userAction } from "../features/users/api";
-import { clientAction as chatAction } from "../features/chats/api";
 
 import { ErrorElement, RouteErrorElement } from "../components/errors";
 import ProtectedRoot from "./root";
@@ -66,7 +65,6 @@ const router = createBrowserRouter([
     children: [
       {
         path: paths.protected.dashboard.root.path,
-        action: chatAction(queryClient),
         errorElement: <RouteErrorElement />,
         element: <DashBoardPage />,
         children: [
@@ -76,7 +74,6 @@ const router = createBrowserRouter([
           },
           {
             path: paths.protected.dashboard.me.path,
-            action: chatAction(queryClient),
             element: <DashBoardMe />,
           },
           {

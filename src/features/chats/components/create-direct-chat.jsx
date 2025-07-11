@@ -1,14 +1,14 @@
 import PropType from "prop-types";
-import { useSubmit } from "react-router-dom";
 
+import { useCreateChat } from "../api";
 import { directChatSchema } from "../schema";
 import { Form } from "../../../components/ui/form/index";
 import { Button } from "../../../components/ui/button";
 
 export default function CreateDirectChat({ memberIds }) {
-  const submit = useSubmit();
+  const createChatMutation = useCreateChat();
 
-  const onSubmit = (data) => submit(data, { method: "POST" });
+  const onSubmit = (data) => createChatMutation.mutate(data);
 
   return (
     <Form

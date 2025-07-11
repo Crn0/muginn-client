@@ -1,42 +1,32 @@
-import { useActionData, useNavigation, useSubmit } from "react-router-dom";
 import { useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
 
-import { getChatsQueryOptions } from "../api/get-chats";
+import { useCreateChat } from "../api/create-chat";
 import { ACCEPTED_IMAGE_TYPES, groupChatSchema } from "../schema";
 import { FormDialog, Input, File } from "../../../components/ui/form/index";
 import { Button } from "../../../components/ui/button";
 
 export default function CreateGroupChat() {
-  const { isFetching } = useQuery({ ...getChatsQueryOptions() });
-
-  const createdChat = useActionData();
-  const navigate = useNavigation();
-  const submit = useSubmit();
+  const createChatMutation = useCreateChat();
 
   const avatarRef = useRef();
 
-  const isFormSubmitting = navigate.state === "submitting";
-  const isDialogDone = !isFetching && !isFormSubmitting;
-  const isFormBusy = isFetching || isFormSubmitting;
-
   const onSubmit = (data) => {
-    let encType = "application/x-www-form-urlencoded";
     const formData = new FormData();
+
+    formData.append("isMultiForm", "false");
 
     Object.entries(data).forEach(([key, value]) => {
       if (["avatar"].includes(key) && value.length) {
-        encType = "multipart/form-data";
+        if (formData.get("isMultiForm") === "false") {
+          formData.set("isMultiForm", "true");
+        }
         formData.append(key, value[0]);
       } else {
         formData.append(key, value);
       }
     });
 
-    submit(formData, {
-      encType,
-      method: "POST",
-    });
+    createChatMutation.mutate(formData);
   };
 
   return (
@@ -49,7 +39,7 @@ export default function CreateGroupChat() {
       mode='onBlur'
       schema={groupChatSchema}
       onSubmit={onSubmit}
-      done={isDialogDone}
+      done={createChatMutation.isSuccess}
       renderButtonTrigger={(options) => (
         <div>
           <Button
@@ -74,8 +64,8 @@ export default function CreateGroupChat() {
           <Button
             type='submit'
             testId='create-chat-form-submit'
-            isLoading={isFormBusy}
-            disabled={isFormBusy}
+            isLoading={createChatMutation.isPending}
+            disabled={createChatMutation.isPending}
           >
             Submit
           </Button>
@@ -89,10 +79,10 @@ export default function CreateGroupChat() {
           testId='chat-avatar'
           accept={ACCEPTED_IMAGE_TYPES.join(",")}
           onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
-          serverError={createdChat?.error}
+          serverError={createChatMutation?.error}
           ref={avatarRef}
         />
-        <Input type='text' name='name' label='Chat Name' serverError={createdChat?.error} />
+        <Input type='text' name='name' label='Chat Name' serverError={createChatMutation?.error} />
       </>
     </FormDialog>
   );
