@@ -31,7 +31,7 @@ function Wrapper() {
 
   useEffect(() => {
     if (!token) {
-      navigate(paths.login.getHref(redirectTo), { replace: true });
+      navigate(paths.login.getHref({ redirectTo }), { replace: true });
     }
 
     if (user.data) {
