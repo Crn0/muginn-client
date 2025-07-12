@@ -49,6 +49,6 @@ export default function ModalDialog({ renderButtonTrigger, title, descriptions, 
 ModalDialog.propTypes = {
   renderButtonTrigger: PropTypes.func,
   title: PropTypes.string.isRequired,
-  descriptions: PropTypes.arrayOf([PropTypes.string]),
+  descriptions: PropTypes.arrayOf(PropTypes.string),
   children: PropTypes.element.isRequired,
 };
