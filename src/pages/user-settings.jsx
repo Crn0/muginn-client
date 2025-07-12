@@ -1,9 +1,14 @@
 import { ErrorBoundary } from "react-error-boundary";
+import { useNavigate } from "react-router-dom";
+import { RxExit } from "react-icons/rx";
 
+import { paths } from "../configs";
+import { useLogout } from "../lib";
 import { useUserSettingsTabStore } from "../stores";
 import { ErrorElement } from "../components/errors";
 import { SettingLayout } from "../components/layouts";
-import { ButtonTab } from "../components/ui/button";
+import { ConfirmationDialog } from "../components/ui/dialog";
+import { Button, ButtonTab } from "../components/ui/button";
 import {
   UpdateAccountProfile,
   UserStanding,
@@ -62,6 +67,12 @@ const contents = [
 ];
 
 export default function UserSettingsPage() {
+  const navigate = useNavigate();
+
+  const logout = useLogout({
+    onSuccess: () => navigate(paths.login.getHref({ redirectTo: null }), { replace: true }),
+  });
+
   const leftTab = useUserSettingsTabStore((s) => s.leftTab);
   const setTabs = useUserSettingsTabStore((s) => s.setTabs);
   const rightTab = useUserSettingsTabStore((s) => s.rightTab);
@@ -82,6 +93,28 @@ export default function UserSettingsPage() {
         setRightTab={setRightTab}
         leftNavButtons={leftNavButtons}
         rightNavButtons={rightNavButtons}
+        headerContent={
+          <ConfirmationDialog
+            icon='danger'
+            title='Log Out'
+            body='Are you sure you want to logut?'
+            isDone={logout.isSuccess}
+            renderButtonTrigger={({ onClick }) => (
+              <Button type='button' onClick={onClick}>
+                <span>
+                  Log Out <RxExit color='red' />
+                </span>
+              </Button>
+            )}
+            confirmButton={
+              <Button type='button' onClick={logout.mutate} disabled={logout.isPending}>
+                <span>
+                  Log Out <RxExit color='red' />
+                </span>
+              </Button>
+            }
+          />
+        }
       >
         {ActiveContent ? (
           <ActiveContent />
