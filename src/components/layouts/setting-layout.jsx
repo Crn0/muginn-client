@@ -28,9 +28,9 @@ export default function SettingLayout({
               setTab={() => setLeftTab(name, defaultContent)}
             />
           ))}
-        </nav>
 
-        {headerContent}
+          <div>{headerContent}</div>
+        </nav>
       </header>
 
       <main>
