@@ -5,12 +5,13 @@ import { paths } from "../../../configs";
 import { useGetUser } from "../../../lib";
 import { ErrorElement } from "../../../components/errors";
 
+import { ModalDialog } from "../../../components/ui/dialog";
 import { Link } from "../../../components/ui/link";
 import { NameplatePreview } from "../../../components/ui/preview";
+import { Button } from "../../../components/ui/button";
 import GroupChatList from "../../chats/components/group-chat-list";
 import CreateGroupChat from "../../chats/components/create-group-chat";
-import { Button } from "../../../components/ui/button";
-import { ModalDialog } from "../../../components/ui/dialog";
+import JoinGroupChat from "../../chats/components/join-group-chat";
 
 export default function DashBoardSideBar() {
   const { data: user } = useGetUser();
@@ -46,9 +47,16 @@ export default function DashBoardSideBar() {
             </div>
           )}
         >
-          <div>
-            <CreateGroupChat />
-          </div>
+          <>
+            <div>
+              <CreateGroupChat />
+            </div>
+
+            <div>
+              <h2>Have an invite already?</h2>
+              <JoinGroupChat />
+            </div>
+          </>
         </ModalDialog>
       </ErrorBoundary>
 
