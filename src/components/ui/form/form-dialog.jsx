@@ -20,6 +20,7 @@ export default function FormDialog({
   children,
   initial = false,
   done = false,
+  isCurried = false,
   ...options
 }) {
   const ref = useRef();
@@ -64,7 +65,9 @@ export default function FormDialog({
 
           <FormProvider {...methods}>
             <form
-              onSubmit={methods.handleSubmit(onSubmit)}
+              onSubmit={
+                isCurried ? methods.handleSubmit(onSubmit(methods)) : methods.handleSubmit(onSubmit)
+              }
               className={cn(className)}
               id={id}
               aria-label='form'
@@ -96,6 +99,7 @@ FormDialog.propTypes = {
   schema: PropTypes.instanceOf(ZodSchema).isRequired,
   initial: PropTypes.bool,
   done: PropTypes.bool,
+  isCurried: PropTypes.bool,
   options: PropTypes.exact({
     mode: PropTypes.oneOf(["onChange", "onBlur", "onSubmit", "onTouched", "all"]),
     reValidateMode: PropTypes.oneOf(["onChange", "onBlur", "onSubmit"]),
