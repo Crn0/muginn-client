@@ -32,7 +32,7 @@ export default function CreateGroupChat() {
   return (
     <FormDialog
       id='GroupChat-Form'
-      title='Customize Your Server'
+      title='Customize Your Group Chat'
       descriptions={[
         "Give your new group-chat a personality with a name and an icon. You can always change it later.",
       ]}

@@ -6,7 +6,7 @@ import { faker } from "@faker-js/faker";
 
 import { paths } from "../../configs/index";
 import { getAuthUserQueryOptions } from "../../lib/auth";
-import { getChatQueryOptions, getChatsQueryOptions, clientAction } from "../../features/chats/api";
+import { getChatQueryOptions, getChatsQueryOptions } from "../../features/chats/api";
 import { generateAccessToken } from "../../../test/utils/data-generator";
 import { createChats } from "./data";
 import { setToken } from "../../stores";
@@ -31,7 +31,6 @@ const chats = [...groupChat, ...directChat];
 const routes = [
   {
     path: paths.protected.dashboard.root.getHref(),
-    action: clientAction(queryClient),
     element: (
       <QueryClientProvider client={queryClient}>
         <DashBoard />
@@ -94,7 +93,7 @@ describe("Dashboard page", () => {
       expect(screen.getByRole("heading", { level: 1, name: "dashboard" })).toBeInTheDocument();
       expect(within(groupChatContainer).getAllByRole("link").length).toBe(groupChat.length);
       expect(within(directChatContainer).getAllByRole("link").length).toBe(directChat.length);
-      expect(screen.getByTestId("create-chat-form-trigger")).toBeInTheDocument();
+      expect(screen.getByTestId("dialog-trigger")).toBeInTheDocument();
     });
 
     it("renders a group chats sidebar and a direct chats panel in the main content on '/chats/me'", () => {
@@ -113,7 +112,7 @@ describe("Dashboard page", () => {
       expect(screen.getByRole("heading", { level: 1, name: "dashboard" })).toBeInTheDocument();
       expect(within(groupChatContainer).getAllByRole("link").length).toBe(groupChat.length);
       expect(within(directChatContainer).getAllByRole("link").length).toBe(directChat.length);
-      expect(screen.getByTestId("create-chat-form-trigger")).toBeInTheDocument();
+      expect(screen.getByTestId("dialog-trigger")).toBeInTheDocument();
     });
 
     it("renders the GroupViewComponent if the route is /chats/:chaId", () => {
@@ -148,6 +147,8 @@ describe("Dashboard page", () => {
 
       const { user } = setupRouter(router, queryClient);
 
+      await user.click(screen.getByTestId("dialog-trigger"));
+
       await user.click(screen.getByTestId("create-chat-form-trigger"));
 
       const form = screen.getByRole("form");
@@ -160,7 +161,7 @@ describe("Dashboard page", () => {
     });
   });
 
-  describe.only("GroupChat Creation", () => {
+  describe("GroupChat Creation", () => {
     describe("Success Case", () => {
       it("should create a new group chat on form submit and refetch user's chats", async () => {
         const token = generateAccessToken(".crno.");
@@ -172,6 +173,8 @@ describe("Dashboard page", () => {
         });
 
         const { user } = setupRouter(router, queryClient);
+
+        await user.click(screen.getByTestId("dialog-trigger"));
 
         await user.click(screen.getByTestId("create-chat-form-trigger"));
 
