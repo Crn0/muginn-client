@@ -2,8 +2,10 @@ import { useMutation, useQuery, queryOptions, useQueryClient } from "@tanstack/r
 
 import client from "./api-client";
 import { queryConfig } from "./react-query";
+import generateHeader from "./generate-header";
 import errorHandler from "./error-handler";
 import tryCatch from "./try-catch";
+import { resetStore } from "../stores";
 
 export const getUser = async () => {
   const { error, data: res } = await tryCatch(
@@ -21,7 +23,10 @@ export const getUser = async () => {
 };
 
 export const register = async (data) => {
+  const headers = generateHeader(["Content-Type", "application/json"]);
+
   const res = await client.callApi("auth/register", {
+    headers,
     authenticatedRequest: false,
     method: "POST",
     body: JSON.stringify(data),
@@ -37,7 +42,10 @@ export const register = async (data) => {
 };
 
 export const login = async (data) => {
+  const headers = generateHeader(["Content-Type", "application/json"]);
+
   const res = await client.callApi("auth/login", {
+    headers,
     authenticatedRequest: false,
     method: "POST",
     credentials: "include",
@@ -118,7 +126,8 @@ export const useLogout = (options) => {
   const mutation = useMutation({
     mutationFn: (data) => logout(data),
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: getAuthUserQueryOptions().queryKey });
+      queryClient.clear();
+      resetStore();
       options?.onSuccess?.();
     },
     onError: (e) => {
