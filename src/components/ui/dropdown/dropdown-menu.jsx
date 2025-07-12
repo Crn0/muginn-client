@@ -8,20 +8,21 @@ export default function DropDownMenu({ className, renderButtonTrigger, children 
   const ref = useRef();
   const triggerRef = useRef();
 
-  const { isOpen, toggle } = useDisclosureWithClickOutside(false, ref, triggerRef);
+  const disclosure = useDisclosureWithClickOutside(false, ref, triggerRef);
 
   const buttonTrigger = renderButtonTrigger({
     triggerRef,
     onClick: () => {
-      toggle();
+      disclosure.toggle();
       triggerRef.current?.focus?.();
     },
+    ...disclosure,
   });
 
   return (
     <>
       {buttonTrigger}
-      {isOpen && (
+      {disclosure.isOpen && (
         <div className={cn(className)} role='menu' ref={ref}>
           {typeof children === "function" ? children() : children}
         </div>
