@@ -6,3 +6,5 @@ export { default as File } from "./file";
 export { default as TextArea } from "./textarea";
 export { default as FormConfirmation } from "./form-confirmation";
 export { default as FormError } from "./error";
+export { default as FieldSet } from "./field-set";
+export { default as Legend } from "./legend";
