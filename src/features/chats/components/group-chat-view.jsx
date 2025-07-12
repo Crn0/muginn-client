@@ -1,12 +1,14 @@
-import { useNavigation, useParams, useSubmit } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { IoCloseSharp } from "react-icons/io5";
 
-import { leaveChatSchema } from "../schema";
 import { getChatQueryOptions } from "../api/get-chat";
 import { ContentLayout } from "../../../components/layouts";
+import { DropDownMenu } from "../../../components/ui/dropdown";
 import { Avatar } from "../../../components/ui/image";
-import { FormDialog } from "../../../components/ui/form";
 import { Button } from "../../../components/ui/button";
+import LeaveGroupChat from "./leave-group-chat";
 import Messages from "../../messages/components/messages";
 import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
@@ -22,9 +24,6 @@ export default function GroupChatView() {
     ...getChatQueryOptions(chatId),
   });
 
-  const navigate = useNavigation();
-  const submit = useSubmit();
-
   if (!chat) {
     return (
       <div role='alert'>
@@ -36,12 +35,6 @@ export default function GroupChatView() {
       </div>
     );
   }
-
-  const isFormSubmitting = navigate.state === "submitting";
-
-  const descriptions = [`Are you sure you want to leave ${chat.name}?`];
-
-  const onSubmit = (data) => submit(data, { method: "DELETE" });
 
   return (
     <ContentLayout
@@ -56,44 +49,22 @@ export default function GroupChatView() {
             />
           </div>
           <div>
-            <FormDialog
-              id='Leave-Chat-Form'
-              title={`Leave '${chat.name}'`}
-              descriptions={descriptions}
-              schema={leaveChatSchema}
-              onSubmit={onSubmit}
+            <DropDownMenu
               renderButtonTrigger={(options) => (
                 <div>
                   <Button
                     type='button'
-                    testId='leave-chat-form-trigger'
+                    testId='drop-down-trigger'
                     onClick={options.onClick}
                     ref={options.triggerRef}
                   >
-                    Leave Chat
+                    {!options.isOpen ? <MdOutlineKeyboardArrowDown /> : <IoCloseSharp />}
                   </Button>
                 </div>
               )}
-              renderButtonCancel={(options) => (
-                <div>
-                  <Button type='button' testId='leave-chat-form-cancel' onClick={options.onClick}>
-                    Cancel
-                  </Button>
-                </div>
-              )}
-              renderButtonSubmit={() => (
-                <div>
-                  <Button
-                    type='submit'
-                    testId='leave-chat-form-submit'
-                    isLoading={isFormSubmitting}
-                    disabled={isFormSubmitting}
-                  >
-                    Leave Chat
-                  </Button>
-                </div>
-              )}
-            />
+            >
+              <LeaveGroupChat chat={chat} />
+            </DropDownMenu>
           </div>
         </>
       }
