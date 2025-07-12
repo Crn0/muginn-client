@@ -2,16 +2,12 @@ import { useMutation, useQuery, queryOptions, useQueryClient } from "@tanstack/r
 
 import client from "./api-client";
 import { queryConfig } from "./react-query";
-import generateHeader from "./generate-header";
 import errorHandler from "./error-handler";
 import tryCatch from "./try-catch";
 
 export const getUser = async () => {
-  const headers = generateHeader(["Content-Type", "application/json"]);
-
   const { error, data: res } = await tryCatch(
     client.callApi("users/me", {
-      headers,
       authenticatedRequest: true,
       method: "GET",
     })
@@ -25,10 +21,7 @@ export const getUser = async () => {
 };
 
 export const register = async (data) => {
-  const headers = generateHeader(["Content-Type", "application/json"]);
-
   const res = await client.callApi("auth/register", {
-    headers,
     authenticatedRequest: false,
     method: "POST",
     body: JSON.stringify(data),
@@ -44,10 +37,7 @@ export const register = async (data) => {
 };
 
 export const login = async (data) => {
-  const headers = generateHeader(["Content-Type", "application/json"]);
-
   const res = await client.callApi("auth/login", {
-    headers,
     authenticatedRequest: false,
     method: "POST",
     credentials: "include",
@@ -64,10 +54,7 @@ export const login = async (data) => {
 };
 
 export const logout = async () => {
-  const headers = generateHeader(["Content-Type", "application/json"]);
-
   const res = await client.callApi("auth/logout", {
-    headers,
     authenticatedRequest: true,
     method: "POST",
     credentials: "include",
