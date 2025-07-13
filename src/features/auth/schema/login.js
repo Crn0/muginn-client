@@ -8,8 +8,8 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 const schema = z.object({
   username: z
     .string()
-    .min(4)
-    .max(36)
+    .min(4, { message: "Username must contain at least 4 character(s)" })
+    .max(36, { message: "Username must contain at most 36 character(s)" })
     .refine((val) => usernameRegex.test(val), {
       message:
         "Username can only contain letters (A-Z, a-z), numbers (0-9), and the characters: _ , .",
