@@ -5,7 +5,7 @@ import Error from "./error";
 
 export default function FieldWrapper({ label, isRequired, error, children }) {
   return (
-    <div>
+    <div className='grid place-content-center gap-3'>
       <Label label={label} isRequired={isRequired}>
         <div className='mt-1'>{children}</div>
       </Label>

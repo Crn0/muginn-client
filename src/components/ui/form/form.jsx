@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { ZodSchema } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider } from "react-hook-form";
+import { cn } from "../../../utils";
 
 export default function Form({ schema, onSubmit, className, id, children, isCurried, ...options }) {
   const methods = useForm({ ...options, resolver: zodResolver(schema) });
@@ -10,7 +11,7 @@ export default function Form({ schema, onSubmit, className, id, children, isCurr
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(isCurried ? onSubmit(methods) : onSubmit)}
-        className={className}
+        className={cn(className)}
         data-testid={id}
         aria-label='form'
       >

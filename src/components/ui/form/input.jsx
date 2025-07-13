@@ -4,6 +4,7 @@ import { useFormContext } from "react-hook-form";
 
 import FieldWrapper from "./field-wrapper";
 import { useInputErrorHandler } from "../../../hooks";
+import { cn } from "../../../utils";
 
 const Input = forwardRef(
   ({ label, serverError, className, type, name, required, ...props }, ref) => {
@@ -24,8 +25,11 @@ const Input = forwardRef(
         <input
           name={name}
           type={type}
-          className={className}
           aria-invalid={error?.message ? "true" : "false"}
+          className={cn(
+            "focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none",
+            className
+          )}
           ref={ref}
           {...register(name)}
           {...props}
