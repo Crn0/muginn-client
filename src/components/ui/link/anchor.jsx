@@ -24,10 +24,20 @@ const anchor = cva("focus-visible:ring-4 focus-visible:ring-blue-500 focus-visib
   },
 });
 
-export default function Anchor({ to, children, className, style, variant, size, hrefLang = "" }) {
+export default function Anchor({
+  to,
+  children,
+  className,
+  style,
+  variant,
+  size,
+  hrefLang = "",
+  testId = "",
+}) {
   return (
     <a
       hrefLang={hrefLang}
+      data-testid={testId}
       href={to}
       className={cn(className, anchor({ variant, size }))}
       style={style}
@@ -45,4 +55,5 @@ Anchor.propTypes = {
   variant: PropTypes.string,
   size: PropTypes.string,
   hrefLang: PropTypes.string,
+  testId: PropTypes.string,
 };

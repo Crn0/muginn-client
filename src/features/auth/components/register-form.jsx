@@ -81,6 +81,7 @@ export default function RegisterForm({ onSuccess }) {
             </Button>
 
             <Anchor
+              testId='google_btn'
               to={GOOGLE_URL}
               variant='button'
               size='lg'
@@ -98,7 +99,7 @@ export default function RegisterForm({ onSuccess }) {
       <div className='flex justify-center'>
         Already have an account?
         <Link to={paths.register.getHref({ redirectTo })} className='ml-1 rounded-md'>
-          Register
+          Log in
         </Link>
       </div>
     </>

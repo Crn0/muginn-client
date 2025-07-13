@@ -70,6 +70,7 @@ export default function LoginForm({ onSuccess }) {
             </Button>
 
             <Anchor
+              testId='google_btn'
               to={GOOGLE_URL}
               variant='button'
               size='lg'
