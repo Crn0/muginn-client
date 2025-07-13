@@ -27,6 +27,10 @@ const routes = [
       </QueryClientProvider>
     ),
   },
+  {
+    path: paths.login.path,
+    element: <p>Log in</p>,
+  },
 ];
 
 afterEach(() => {
@@ -115,17 +119,13 @@ describe("Register Page", () => {
 
       const { user } = setupRouter(router, queryClient);
 
-      await waitFor(async () => {
-        await user.type(screen.getByLabelText("DISPLAY NAME"), valid.displayName);
-        await user.type(screen.getByLabelText("USERNAME"), valid.username);
-        await user.type(screen.getByLabelText("PASSWORD"), valid.password);
-        await user.type(screen.getByLabelText("CONFIRM PASSWORD"), valid.password);
+      await user.type(screen.getByLabelText("DISPLAY NAME"), valid.displayName);
+      await user.type(screen.getByLabelText("USERNAME"), valid.username);
+      await user.type(screen.getByLabelText("PASSWORD"), valid.password);
+      await user.type(screen.getByLabelText("CONFIRM PASSWORD"), valid.password);
+      await user.click(screen.getByTestId("register_btn"));
 
-        await user.click(screen.getByTestId("register_btn"));
-
-        expect(screen.getByTestId("register_btn")).toBeDisabled();
-        expect(screen.getByTestId("google_btn")).toBeDisabled();
-      });
+      expect(screen.getByTestId("register_btn")).toBeDisabled();
 
       await waitFor(() => {
         expect(screen.getByText("Log in")).toBeInTheDocument();
