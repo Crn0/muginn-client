@@ -16,12 +16,12 @@ const GOOGLE_URL = `${env.getValue("serverUrl")}/api/${version}/auth/google`;
 
 export default function RegisterForm({ onSuccess }) {
   const [searchParams] = useSearchParams();
-  const registering = useRegister({ onSuccess });
+  const register = useRegister({ onSuccess });
 
   const redirectTo = searchParams.get("redirectTo");
 
   const onSubmit = (data) => {
-    registering.mutate(data);
+    register.mutate(data);
   };
 
   return (
@@ -41,14 +41,14 @@ export default function RegisterForm({ onSuccess }) {
               type='text'
               name='displayName'
               label='DISPLAY NAME'
-              serverError={registering?.error}
+              serverError={register?.error}
             />
 
             <Input
               type='text'
               name='username'
               label='USERNAME'
-              serverError={registering?.error}
+              serverError={register?.error}
               required
             />
 
@@ -56,7 +56,7 @@ export default function RegisterForm({ onSuccess }) {
               type='password'
               name='password'
               label='PASSWORD'
-              serverError={registering?.error}
+              serverError={register?.error}
               required
             />
 
@@ -64,7 +64,7 @@ export default function RegisterForm({ onSuccess }) {
               type='password'
               name='confirmPassword'
               label='CONFIRM PASSWORD'
-              serverError={registering?.error}
+              serverError={register?.error}
               required
             />
           </div>
@@ -74,8 +74,8 @@ export default function RegisterForm({ onSuccess }) {
               type='submit'
               size='lg'
               variant='default'
-              isLoading={registering.isPending}
-              disabled={registering.isPending}
+              isLoading={register.isPending}
+              disabled={register.isPending}
               testId='register_btn'
             >
               Register
@@ -88,7 +88,7 @@ export default function RegisterForm({ onSuccess }) {
               size='lg'
               className={cn(
                 "bg-white text-gray-600 hover:opacity-75",
-                `${registering.isPending ? "pointer-events-none" : "pointer-events-auto"}`
+                `${register.isPending ? "pointer-events-none" : "pointer-events-auto"}`
               )}
             >
               <span className='flex items-center gap-1'>
@@ -105,7 +105,7 @@ export default function RegisterForm({ onSuccess }) {
           to={paths.login.getHref({ redirectTo })}
           className={cn(
             "ml-1 rounded-md",
-            `${registering.isPending ? "pointer-events-none" : "foo pointer-events-auto"}`
+            `${register.isPending ? "pointer-events-none" : "foo pointer-events-auto"}`
           )}
         >
           Log in
