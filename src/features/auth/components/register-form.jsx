@@ -98,7 +98,7 @@ export default function RegisterForm({ onSuccess }) {
 
       <div className='flex justify-center'>
         Already have an account?
-        <Link to={paths.register.getHref({ redirectTo })} className='ml-1 rounded-md'>
+        <Link to={paths.login.getHref({ redirectTo })} className='ml-1 rounded-md'>
           Log in
         </Link>
       </div>
