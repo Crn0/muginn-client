@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
 
 import { env, paths } from "../../../configs";
 import { useRegister } from "../../../lib/auth";
@@ -7,7 +8,6 @@ import { registerSchema } from "../schema";
 import { FieldSet, Form, Input } from "../../../components/ui/form/index";
 import { Button } from "../../../components/ui/button";
 import { Anchor, Link } from "../../../components/ui/link";
-import { FcGoogle } from "react-icons/fc";
 
 const version = `v${env.getValue("apiVersion")}`;
 
