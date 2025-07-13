@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 
 import { env, paths } from "../../../configs";
+import { cn } from "../../../utils";
 import { useLogin } from "../../../lib/auth";
 import { loginSchema } from "../schema";
 import { FieldSet, Form, Input } from "../../../components/ui/form/index";
@@ -74,8 +75,10 @@ export default function LoginForm({ onSuccess }) {
               to={GOOGLE_URL}
               variant='button'
               size='lg'
-              className='bg-white text-gray-600 hover:opacity-75'
-              style={{ pointerEvents: login.isPending ? "none" : "auto" }}
+              className={cn(
+                "bg-white text-gray-600 hover:opacity-75",
+                `${login.isPending ? "pointer-events-none" : "pointer-events-auto"}`
+              )}
             >
               <span className='flex items-center gap-1'>
                 <FcGoogle /> Log in with Google
