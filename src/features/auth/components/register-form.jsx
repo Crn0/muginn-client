@@ -101,7 +101,13 @@ export default function RegisterForm({ onSuccess }) {
 
       <div className='flex justify-center'>
         Already have an account?
-        <Link to={paths.login.getHref({ redirectTo })} className='ml-1 rounded-md'>
+        <Link
+          to={paths.login.getHref({ redirectTo })}
+          className={cn(
+            "ml-1 rounded-md",
+            `${registering.isPending ? "pointer-events-none" : "foo pointer-events-auto"}`
+          )}
+        >
           Log in
         </Link>
       </div>
