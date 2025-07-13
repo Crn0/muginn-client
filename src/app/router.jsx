@@ -1,6 +1,5 @@
 import { ErrorBoundary } from "react-error-boundary";
 import { createBrowserRouter } from "react-router-dom";
-import { QueryClientProvider } from "@tanstack/react-query";
 
 import { paths } from "../configs";
 import queryClient from "./query-client";
@@ -24,34 +23,25 @@ const router = createBrowserRouter([
     path: paths.register.path,
     errorElement: <RouteErrorElement />,
     element: (
-      <QueryClientProvider client={queryClient}>
-        <ErrorBoundary FallbackComponent={ErrorElement}>
-          <RegisterPage />,
-        </ErrorBoundary>
-      </QueryClientProvider>
+      <ErrorBoundary FallbackComponent={ErrorElement}>
+        <RegisterPage />
+      </ErrorBoundary>
     ),
   },
   {
     path: paths.login.path,
     errorElement: <RouteErrorElement />,
     element: (
-      <QueryClientProvider client={queryClient}>
-        <ErrorBoundary FallbackComponent={ErrorElement}>
-          <LoginPage />
-        </ErrorBoundary>
-        ,
-      </QueryClientProvider>
+      <ErrorBoundary FallbackComponent={ErrorElement}>
+        <LoginPage />
+      </ErrorBoundary>
     ),
   },
   {
     path: paths.silentLogin.path,
     loader: silentLoginLoader,
     errorElement: <RouteErrorElement />,
-    element: (
-      <QueryClientProvider client={queryClient}>
-        <SilentLoginPage />,
-      </QueryClientProvider>
-    ),
+    element: <SilentLoginPage />,
   },
   {
     path: paths.protected.root.path,
