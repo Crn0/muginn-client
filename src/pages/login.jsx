@@ -22,7 +22,7 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthLayout title='Welcome back!' message="We're so excited to see you again!">
+    <AuthLayout title='Muginn'>
       <ErrorBoundary FallbackComponent={ErrorElement}>
         <LoginForm onSuccess={onSuccess} />
       </ErrorBoundary>

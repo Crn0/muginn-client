@@ -27,7 +27,7 @@ const Input = forwardRef(
           type={type}
           aria-invalid={error?.message ? "true" : "false"}
           className={cn(
-            "focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none",
+            "bg-gray-950 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none",
             className
           )}
           ref={ref}

@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
 
 import { env, paths } from "../../../configs";
 import { useLogin } from "../../../lib/auth";
 import { loginSchema } from "../schema";
-import { Form, Input } from "../../../components/ui/form/index";
+import { FieldSet, Form, Input } from "../../../components/ui/form/index";
 import { Button } from "../../../components/ui/button";
-import { Link } from "../../../components/ui/link";
+import { Link, Anchor } from "../../../components/ui/link";
 
 const version = `v${env.getValue("apiVersion")}`;
 
@@ -28,61 +29,65 @@ export default function LoginForm({ onSuccess }) {
 
   return (
     <>
-      <div>
-        <Form
-          onSubmit={onSubmit}
-          id='Login-Form'
-          schema={loginSchema}
-          mode='onBlur'
-          defaultValues={{ username: "", password: "" }}
-        >
-          <>
-            <div>
-              <Input
-                type='text'
-                name='username'
-                label='USERNAME'
-                onFocus={onFocus}
-                serverError={login?.error}
-                required
-              />
+      <Form
+        id='Login-Form'
+        className='w-full bg-gray-900 sm:w-lg'
+        schema={loginSchema}
+        onSubmit={onSubmit}
+        defaultValues={{ username: "", password: "" }}
+        mode='onBlur'
+      >
+        <FieldSet className='flex flex-col gap-10 p-5 sm:grid sm:place-content-center sm:place-items-center sm:gap-5'>
+          <div className='grid place-content-center place-items-center'>
+            <h2>Welcome Back!</h2>
 
-              <Input type='password' name='password' label='PASSWORD' onFocus={onFocus} required />
-            </div>
+            <i className='text-sm font-thin'>We&apos;re so excited to see you again!</i>
+          </div>
 
-            <div className='grid'>
-              <Button
-                type='submit'
-                size='m'
-                variant='default'
-                isLoading={login.isPending}
-                disabled={login.isPending}
-                testId='login_btn'
-              >
-                Log in
-              </Button>
+          <div className='grid gap-5'>
+            <Input
+              type='text'
+              name='username'
+              label='USERNAME'
+              onFocus={onFocus}
+              serverError={login?.error}
+              required
+            />
 
-              <a href={GOOGLE_URL}>
-                <Button
-                  type='button'
-                  size='m'
-                  variant='default'
-                  isLoading={login.isPending}
-                  disabled={login.isPending}
-                  testId='google_btn'
-                >
-                  Log in with Google
-                </Button>
-              </a>
-            </div>
-          </>
-        </Form>
-      </div>
-      <div>
-        <p>
-          Don&apos;t have an account yet?{" "}
-          <Link to={paths.register.getHref({ redirectTo })}>Register</Link>
-        </p>
+            <Input type='password' name='password' label='PASSWORD' onFocus={onFocus} required />
+          </div>
+
+          <div className='grid gap-5'>
+            <Button
+              type='submit'
+              size='lg'
+              variant='default'
+              isLoading={login.isPending}
+              disabled={login.isPending}
+              testId='login_btn'
+            >
+              Log in
+            </Button>
+
+            <Anchor
+              to={GOOGLE_URL}
+              variant='button'
+              size='lg'
+              className='bg-white text-gray-600 hover:opacity-75'
+              style={{ pointerEvents: login.isPending ? "none" : "auto" }}
+            >
+              <span className='flex items-center gap-1'>
+                <FcGoogle /> Log in with Google
+              </span>
+            </Anchor>
+          </div>
+        </FieldSet>
+      </Form>
+      <div className='flex justify-center'>
+        Don&apos;t have an account yet?
+        <Link to={paths.register.getHref({ redirectTo })} className='ml-1 rounded-md'>
+          Register
+        </Link>
       </div>
     </>
   );
