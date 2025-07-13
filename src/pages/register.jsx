@@ -14,7 +14,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthLayout title='Create an account'>
+    <AuthLayout title='Muginn'>
       <ErrorBoundary FallbackComponent={ErrorElement}>
         <RegisterForm onSuccess={onSuccess} />
       </ErrorBoundary>
