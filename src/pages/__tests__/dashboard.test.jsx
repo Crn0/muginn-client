@@ -132,7 +132,7 @@ describe("Dashboard page", () => {
 
       expect(screen.getByRole("heading", { level: 1, name: chat.name })).toBeInTheDocument();
       expect(screen.getByAltText(`${chat.name}'s avatar`)).toBeInTheDocument();
-      expect(screen.getByTestId("leave-chat-form-trigger")).toBeInTheDocument();
+      expect(screen.getByTestId("chat-drop-down-trigger")).toBeInTheDocument();
       expect(screen.getByRole("heading", { level: 2, name: chat.name })).toBeInTheDocument();
       expect(screen.getByRole("note")).toBeInTheDocument();
       expect(screen.getByTestId("create-message-form")).toBeInTheDocument();

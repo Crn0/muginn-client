@@ -90,7 +90,7 @@ describe("Dashboard Content", () => {
     setupRouter(router, queryClient);
 
     expect(screen.getByAltText(`${chat.name}'s avatar`)).toBeInTheDocument();
-    expect(screen.getByTestId("leave-chat-form-trigger")).toBeInTheDocument();
+    expect(screen.getByTestId("chat-drop-down-trigger")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: chat.name })).toBeInTheDocument();
     expect(screen.getByRole("note")).toBeInTheDocument();
   });

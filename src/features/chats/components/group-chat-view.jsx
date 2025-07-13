@@ -54,7 +54,7 @@ export default function GroupChatView() {
                 <div>
                   <Button
                     type='button'
-                    testId='drop-down-trigger'
+                    testId='chat-drop-down-trigger'
                     onClick={options.onClick}
                     ref={options.triggerRef}
                   >
