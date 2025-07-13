@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { paths } from "../configs";
@@ -9,8 +9,12 @@ import { RegisterForm } from "../features/auth/components";
 export default function RegisterPage() {
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
+
+  const redirectTo = searchParams.get("redirectTo");
+
   const onSuccess = () => {
-    navigate(paths.login.getHref(), { replace: true });
+    navigate(paths.login.getHref({ redirectTo }), { replace: true });
   };
 
   return (
