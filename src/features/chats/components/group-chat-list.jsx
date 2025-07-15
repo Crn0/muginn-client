@@ -30,7 +30,7 @@ export default function GroupChatList() {
     <div data-testid='group-chat-list'>
       {chats.map((chat) => (
         <Link key={chat.id} to={`/chats/${chat.id}`}>
-          <Avatar type='group' asset={chat.avatar} alt={chat.name} />
+          <Avatar type='group' asset={chat.avatar} variant='group' alt={chat.name} />
         </Link>
       ))}
     </div>
