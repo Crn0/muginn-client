@@ -1,18 +1,9 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { cva } from "class-variance-authority";
 
 import { cn } from "../../../utils";
 
-const image = cva(
-  "block aspect-square h-full w-full object-cover object-center opacity-0 transition-opacity delay-150 ease-in-out",
-  {
-    variants: {},
-    defaultVariants: {},
-  }
-);
-
-export default function LazyImage({ asset, fallBackAsset, className, variant, size, alt }) {
+export default function LazyImage({ asset, fallBackAsset, className, alt }) {
   const [loaded, setLoaded] = useState(false);
 
   const sortedImages = [...(asset?.images || [])].sort((a, b) => a.size - b.size);
@@ -26,11 +17,14 @@ export default function LazyImage({ asset, fallBackAsset, className, variant, si
 
   return (
     <div
-      className={cn("bg-cover bg-center", className)}
+      className={cn("max-w-full bg-cover bg-center", className)}
       style={{ backgroundImage: `url(${blurImage})` }}
     >
       <img
-        className={cn(image({ variant, size }), loaded && "opacity-100")}
+        className={cn(
+          "block aspect-square h-full w-full object-cover object-center opacity-0 transition-opacity delay-150 ease-in-out",
+          loaded && "opacity-100"
+        )}
         src={imageContent}
         alt={alt ?? ""}
         onLoad={() => setLoaded(true)}
@@ -43,8 +37,6 @@ export default function LazyImage({ asset, fallBackAsset, className, variant, si
 LazyImage.propTypes = {
   className: PropTypes.string,
   alt: PropTypes.string,
-  variant: PropTypes.string,
-  size: PropTypes.string,
   asset: PropTypes.shape({
     url: PropTypes.string,
     images: PropTypes.arrayOf(
