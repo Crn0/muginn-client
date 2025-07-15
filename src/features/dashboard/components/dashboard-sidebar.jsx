@@ -1,5 +1,5 @@
 import { ErrorBoundary } from "react-error-boundary";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosAddCircleOutline, IoIosSettings } from "react-icons/io";
 
 import { paths } from "../../../configs";
 import { useGetUser } from "../../../lib";
@@ -60,14 +60,21 @@ export default function DashBoardSideBar() {
         </ModalDialog>
       </ErrorBoundary>
 
-      <div>
+      <div className='flex max-w-2xs border-2 border-gray-900 bg-gray-950'>
         <ErrorBoundary FallbackComponent={ErrorElement}>
           <NameplatePreview
             username={user.username}
             displayName={user.profile.displayName}
             asset={user.profile.asset}
+            className='flex-[0.9]'
           />
         </ErrorBoundary>
+
+        <div className='grid place-content-center'>
+          <Link to={paths.protected.userSettings.getHref()} className='text-gray-300'>
+            <IoIosSettings />
+          </Link>
+        </div>
       </div>
     </aside>
   );

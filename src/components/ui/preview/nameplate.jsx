@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 
+import { cn } from "../../../utils";
 import { Avatar } from "../image";
 import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
@@ -9,20 +10,16 @@ const fallback = {
   lazyImage: avatarLazy,
 };
 
-export default function NameplatePreview({ username, displayName, asset }) {
+export default function NameplatePreview({ username, displayName, className, asset }) {
   return (
-    <div>
-      <div>
-        <Avatar
-          asset={asset}
-          fallback={fallback}
-          alt={`${displayName || username}'s nameplate avatar`}
-          type='user'
-        />
-      </div>
-      <div>
-        <span>{displayName || username}</span>
-      </div>
+    <div className={cn("flex items-center gap-2", className)}>
+      <Avatar
+        asset={asset}
+        fallback={fallback}
+        alt={`${displayName || username}'s nameplate avatar`}
+        variant='user'
+      />
+      <div className='font-sans text-sm'>{displayName || username}</div>
     </div>
   );
 }
@@ -30,6 +27,7 @@ export default function NameplatePreview({ username, displayName, asset }) {
 NameplatePreview.propTypes = {
   username: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
+  className: PropTypes.string,
   asset: PropTypes.shape({
     url: PropTypes.string,
     images: PropTypes.arrayOf(
