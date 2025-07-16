@@ -6,11 +6,13 @@ import { useForm, FormProvider } from "react-hook-form";
 
 import { cn } from "../../../utils";
 import { useDisclosureWithClickOutside } from "../../../hooks";
+import { Dialog } from "../dialog";
 
 export default function FormDialog({
   title,
   descriptions,
   id,
+  parentId,
   className,
   schema,
   onSubmit,
@@ -23,66 +25,79 @@ export default function FormDialog({
   isCurried = false,
   ...options
 }) {
-  const ref = useRef();
+  const dialogRef = useRef();
   const triggerRef = useRef();
   const methods = useForm({ ...options, resolver: zodResolver(schema) });
-  const { isOpen, open, close } = useDisclosureWithClickOutside(initial, ref, triggerRef);
+  const disclosure = useDisclosureWithClickOutside(initial, dialogRef, triggerRef);
 
   const buttonTrigger = renderButtonTrigger({
     triggerRef,
-    onClick: () => open(),
+    ...disclosure,
+    onClick: () => disclosure.open(),
   });
 
   const buttonCancel = renderButtonCancel({
-    onClick: () => close(),
+    ...disclosure,
+    onClick: () => disclosure.close(),
   });
 
   const buttonSubmit = renderButtonSubmit({
-    close,
+    ...disclosure,
   });
 
   useEffect(() => {
     if (Object.entries(methods.formState.errors).length === 0 && done) {
-      close();
+      disclosure.close();
     }
-  }, [close, done, methods.formState.errors]);
+  }, [done, disclosure, methods.formState.errors]);
 
   return (
-    <>
-      {!isOpen && buttonTrigger}
-
-      {isOpen && (
-        <div role='dialog' aria-modal='true'>
-          <div>
+    <Dialog
+      parentId={parentId}
+      buttonTrigger={buttonTrigger}
+      ref={dialogRef}
+      open={disclosure.isOpen}
+    >
+      <>
+        <div className='grid'>
+          <div className='flex items-center justify-center'>
             <h2>{title}</h2>
-
-            {descriptions?.map((desc) => (
-              <div key={desc}>
-                <span>{desc}</span>
-              </div>
-            ))}
           </div>
 
-          <FormProvider {...methods}>
-            <form
-              onSubmit={
-                isCurried ? methods.handleSubmit(onSubmit(methods)) : methods.handleSubmit(onSubmit)
-              }
-              className={cn(className)}
-              id={id}
-              aria-label='form'
-              ref={ref}
-            >
-              <div>{children}</div>
-              <div>
-                {buttonCancel}
-                {buttonSubmit}
-              </div>
-            </form>
-          </FormProvider>
+          {descriptions?.length > 0 && (
+            <div>
+              {descriptions.map((description) => (
+                <div key={description} className='text-center text-xs'>
+                  {description}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </>
+
+        <FormProvider {...methods}>
+          <form
+            onSubmit={
+              isCurried ? methods.handleSubmit(onSubmit(methods)) : methods.handleSubmit(onSubmit)
+            }
+            id={id}
+            aria-label='form'
+            className={cn(
+              "grid place-content-center-safe place-items-center-safe gap-10",
+              className
+            )}
+          >
+            <div className='grid place-content-center-safe place-items-center-safe gap-5'>
+              {children}
+            </div>
+            <div className='flex items-center-safe justify-center-safe gap-5'>
+              {buttonCancel}
+              {buttonSubmit}
+            </div>
+          </form>
+        </FormProvider>
+      </>
+    </Dialog>
   );
 }
 
@@ -96,6 +111,7 @@ FormDialog.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
   className: PropTypes.string,
   id: PropTypes.string.isRequired,
+  parentId: PropTypes.string.isRequired,
   schema: PropTypes.instanceOf(ZodSchema).isRequired,
   initial: PropTypes.bool,
   done: PropTypes.bool,

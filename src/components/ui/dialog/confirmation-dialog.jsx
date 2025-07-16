@@ -17,6 +17,7 @@ function Icon(type) {
 }
 
 export default function ConfirmationDialog({
+  parentId,
   renderButtonTrigger,
   confirmButton,
   title,
@@ -44,7 +45,7 @@ export default function ConfirmationDialog({
     }
   }, [isDone, close]);
   return (
-    <Dialog buttonTrigger={buttonTrigger} open={isOpen} ref={dialogRef}>
+    <Dialog buttonTrigger={buttonTrigger} open={isOpen} ref={dialogRef} parentId={parentId}>
       <>
         <div>
           <h2>
@@ -73,6 +74,7 @@ export default function ConfirmationDialog({
 }
 
 ConfirmationDialog.propTypes = {
+  parentId: PropTypes.string.isRequired,
   confirmButton: PropTypes.element,
   renderButtonTrigger: PropTypes.func,
   title: PropTypes.string.isRequired,
