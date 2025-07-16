@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getChatsQueryOptions } from "../api/get-chats";
+import { useDashboardDrawer } from "../../../components/layouts/context";
 import { Spinner } from "../../../components/ui/spinner";
 import { Link } from "../../../components/ui/link";
-import { Avatar } from "../../../components/ui/image";
+import { GroupChatAvatar } from "../../../components/ui/image";
 
 export default function GroupChatList() {
   const chatsQuery = useQuery({
@@ -11,6 +12,8 @@ export default function GroupChatList() {
     throwOnError: (e) =>
       e.response?.status >= 500 || e?.code === 422 || e.message.toLowerCase() === "failed to fetch",
   });
+
+  const { close, manual } = useDashboardDrawer();
 
   if (chatsQuery.isLoading && !chatsQuery.data) {
     return (
@@ -27,10 +30,23 @@ export default function GroupChatList() {
   }
 
   return (
-    <div data-testid='group-chat-list'>
+    <div
+      data-testid='group-chat-list'
+      className='flex flex-col items-baseline justify-center-safe gap-5'
+    >
       {chats.map((chat) => (
-        <Link key={chat.id} to={`/chats/${chat.id}`}>
-          <Avatar type='group' asset={chat.avatar} variant='group' alt={chat.name} />
+        <Link
+          key={chat.id}
+          to={`/chats/${chat.id}`}
+          variant='button'
+          size='icon'
+          className='overflow-hidden bg-slate-950 text-xs'
+          onClick={() => {
+            manual();
+            close();
+          }}
+        >
+          <GroupChatAvatar type='group' asset={chat.avatar} size='icon' alt={chat.name} />
         </Link>
       ))}
     </div>
