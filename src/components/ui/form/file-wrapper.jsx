@@ -9,7 +9,7 @@ export default function FileWrapper({ label, className, error, onKeyDown, isRequ
       <label className={cn(isRequired ? "after:text-red-600 after:content-['*']" : "", className)}>
         <span
           role='button'
-          className='rounded-sm bg-blue-500 p-2 text-white'
+          className='rounded-sm bg-indigo-400 p-2 text-white'
           onKeyDown={onKeyDown}
           tabIndex={0}
         >
