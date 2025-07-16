@@ -10,6 +10,7 @@ import { createChats } from "./data";
 import { setupRouter } from "./mocks/utils/setup";
 import { RouteErrorElement } from "../../../../components/errors";
 import GroupChatList from "../group-chat-list";
+import { DashboardDrawerContext } from "../../../../components/layouts/context";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +25,11 @@ const router = createMemoryRouter(
     {
       path: paths.protected.dashboard.me.getHref(),
       errorElement: <RouteErrorElement />,
-      element: <GroupChatList />,
+      element: (
+        <DashboardDrawerContext.Provider value={{ close: () => {}, manual: () => {} }}>
+          <GroupChatList />
+        </DashboardDrawerContext.Provider>
+      ),
     },
   ],
   { initialEntries: [paths.protected.dashboard.me.getHref()] }
