@@ -7,7 +7,7 @@ import { useClickOutside } from "../../../hooks";
 export default function Drawer({ triggerRef, className, open, onClose, children }) {
   const drawerRef = useRef();
 
-  useClickOutside(drawerRef, triggerRef, onClose);
+  useClickOutside(drawerRef, triggerRef, open, onClose);
 
   return (
     <div
