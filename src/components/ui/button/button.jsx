@@ -6,12 +6,13 @@ import { cn } from "../../../utils/index";
 import { Spinner } from "../spinner/index";
 
 const button = cva(
-  "focus-visible:ring-ring inline-flex items-center justify-center rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-4 focus-visible:ring-blue-500 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+  "focus-visible:ring-ring  inline-flex items-center justify-center rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-4 focus-visible:ring-blue-500 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-blue-500 text-white hover:opacity-75",
+        default: "bg-indigo-400 text-white hover:opacity-75",
         destructive: "bg-red-500 text-white hover:opacity-75",
+        outline: "bg-inherit hover:bg-indigo-400",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
