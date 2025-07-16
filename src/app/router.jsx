@@ -59,10 +59,6 @@ const router = createBrowserRouter([
         element: <DashBoardPage />,
         children: [
           {
-            index: true,
-            element: <DashBoardMe />,
-          },
-          {
             path: paths.protected.dashboard.me.path,
             element: <DashBoardMe />,
           },

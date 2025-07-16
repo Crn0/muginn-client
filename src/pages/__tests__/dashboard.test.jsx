@@ -38,7 +38,7 @@ const routes = [
     ),
     children: [
       {
-        index: true,
+        index: paths.protected.dashboard.me.path,
         element: <DashBoardMe />,
       },
       {
@@ -79,7 +79,7 @@ describe("Dashboard page", () => {
   describe("UI Rendering", () => {
     it("renders a group chats sidebar and a direct chats panel in the main content on '/chats'", () => {
       const router = createMemoryRouter(routes, {
-        initialEntries: [paths.protected.dashboard.root.getHref()],
+        initialEntries: [paths.protected.dashboard.me.getHref()],
       });
 
       setupRouter(router, queryClient);
