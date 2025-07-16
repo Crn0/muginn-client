@@ -93,7 +93,9 @@ describe("Register Page", () => {
       await user.click(screen.getByRole("button", { name: "Register" }));
 
       await waitFor(() => {
-        expect(screen.getByText("String must contain at most 36 character(s)")).toBeInTheDocument();
+        expect(
+          screen.getByText("Display name must contain at most 36 character(s)")
+        ).toBeInTheDocument();
         expect(
           screen.getByText(
             "Username can only contain letters (A-Z, a-z), numbers (0-9), and the characters: _ , ."
