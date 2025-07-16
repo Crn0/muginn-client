@@ -9,7 +9,7 @@ export default function Drawer({ triggerRef, className, open, onClose, children 
 
   useClickOutside(drawerRef, triggerRef, open, onClose);
 
-  return (
+  return open ? (
     <div
       tabIndex='-1'
       ref={drawerRef}
@@ -21,7 +21,7 @@ export default function Drawer({ triggerRef, className, open, onClose, children 
     >
       {children}
     </div>
-  );
+  ) : null;
 }
 
 Drawer.propTypes = {
