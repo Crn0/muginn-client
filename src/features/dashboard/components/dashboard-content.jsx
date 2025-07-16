@@ -5,7 +5,7 @@ import { Spinner } from "../../../components/ui/spinner";
 
 export default function DashboardContent() {
   return (
-    <div>
+    <div className='flex-1'>
       <Suspense
         fallback={
           <div>
