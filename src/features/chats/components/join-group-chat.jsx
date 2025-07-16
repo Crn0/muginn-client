@@ -26,6 +26,7 @@ export default function JoinGroupChat() {
   return (
     <FormDialog
       isCurried
+      parentId='dashboard-main'
       id='Join-GroupChat-Form'
       title='Join a Group Chat'
       descriptions={["Enter an invite below to join an existing group chat"]}
@@ -34,23 +35,19 @@ export default function JoinGroupChat() {
       onSubmit={onSubmit}
       done={joinChatMutation.isSuccess}
       renderButtonTrigger={(options) => (
-        <div>
-          <Button
-            type='button'
-            testId='join-chat-form-trigger'
-            onClick={options.onClick}
-            ref={options.triggerRef}
-          >
-            Join Chat
-          </Button>
-        </div>
+        <Button
+          type='button'
+          testId='join-chat-form-trigger'
+          onClick={options.onClick}
+          ref={options.triggerRef}
+        >
+          Join Chat
+        </Button>
       )}
       renderButtonCancel={(options) => (
-        <div>
-          <Button type='button' testId='join-chat-form-cancel' onClick={options.onClick}>
-            Cancel
-          </Button>
-        </div>
+        <Button type='button' testId='join-chat-form-cancel' onClick={options.onClick}>
+          Cancel
+        </Button>
       )}
       renderButtonSubmit={() => (
         <div>
