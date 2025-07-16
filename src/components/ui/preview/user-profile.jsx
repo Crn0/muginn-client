@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import { Avatar, BackgroundAvatar } from "../image";
+import { UserAvatar, BackgroundAvatar } from "../image";
 import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
 
@@ -25,7 +25,7 @@ export default function UserProfilePreview({ user, renderProfileButton, children
             />
           </div>
           <div>
-            <Avatar
+            <UserAvatar
               asset={user.profile.avatar}
               fallback={{ image: avatar, lazyImage: avatarLazy }}
               alt={`${user.profile.displayName || user.username}'s avatar`}
