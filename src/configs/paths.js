@@ -1,13 +1,17 @@
 function makeRoute(path, parent, customHref) {
-  const fullPath = parent
-    ? `${parent.fullPath}/${path}`.replace(/\/+/g, "/")
-    : path.startsWith("/")
-      ? path
-      : `/${path}`;
+  let fullPath;
+  const parentHref = parent?.getHref?.();
+
+  if (parentHref) {
+    fullPath = `${parentHref}/${path}`.replace(/\/+/g, "/");
+  } else if (path.startsWith("/")) {
+    fullPath = path;
+  } else {
+    fullPath = `/${path}`;
+  }
 
   return {
     path,
-    fullPath,
     getHref(params = {}) {
       if (typeof customHref === "function") return customHref(params);
 
