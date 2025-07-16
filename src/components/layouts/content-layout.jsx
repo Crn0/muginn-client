@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 export default function ContentLayout({ header, children }) {
   return (
     <>
-      <header>{header}</header>
+      <header className='flex'>{header}</header>
 
-      {children ? <section>{children}</section> : null}
+      <section>{children}</section>
     </>
   );
 }
