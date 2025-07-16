@@ -16,7 +16,12 @@ const queryClient = new QueryClient({
 const routes = [
   {
     path: paths.protected.dashboard.me.getHref(),
-    element: <JoinGroupChat />,
+    element: (
+      <>
+        <div id='dashboard-main' />
+        <JoinGroupChat />
+      </>
+    ),
   },
 ];
 
