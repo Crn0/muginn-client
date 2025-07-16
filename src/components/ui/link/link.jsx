@@ -27,11 +27,20 @@ const link = cva(
   }
 );
 
-export default function Link({ to, children, className, variant, size, onClick = () => {} }) {
+export default function Link({
+  to,
+  children,
+  className,
+  variant,
+  size,
+  testId = "",
+  onClick = () => {},
+}) {
   return (
     <RouterLink
       hrefLang=''
       to={to}
+      data-testid={testId}
       onClick={onClick}
       className={cn(link({ variant, size }), className)}
     >
@@ -47,4 +56,5 @@ Link.propTypes = {
   onClick: PropTypes.func,
   variant: PropTypes.string,
   size: PropTypes.string,
+  testId: PropTypes.string,
 };

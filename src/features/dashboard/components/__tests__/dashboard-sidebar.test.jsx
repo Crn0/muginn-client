@@ -48,7 +48,7 @@ describe("Dashboard sidebar", () => {
   it("renders the list of group chats along with a link to view direct chats, a button to open the dropdown and the user's nameplate", () => {
     setupRouter(router, queryClient);
 
-    expect(screen.getByRole("link", { name: /dm/i })).toBeInTheDocument();
+    expect(screen.getByTestId("dm")).toBeInTheDocument();
     expect(screen.getAllByRole("link").length - 1).toBe(chats.length);
     expect(screen.getByTestId("dialog-trigger")).toBeInTheDocument();
   });

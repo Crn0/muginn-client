@@ -25,7 +25,7 @@ export default function DashboardSidebarContent() {
     <>
       <nav className='flex flex-col place-items-center gap-5 p-5'>
         <div>
-          <Link to={paths.protected.dashboard.me.getHref()} variant='button'>
+          <Link testId='dm' to={paths.protected.dashboard.me.getHref()} variant='button'>
             <GiRaven color='white' />
           </Link>
         </div>
