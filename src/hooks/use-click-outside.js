@@ -16,8 +16,9 @@ export default function useClickOutside(
     const listener = (e) => {
       const paths = e.composedPath();
 
-      if (paths.includes(triggerRef?.current)) return;
       if (!ref.current || paths.includes(ref.current)) return;
+      if (paths.includes(triggerRef?.current)) return;
+      if (paths.some(({ dataset }) => dataset?.insidePortal === "true")) return;
 
       handler();
     };
