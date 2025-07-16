@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getChatsQueryOptions } from "../api/get-chats";
 import { Spinner } from "../../../components/ui/spinner";
 import { Link } from "../../../components/ui/link";
-import { Avatar } from "../../../components/ui/image";
+import { UserAvatar } from "../../../components/ui/image";
 import avatar from "../../../assets/avatar.png";
 import avatarLazy from "../../../assets/avatar-lazy.png";
 
@@ -35,7 +35,7 @@ export default function DirectChatList() {
     <div data-testid='direct-chat-list'>
       {chats.map((chat) => (
         <Link key={chat.id} to={`/chats/${chat.id}`}>
-          <Avatar
+          <UserAvatar
             type='direct'
             asset={chat.avatar}
             alt={`Direct chat ${chat.id}`}
