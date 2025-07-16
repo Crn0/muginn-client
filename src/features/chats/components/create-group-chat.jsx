@@ -31,6 +31,7 @@ export default function CreateGroupChat() {
 
   return (
     <FormDialog
+      parentId='dashboard-main'
       id='GroupChat-Form'
       title='Customize Your Group Chat'
       descriptions={[
@@ -41,23 +42,19 @@ export default function CreateGroupChat() {
       onSubmit={onSubmit}
       done={createChatMutation.isSuccess}
       renderButtonTrigger={(options) => (
-        <div>
-          <Button
-            type='button'
-            testId='create-chat-form-trigger'
-            onClick={options.onClick}
-            ref={options.triggerRef}
-          >
-            Create Chat
-          </Button>
-        </div>
+        <Button
+          type='button'
+          testId='create-chat-form-trigger'
+          onClick={options.onClick}
+          ref={options.triggerRef}
+        >
+          Create Chat
+        </Button>
       )}
       renderButtonCancel={(options) => (
-        <div>
-          <Button type='button' testId='create-chat-form-cancel' onClick={options.onClick}>
-            Cancel
-          </Button>
-        </div>
+        <Button type='button' testId='create-chat-form-cancel' onClick={options.onClick}>
+          Cancel
+        </Button>
       )}
       renderButtonSubmit={() => (
         <div>
