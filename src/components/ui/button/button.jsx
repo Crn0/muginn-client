@@ -47,7 +47,7 @@ const Button = React.forwardRef(
   ) => (
     <button
       type={type === "submit" ? "submit" : "button"}
-      className={cn(button({ variant, size, className }))}
+      className={cn(button({ variant, size, className }), className)}
       tabIndex={tabIndex}
       disabled={disabled}
       data-testid={testId}
