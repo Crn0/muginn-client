@@ -1,26 +1,27 @@
 import PropTypes from "prop-types";
+
+import getAvatar from "./get-avatar";
 import { cn } from "../../../utils";
 import LazyImage from "./lazy-image";
+import avatarMain from "../../../assets/avatar.png";
+import avatarLazy from "../../../assets/avatar-lazy.png";
 
-const getShape = (type) => {
-  const t = type.toLowerCase();
-
-  if (t === "user") return "rounded-xl";
-
-  throw new Error("Invalid type");
+const fallback = {
+  main: avatarMain,
+  lazy: avatarLazy,
 };
 
-export default function BackgroundAvatar({ asset, fallback, alt, size, className, type }) {
-  const shapeClass = getShape(type);
+export default function BackgroundAvatar({ asset, alt, size, className }) {
+  const { mainImage, lazyImage } = getAvatar(asset, fallback);
 
   return (
     <LazyImage
-      asset={asset}
-      fallBackAsset={fallback}
+      mainImage={mainImage}
+      lazyImage={lazyImage}
       alt={alt}
       size={size}
       variant='backgroundAvatar'
-      className={cn(shapeClass, className)}
+      className={cn(className)}
     />
   );
 }
@@ -29,7 +30,6 @@ BackgroundAvatar.propTypes = {
   className: PropTypes.string,
   alt: PropTypes.string,
   size: PropTypes.string,
-  type: PropTypes.oneOf(["user"]).isRequired,
   asset: PropTypes.shape({
     url: PropTypes.string,
     images: PropTypes.arrayOf(
@@ -39,9 +39,5 @@ BackgroundAvatar.propTypes = {
         format: PropTypes.string,
       })
     ),
-  }),
-  fallback: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    lazyImage: PropTypes.string.isRequired,
   }),
 };

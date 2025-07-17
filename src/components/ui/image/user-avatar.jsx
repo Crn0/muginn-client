@@ -1,12 +1,28 @@
 import PropTypes from "prop-types";
 
 import { cn } from "../../../utils";
+import getAvatar from "./get-avatar";
 import LazyImage from "./lazy-image";
 
-export default function UserAvatar({ asset, fallback, alt, className }) {
+import avatarMain from "../../../assets/avatar.png";
+import avatarLazy from "../../../assets/avatar-lazy.png";
+
+const fallback = {
+  main: avatarMain,
+  lazy: avatarLazy,
+};
+
+export default function UserAvatar({ asset, alt, className }) {
+  const { mainImage, lazyImage } = getAvatar(asset, fallback);
+
   return (
     <div className={cn("w-10", className)}>
-      <LazyImage asset={asset} fallBackAsset={fallback} className='rounded-full p-5' alt={alt} />
+      <LazyImage
+        mainImage={mainImage}
+        lazyImage={lazyImage}
+        className='rounded-full p-5'
+        alt={alt}
+      />
     </div>
   );
 }
@@ -23,9 +39,5 @@ UserAvatar.propTypes = {
         format: PropTypes.string,
       })
     ),
-  }),
-  fallback: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    lazyImage: PropTypes.string.isRequired,
   }),
 };
