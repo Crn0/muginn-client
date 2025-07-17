@@ -29,77 +29,84 @@ export default function LoginForm({ onSuccess }) {
   };
 
   return (
-    <>
-      <Form
-        id='Login-Form'
-        className='w-full bg-gray-900 sm:w-lg'
-        schema={loginSchema}
-        onSubmit={onSubmit}
-        defaultValues={{ username: "", password: "" }}
-        mode='onBlur'
-      >
-        <FieldSet className='flex flex-col gap-10 p-5 sm:grid sm:place-content-center sm:place-items-center sm:gap-5'>
-          <div className='grid place-content-center place-items-center'>
-            <h2>Welcome Back!</h2>
+    <Form
+      id='Login-Form'
+      className='w-full bg-gray-900 sm:w-2xl'
+      schema={loginSchema}
+      onSubmit={onSubmit}
+      defaultValues={{ username: "", password: "" }}
+      mode='onBlur'
+    >
+      <FieldSet className='flex flex-col gap-10 p-5 sm:grid sm:place-content-center sm:place-items-center sm:gap-5'>
+        <div className='grid place-content-center place-items-center'>
+          <h2 className='self-center text-2xl font-bold'>Welcome Back!</h2>
 
-            <i className='text-sm font-thin'>We&apos;re so excited to see you again!</i>
-          </div>
+          <i className='text-sm font-thin'>We&apos;re so excited to see you again!</i>
+        </div>
 
-          <div className='grid gap-5'>
-            <Input
-              type='text'
-              name='username'
-              label='USERNAME'
-              onFocus={onFocus}
-              serverError={login?.error}
-              required
-            />
+        <div className='grid gap-5'>
+          <Input
+            type='text'
+            name='username'
+            label='USERNAME'
+            className='sm:w-md sm:p-2'
+            onFocus={onFocus}
+            serverError={login?.error}
+            required
+          />
 
-            <Input type='password' name='password' label='PASSWORD' onFocus={onFocus} required />
-          </div>
+          <Input
+            type='password'
+            name='password'
+            label='PASSWORD'
+            className='sm:w-md sm:p-2'
+            onFocus={onFocus}
+            required
+          />
+        </div>
 
-          <div className='grid gap-5'>
-            <Button
-              type='submit'
-              size='lg'
-              variant='default'
-              isLoading={login.isPending}
-              disabled={login.isPending}
-              testId='login_btn'
-            >
-              Log in
-            </Button>
+        <div className='grid gap-5'>
+          <Button
+            type='submit'
+            size='lg'
+            variant='default'
+            isLoading={login.isPending}
+            disabled={login.isPending}
+            testId='login_btn'
+          >
+            Log in
+          </Button>
 
-            <Anchor
-              testId='google_btn'
-              to={GOOGLE_URL}
-              variant='button'
-              size='lg'
-              className={cn(
-                "bg-white text-gray-600 hover:opacity-75",
-                `${login.isPending ? "pointer-events-none" : "pointer-events-auto"}`
-              )}
-            >
-              <span className='flex items-center gap-1'>
-                <FcGoogle /> Log in with Google
-              </span>
-            </Anchor>
-          </div>
-        </FieldSet>
-      </Form>
+          <Anchor
+            testId='google_btn'
+            to={GOOGLE_URL}
+            variant='button'
+            size='lg'
+            className={cn(
+              "bg-white text-gray-600 hover:opacity-75",
+              `${login.isPending ? "pointer-events-none" : "pointer-events-auto"}`
+            )}
+          >
+            <span className='flex items-center gap-1'>
+              <FcGoogle /> Log in with Google
+            </span>
+          </Anchor>
+        </div>
+      </FieldSet>
+
       <div className='flex justify-center'>
         Don&apos;t have an account yet?
         <Link
           to={paths.register.getHref({ redirectTo })}
           className={cn(
-            "ml-1 rounded-md",
+            "ml-1 rounded-md p-0",
             `${login.isPending ? "pointer-events-none" : "foo pointer-events-auto"}`
           )}
         >
           Register
         </Link>
       </div>
-    </>
+    </Form>
   );
 }
 
