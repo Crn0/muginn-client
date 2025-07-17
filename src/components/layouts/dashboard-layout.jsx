@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useRef, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 import { cn } from "../../utils";
@@ -10,6 +11,7 @@ import { Button } from "../ui/button";
 import DashboardSidebarContent from "../../features/dashboard/components/dashboard-sidebar-content";
 
 export default function DashboardLayout({ title, children }) {
+  const location = useLocation();
   const drawer = useResponsiveDrawer(640);
   const triggerRef = useRef();
 
@@ -27,7 +29,12 @@ export default function DashboardLayout({ title, children }) {
           <Button
             type='button'
             className='sm:hidden'
-            onClick={() => drawer.open()}
+            onClick={() => {
+              if (drawer.isDrawerOpen && location.pathname.endsWith("/me")) return;
+
+              drawer.manual();
+              drawer.toggle();
+            }}
             ref={triggerRef}
             variant='outline'
           >
