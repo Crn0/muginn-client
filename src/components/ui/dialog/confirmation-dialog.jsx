@@ -28,6 +28,7 @@ export default function ConfirmationDialog({
 }) {
   const dialogRef = useRef();
   const triggerRef = useRef();
+  const cancelRef = useRef();
 
   const { isOpen, toggle, close } = useDisclosureWithClickOutside(false, dialogRef, triggerRef);
 
@@ -38,6 +39,12 @@ export default function ConfirmationDialog({
       triggerRef.current?.focus?.();
     },
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      cancelRef.current?.focus?.();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isDone) {
@@ -64,6 +71,7 @@ export default function ConfirmationDialog({
           <Button
             type='button'
             onClick={() => close()}
+            ref={cancelRef}
             className='focus:ring-4 focus:ring-blue-500 focus:outline-none'
           >
             {cancelButtonText}
