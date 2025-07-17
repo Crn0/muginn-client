@@ -13,7 +13,7 @@ function Icon(type) {
     info: <FaExclamation aria-hidden='true' />,
   };
 
-  return icon[type];
+  return icon[type] ?? null;
 }
 
 export default function ConfirmationDialog({
@@ -22,8 +22,8 @@ export default function ConfirmationDialog({
   confirmButton,
   title,
   isDone,
+  icon,
   body = "",
-  icon = "info",
   cancelButtonText = "cancel",
 }) {
   const dialogRef = useRef();
@@ -47,14 +47,12 @@ export default function ConfirmationDialog({
   return (
     <Dialog buttonTrigger={buttonTrigger} open={isOpen} ref={dialogRef} parentId={parentId}>
       <>
-        <div>
-          <h2>
-            {Icon(icon)}
-            {title}
-          </h2>
+        <div className='flex items-center-safe gap-1'>
+          {Icon(icon)}
+          <h2>{title}</h2>
         </div>
 
-        <div>
+        <div className='flex items-center-safe'>
           {body && (
             <div>
               <p>{body}</p>
@@ -62,11 +60,15 @@ export default function ConfirmationDialog({
           )}
         </div>
 
-        <div>
-          {confirmButton}
-          <Button type='button' onClick={() => close()}>
+        <div className='flex items-center-safe justify-end-safe gap-5'>
+          <Button
+            type='button'
+            onClick={() => close()}
+            className='focus:ring-4 focus:ring-blue-500 focus:outline-none'
+          >
             {cancelButtonText}
           </Button>
+          {confirmButton}
         </div>
       </>
     </Dialog>
