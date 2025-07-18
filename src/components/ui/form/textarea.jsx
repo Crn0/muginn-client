@@ -2,11 +2,12 @@ import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
 
+import { cn } from "../../../utils";
 import FieldWrapper from "./field-wrapper";
 import { useInputErrorHandler } from "../../../hooks";
 
 const TextArea = forwardRef(
-  ({ label, serverError, className, name, maxLength, required, ...props }, ref) => {
+  ({ serverError, className, name, maxLength, required, label = "", ...props }, ref) => {
     const {
       register,
       setError,
@@ -20,10 +21,10 @@ const TextArea = forwardRef(
     });
 
     return (
-      <FieldWrapper label={label} error={error} isRequired={required}>
+      <FieldWrapper label={label} className='items-baseline' error={error} isRequired={required}>
         <textarea
           name={name}
-          className={className}
+          className={cn("flex-1", className)}
           maxLength={maxLength}
           aria-invalid={error?.message ? "true" : "false"}
           ref={ref}
@@ -38,7 +39,7 @@ const TextArea = forwardRef(
 TextArea.displayName = "TextArea";
 
 TextArea.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
   maxLength: PropTypes.number.isRequired,
