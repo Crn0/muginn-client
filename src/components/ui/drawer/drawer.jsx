@@ -4,10 +4,10 @@ import { useRef } from "react";
 import { cn } from "../../../utils";
 import { useClickOutside } from "../../../hooks";
 
-export default function Drawer({ triggerRef, className, open, onClose, children }) {
+export default function Drawer({ triggerRef, className, open, onClose, children, refs = [] }) {
   const drawerRef = useRef();
 
-  useClickOutside(drawerRef, triggerRef, open, onClose);
+  useClickOutside([...refs, drawerRef], triggerRef, open, onClose);
 
   return open ? (
     <div
@@ -34,4 +34,8 @@ Drawer.propTypes = {
   className: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)])
     .isRequired,
+  refs: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.arrayOf(PropTypes.shape({ current: PropTypes.instanceOf(Element) })),
+  ]),
 };

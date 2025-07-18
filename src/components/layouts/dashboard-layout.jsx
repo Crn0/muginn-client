@@ -13,6 +13,7 @@ import DashboardSidebarContent from "../../features/dashboard/components/dashboa
 export default function DashboardLayout({ title, children }) {
   const location = useLocation();
   const drawer = useResponsiveDrawer(640);
+  const containerRef = useRef();
   const triggerRef = useRef();
 
   const contextValue = useMemo(
@@ -24,7 +25,7 @@ export default function DashboardLayout({ title, children }) {
 
   return (
     <DashboardDrawerContext.Provider value={contextValue}>
-      <div className='flex min-h-dvh flex-col gap-2 bg-black text-white'>
+      <div className='flex min-h-dvh flex-col gap-2 bg-black text-white' ref={containerRef}>
         <header className='flex items-center justify-center gap-2 p-2 sm:grid sm:place-content-center sm:gap-0'>
           <Button
             type='button'
@@ -50,6 +51,7 @@ export default function DashboardLayout({ title, children }) {
             open={drawer.isDrawerOpen}
             onClose={() => drawer.close()}
             triggerRef={triggerRef}
+            refs={[containerRef]}
           >
             <DashboardSidebarContent />
           </Drawer>
