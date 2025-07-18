@@ -15,6 +15,7 @@ const initEnv = () => {
     SERVER_MOCK_API_PORT: z.string().optional().default("3000"),
     API_VERSION: z.coerce.number().default(1),
     TOKEN_SECRET: z.string().default("secret"),
+    NODE_ENV: z.enum(["prod", "dev", "test"]).default("dev"),
   });
 
   const env = Object.entries(import.meta.env);
