@@ -24,7 +24,7 @@ export default function DashboardLayout({ title, children }) {
 
   return (
     <DashboardDrawerContext.Provider value={contextValue}>
-      <div className='flex min-h-dvh flex-col gap-5 bg-black text-white'>
+      <div className='flex min-h-dvh flex-col gap-2 bg-black text-white'>
         <header className='flex items-center justify-center gap-2 p-2 sm:grid sm:place-content-center sm:gap-0'>
           <Button
             type='button'
@@ -46,7 +46,7 @@ export default function DashboardLayout({ title, children }) {
 
         <main id='dashboard-main' className='flex flex-1'>
           <Drawer
-            className='flex pr-5 sm:p-0'
+            className='flex p-0'
             open={drawer.isDrawerOpen}
             onClose={() => drawer.close()}
             triggerRef={triggerRef}
@@ -54,7 +54,7 @@ export default function DashboardLayout({ title, children }) {
             <DashboardSidebarContent />
           </Drawer>
 
-          <div className={cn("hidden sm:flex sm:flex-1", `${!drawer.isDrawerOpen && "flex"}`)}>
+          <div className={cn("hidden flex-1 sm:flex", `${!drawer.isDrawerOpen && "flex"}`)}>
             {children}
           </div>
         </main>
