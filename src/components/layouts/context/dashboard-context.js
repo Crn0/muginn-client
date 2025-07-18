@@ -1,6 +1,15 @@
 import { createContext, useContext } from "react";
 
-export const DashboardDrawerContext = createContext(null);
+export const DashboardDrawerContext = createContext({
+  isAutoDrawer: false,
+  isDrawerOpen: false,
+  clientWidth: null,
+  close: () => {},
+  open: () => {},
+  toggle: () => {},
+  auto: () => {},
+  manual: () => {},
+});
 
 export const useDashboardDrawer = () => {
   const ctx = useContext(DashboardDrawerContext);
