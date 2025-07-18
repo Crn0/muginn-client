@@ -1,7 +1,7 @@
 import z from "zod";
 
 const MAX_ATTACHMENTS_LENGTH = 5;
-const MAX_CONTENT_LENGTH = 2000;
+export const MAX_CONTENT_LENGTH = 2000;
 
 export const MAX_FILE_SIZE = 10_000_000; // 10mb
 
