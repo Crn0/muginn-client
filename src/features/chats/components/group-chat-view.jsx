@@ -1,22 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { IoCloseSharp } from "react-icons/io5";
 
 import { getChatQueryOptions } from "../api/get-chat";
-import { ContentLayout } from "../../../components/layouts";
-import { DropDownMenu } from "../../../components/ui/dropdown";
-import { Avatar } from "../../../components/ui/image";
-import { Button } from "../../../components/ui/button";
-import LeaveGroupChat from "./leave-group-chat";
+import { ChatLayout } from "../../../components/layouts";
 import Messages from "../../messages/components/messages";
-import avatar from "../../../assets/avatar.png";
-import avatarLazy from "../../../assets/avatar-lazy.png";
-
-const fallback = {
-  image: avatar,
-  lazyImage: avatarLazy,
-};
 
 export default function GroupChatView() {
   const { chatId } = useParams();
@@ -37,57 +24,20 @@ export default function GroupChatView() {
   }
 
   return (
-    <ContentLayout
-      header={
-        <>
-          <div>
-            <Avatar
-              asset={chat.avatar}
-              fallback={fallback}
-              alt={`${chat.name}'s avatar`}
-              type='group'
-            />
-          </div>
-          <div>
-            <DropDownMenu
-              renderButtonTrigger={(options) => (
-                <div>
-                  <Button
-                    type='button'
-                    testId='chat-drop-down-trigger'
-                    onClick={options.onClick}
-                    ref={options.triggerRef}
-                  >
-                    {!options.isOpen ? <MdOutlineKeyboardArrowDown /> : <IoCloseSharp />}
-                  </Button>
-                </div>
-              )}
-            >
-              <LeaveGroupChat chat={chat} />
-            </DropDownMenu>
-          </div>
-        </>
-      }
-    >
-      <>
-        <section>
-          <h2>{chat.name}</h2>
-        </section>
+    <ChatLayout title='general'>
+      <div className='flex flex-1 flex-col'>
+        <div role='note' className='grid place-content-center-safe place-items-center-safe gap-1'>
+          <h3 className='grid place-content-center-safe place-items-center-safe'>
+            <p>Welcome to</p>
+            <p>{chat.name}</p>
+          </h3>
+          <div>This is the beginning of the chat</div>
+        </div>
 
-        <section>
-          <div role='note'>
-            <h3>
-              <p>Welcome to</p>
-              <p>{chat.name}</p>
-            </h3>
-            <div>This is the beginning of the chat</div>
-          </div>
-
-          <div>
-            <Messages chatId={chat.id} />
-          </div>
-        </section>
-      </>
-    </ContentLayout>
+        <div className='flex flex-1 flex-col'>
+          <Messages chatId={chat.id} />
+        </div>
+      </div>
+    </ChatLayout>
   );
 }
