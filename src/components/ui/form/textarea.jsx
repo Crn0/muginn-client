@@ -21,7 +21,7 @@ const TextArea = forwardRef(
     });
 
     return (
-      <FieldWrapper label={label} className='items-baseline' error={error} isRequired={required}>
+      <FieldWrapper label={label} className='items-stretch' error={error} isRequired={required}>
         <textarea
           name={name}
           className={cn("flex-1", className)}
