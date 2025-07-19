@@ -12,7 +12,8 @@ const button = cva(
       variant: {
         default: "bg-indigo-400 text-white hover:opacity-75",
         destructive: "bg-red-500 text-white hover:opacity-75",
-        outline: "bg-inherit hover:bg-indigo-400",
+        outline: "bg-inherit hover:bg-transparent hover:opacity-75",
+        "outline-destructive": "flex justify-between text-red-700 hover:bg-red-700/20",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
