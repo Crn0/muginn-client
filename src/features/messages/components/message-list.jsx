@@ -10,7 +10,7 @@ export default function MessageList({ chatId }) {
 
   if (messagesQuery.isLoading) {
     return (
-      <div>
+      <div className='absolute top-[50%] left-[50%]'>
         <Spinner />
       </div>
     );

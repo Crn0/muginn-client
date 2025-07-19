@@ -5,10 +5,10 @@ import { Spinner } from "../../../components/ui/spinner";
 
 export default function DashboardContent() {
   return (
-    <div className='flex-1'>
+    <div className='flex flex-1'>
       <Suspense
         fallback={
-          <div>
+          <div className='flex flex-1 items-center-safe justify-center-safe bg-black text-white'>
             <Spinner />
           </div>
         }

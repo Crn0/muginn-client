@@ -39,14 +39,24 @@ function Wrapper() {
     }
   }, [navigate, redirectTo, token, user.data, user.isError]);
 
-  return <Spinner />;
+  return (
+    <div className='flex min-h-dvh items-center-safe justify-center-safe bg-black text-white'>
+      <Spinner />
+    </div>
+  );
 }
 
 export default function SilentLogin() {
   const { data: loaderData } = useLoaderData();
 
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense
+      fallback={
+        <div className='flex min-h-dvh items-center-safe justify-center-safe bg-black text-white'>
+          <Spinner />
+        </div>
+      }
+    >
       <Await resolve={loaderData} errorElement={<AwaitErrorElement />}>
         <ErrorBoundary FallbackComponent={ErrorElement}>
           <Wrapper />

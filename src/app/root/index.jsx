@@ -28,7 +28,7 @@ export default function ProtectedRoot() {
 
   if (isLoading) {
     return (
-      <div>
+      <div className='flex min-h-dvh items-center-safe justify-center-safe bg-black text-white'>
         <Spinner />
       </div>
     );
