@@ -1,139 +1,159 @@
 import PropTypes from "prop-types";
-import { useRef, useState } from "react";
-import { FaPlusSquare, FaRegTrashAlt } from "react-icons/fa";
-import { IoIosSend } from "react-icons/io";
+import { useFormContext } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { IoIosSend, IoMdAddCircleOutline } from "react-icons/io";
 
+import { CustomError } from "../../../errors";
 import { generateId } from "../../../lib";
-import { createMessageSchema, ACCEPTED_ATTACHMENTS_TYPES } from "../schema";
+import { createMessageSchema, ACCEPTED_ATTACHMENTS_TYPES, MAX_CONTENT_LENGTH } from "../schema";
 import { useCreateMessage } from "../api/create-message";
-import { File, Form, FormError, Input } from "../../../components/ui/form";
-import { DropDownMenu } from "../../../components/ui/dropdown";
-import { MessageAttachment } from "../../../components/ui/preview";
+import { File as InputFile, Form, FormError, TextArea } from "../../../components/ui/form";
+import { FileAttachment } from "../../../components/ui/preview";
 import { Button } from "../../../components/ui/button";
+
+const TEXTAREA_MAX_LEN = MAX_CONTENT_LENGTH;
+
+function FormChildren({ selectedFiles, setSelectedFiles, serverError, isSuccess }) {
+  const {
+    reset,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
+
+  const fileRef = useRef();
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+      setSelectedFiles([]);
+    }
+  }, [isSuccess, reset, setSelectedFiles]);
+
+  return (
+    <div className='grid border-1 border-slate-900 p-1'>
+      {selectedFiles?.length > 0 && (
+        <>
+          <div className='sm:scrollbar flex overflow-x-auto'>
+            {selectedFiles.map(({ id, file }) => (
+              <FileAttachment
+                key={id}
+                attachment={file}
+                onRemove={() => {
+                  const files = Array.from(selectedFiles).filter((f) => f.id !== id);
+
+                  setSelectedFiles(files);
+                  setValue(
+                    "attachments",
+                    files.map((ob) => ob.file)
+                  );
+                }}
+              />
+            ))}
+          </div>
+
+          <div>
+            {errors?.attachments && (
+              <FormError errorMessage={errors.attachments.message} className='text-lg' />
+            )}
+          </div>
+        </>
+      )}
+
+      <div className='flex items-center-safe justify-center-safe p-5'>
+        <InputFile
+          testId='message-attachments'
+          name='attachments'
+          className='flex h-9 items-center justify-center rounded-md text-3xl font-medium whitespace-nowrap text-white transition-colors hover:opacity-75 focus-visible:ring-4 focus-visible:ring-blue-500 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50'
+          label={<IoMdAddCircleOutline />}
+          accept={ACCEPTED_ATTACHMENTS_TYPES.join(",")}
+          onKeyDown={(e) => e.code === "Enter" && fileRef.current.click()}
+          onChange={(e) => {
+            const files = Array.from(e.target.files).map((file) => ({
+              file,
+              id: generateId(),
+            }));
+
+            setValue(
+              "attachments",
+              selectedFiles.concat(files).map(({ file }) => file)
+            );
+
+            setSelectedFiles((prev) => prev.concat(files));
+          }}
+          serverError={serverError}
+          ref={fileRef}
+          showError={false}
+          multiple
+        />
+
+        <TextArea
+          type='text'
+          name='content'
+          placeholder='Message'
+          rows='1'
+          maxLength={TEXTAREA_MAX_LEN}
+          className='flex-1 resize-none border-none shadow-none outline-none'
+          serverError={serverError}
+          onChange={(e) => {
+            setValue("content", e.target.value);
+            e.target.style.height = "auto";
+            e.target.style.height = `${e.target.scrollHeight}px`;
+          }}
+        />
+
+        <Button type='submit' className='sm:hidden'>
+          <IoIosSend />
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export default function CreateMessage({ chatId }) {
   const createMessage = useCreateMessage(chatId);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const fileRef = useRef();
 
-  const onSubmit =
-    ({ reset }) =>
-    (data) => {
-      const formData = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          return value.forEach((v) => formData.append(key, v));
-        }
-        if (typeof value === "object") {
-          return formData.append(key, JSON.stringify(value));
-        }
+  const onSubmit = (data) => {
+    const formData = new FormData();
 
-        return formData.append(key, value);
-      });
+    Object.entries(data).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        return value.forEach((v) => formData.append(key, v));
+      }
+      if (typeof value === "object") {
+        return formData.append(key, JSON.stringify(value));
+      }
 
-      createMessage.mutate(formData);
+      return formData.append(key, value);
+    });
 
-      reset();
-      setSelectedFiles([]);
-    };
+    createMessage.mutate(formData);
+  };
 
   return (
-    <Form
-      id='create-message-form'
-      schema={createMessageSchema}
-      onSubmit={onSubmit}
-      mode='onBlur'
-      isCurried
-    >
-      {({ setValue, formState: { errors } }) => (
-        <>
-          <div>
-            {selectedFiles?.length > 0 && (
-              <div>
-                <div>
-                  {selectedFiles.map(({ id, file }) => (
-                    <div key={id}>
-                      <MessageAttachment attachment={file} />
-                      <Button
-                        type='button'
-                        size='sm'
-                        className='bg-contain bg-no-repeat p-15'
-                        onClick={() => {
-                          const files = Array.from(selectedFiles).filter((f) => f.id !== id);
-
-                          setSelectedFiles(files);
-
-                          setValue("attachments", files);
-                        }}
-                      >
-                        <FaRegTrashAlt color='red' />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-                {errors?.attachments && <FormError errorMessage={errors.attachments.message} />}
-              </div>
-            )}
-          </div>
-          <div>
-            <DropDownMenu
-              renderButtonTrigger={(options) => (
-                <div>
-                  <Button
-                    type='button'
-                    testId='drop-down-trigger'
-                    onClick={options.onClick}
-                    ref={options.triggerRef}
-                  >
-                    <FaPlusSquare />
-                  </Button>
-                </div>
-              )}
-            >
-              <File
-                name='attachments'
-                label='Upload a File'
-                testId='message-attachments'
-                accept={ACCEPTED_ATTACHMENTS_TYPES.join(",")}
-                onKeyDown={(e) => e.code === "Enter" && fileRef.current.click()}
-                onChange={(e) => {
-                  const files = Array.from(e.target.files).map((file) => ({
-                    file,
-                    id: generateId(),
-                  }));
-
-                  setValue(
-                    "attachments",
-                    selectedFiles.concat(files).map(({ file }) => file)
-                  );
-
-                  setSelectedFiles((prev) => prev.concat(files));
-                }}
-                serverError={createMessage?.error}
-                ref={fileRef}
-                multiple
-              />
-            </DropDownMenu>
-
-            <div>
-              <Input
-                type='text'
-                name='content'
-                className='border border-black'
-                serverError={createMessage.error}
-              />
-            </div>
-
-            <Button type='submit'>
-              <IoIosSend />
-            </Button>
-          </div>
-        </>
-      )}
+    <Form id='create-message-form' schema={createMessageSchema} onSubmit={onSubmit} mode='onBlur'>
+      <FormChildren
+        selectedFiles={selectedFiles}
+        setSelectedFiles={setSelectedFiles}
+        serverError={createMessage.error}
+        isSuccess={createMessage.isSuccess}
+      />
     </Form>
   );
 }
 
 CreateMessage.propTypes = {
   chatId: PropTypes.string.isRequired,
+};
+
+FormChildren.propTypes = {
+  selectedFiles: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      file: PropTypes.instanceOf(File),
+    })
+  ),
+  setSelectedFiles: PropTypes.func.isRequired,
+  serverError: PropTypes.instanceOf(CustomError),
+  isSuccess: PropTypes.bool.isRequired,
 };
