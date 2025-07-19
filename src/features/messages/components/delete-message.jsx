@@ -15,12 +15,16 @@ export default function DeleteMessage({ chatId, messageId }) {
       icon='danger'
       body='Are you sure you want to delete this message?'
       renderButtonTrigger={({ onClick }) => (
-        <Button type='button' onClick={onClick}>
+        <Button type='button' variant='outline-destructive' onClick={onClick}>
           Delete Message
         </Button>
       )}
       confirmButton={
-        <Button type='button' onClick={() => deleteMessage.mutate({ chatId, messageId })}>
+        <Button
+          type='button'
+          variant='destructive'
+          onClick={() => deleteMessage.mutate({ chatId, messageId })}
+        >
           Delete
         </Button>
       }
