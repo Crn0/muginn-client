@@ -6,12 +6,11 @@ import CreateMessage from "./create-message";
 export default function Messages({ chatId }) {
   return (
     <>
-      <div>
+      <div className='flex-1'>
         <MessageList chatId={chatId} />
       </div>
-      <div>
-        <CreateMessage chatId={chatId} />
-      </div>
+
+      <CreateMessage chatId={chatId} />
     </>
   );
 }
