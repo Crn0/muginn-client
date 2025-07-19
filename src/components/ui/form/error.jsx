@@ -1,13 +1,15 @@
 import PropTypes from "prop-types";
 
-export default function Error({ errorMessage }) {
+import { cn } from "../../../utils";
+
+export default function Error({ errorMessage, className }) {
   if (!errorMessage) return null;
 
   return (
     <div
       role='alert'
       aria-label={errorMessage}
-      className='text-center text-sm font-semibold text-red-500'
+      className={cn("text-center text-sm font-semibold text-red-500", className)}
     >
       {errorMessage}
     </div>
@@ -16,4 +18,5 @@ export default function Error({ errorMessage }) {
 
 Error.propTypes = {
   errorMessage: PropTypes.string,
+  className: PropTypes.string,
 };
