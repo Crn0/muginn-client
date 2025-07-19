@@ -16,18 +16,31 @@ export default function LeaveGroupChat({ chat }) {
 
   return (
     <ConfirmationDialog
+      parentId='group-chat-view-dropdown'
       isDone={leaveGroupChatMutation.isSuccess}
       title={`Leave '${chat.name}'`}
       icon='danger'
       body={`Are you sure you want to leave ${chat.name}? You won't be able to rejoin this chat unless you are re-invited.`}
       cancelButtonText='Cancel'
       renderButtonTrigger={({ onClick }) => (
-        <Button type='button' onClick={onClick}>
-          Leave Chat <RxExit color='red' />
+        <Button
+          type='button'
+          onClick={onClick}
+          variant='outline'
+          className='flex justify-between text-red-700 hover:bg-red-700/20'
+        >
+          <span>Leave Chat</span>
+          <span>
+            <RxExit color='red' />
+          </span>
         </Button>
       )}
       confirmButton={
-        <Button type='button' onClick={() => leaveGroupChatMutation.mutate({ id: chat.id })}>
+        <Button
+          type='button'
+          variant='destructive'
+          onClick={() => leaveGroupChatMutation.mutate({ id: chat.id })}
+        >
           Leave Chat
         </Button>
       }
