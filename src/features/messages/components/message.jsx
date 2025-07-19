@@ -28,6 +28,7 @@ export default function Message({ message }) {
         {isHover && (
           <div>
             <DropDownMenu
+              id={message.id}
               renderButtonTrigger={(options) => (
                 <div>
                   <Button
