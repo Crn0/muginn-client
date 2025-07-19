@@ -33,6 +33,7 @@ const File = forwardRef(
       onChange,
       required,
       multiple = false,
+      showError = true,
     },
     ref
   ) => {
@@ -57,7 +58,7 @@ const File = forwardRef(
         <FileWrapper
           label={label}
           className={className}
-          error={error}
+          error={showError ? error : null}
           onKeyDown={onKeyDown}
           isRequired={required}
         >
@@ -96,6 +97,7 @@ File.propTypes = {
   onChange: PropTypes.func,
   testId: PropTypes.string,
   multiple: PropTypes.bool,
+  showError: PropTypes.bool,
 };
 
 export default File;
