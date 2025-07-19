@@ -83,7 +83,7 @@ const File = forwardRef(
 File.displayName = "File";
 
 File.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
   renderFieldButton: PropTypes.func,
   registration: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.func])),
   className: PropTypes.string,

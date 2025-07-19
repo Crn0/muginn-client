@@ -9,7 +9,7 @@ export default function FileWrapper({ label, className, error, onKeyDown, isRequ
       <label className={cn(isRequired ? "after:text-red-600 after:content-['*']" : "", className)}>
         <span
           role='button'
-          className='rounded-sm bg-indigo-400 p-2 text-white'
+          className='rounded-sm bg-inherit p-2 text-inherit'
           onKeyDown={onKeyDown}
           tabIndex={0}
         >
@@ -23,7 +23,7 @@ export default function FileWrapper({ label, className, error, onKeyDown, isRequ
 }
 
 FileWrapper.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
   className: PropTypes.string,
   error: PropTypes.shape({ message: PropTypes.string }),
   onKeyDown: PropTypes.func.isRequired,
