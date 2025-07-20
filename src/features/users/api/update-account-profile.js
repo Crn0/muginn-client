@@ -1,10 +1,10 @@
-import { redirect } from "react-router-dom";
-import { ApiClient, generateHeader, getAuthUserQueryOptions, tryCatch } from "../../../lib";
-import { paths } from "../../../configs";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { ApiClient, generateHeader, tryCatch } from "../../../lib";
 import { resetStore } from "../../../stores";
 
 export const updateUsername = async (data) => {
-  const headers = generateHeader();
+  const headers = generateHeader(["Content-Type", "application/json"]);
 
   const { error, data: res } = await tryCatch(
     ApiClient.callApi("users/me/username", {
@@ -21,7 +21,7 @@ export const updateUsername = async (data) => {
 };
 
 export const updatePassword = async (data) => {
-  const headers = generateHeader();
+  const headers = generateHeader(["Content-Type", "application/json"]);
 
   const { error, data: res } = await tryCatch(
     ApiClient.callApi("users/me/password", {
@@ -29,6 +29,7 @@ export const updatePassword = async (data) => {
       authenticatedRequest: true,
       method: "PATCH",
       body: JSON.stringify(data),
+      credentials: "include",
     })
   );
 
@@ -37,49 +38,41 @@ export const updatePassword = async (data) => {
   return res;
 };
 
-export const updateAccountProfileAction = (queryClient) => async (formData) => {
-  const intent = formData.get("intent");
-
-  formData.delete("intent");
-
-  const updates = Object.fromEntries(formData);
-
-  const handleUpdate = async (updater) => {
-    const { error, data } = await tryCatch(updater(updates));
-
-    if (
-      (typeof error?.code === "number" && error?.code !== 422) ||
-      error?.message === "Failed to fetch"
-    ) {
-      throw error;
-    }
-
-    return { error, data };
-  };
+const updateAccountProfile = (queryClient) => async (data) => {
+  const intent = data?.intent;
 
   if (intent === "update:accountProfile:username") {
-    const { error, data } = await handleUpdate(updateUsername);
-
-    if (data) {
-      queryClient.invalidateQueries({ queryKey: getAuthUserQueryOptions().queryKey });
-    }
-
-    return { error, data };
+    return updateUsername(data);
   }
 
   if (intent === "update:accountProfile:password") {
-    const { error, data } = await handleUpdate(updatePassword);
+    const { error, data: res } = await tryCatch(updatePassword(data));
 
-    if (data) {
-      queryClient.removeQueries({ queryKey: getAuthUserQueryOptions().queryKey });
+    if (error) throw error;
 
-      resetStore();
+    queryClient.clear();
 
-      return redirect(paths.login.getHref(window.location.pathname));
-    }
+    resetStore();
 
-    return { error, data: null };
+    return res;
   }
 
   throw new Error("Invalid intent");
+};
+
+export const useUpdateAccountProfile = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  const { onSuccess, onError, ...restConfig } = options || {};
+
+  return useMutation({
+    ...restConfig,
+    onSuccess: (...args) => {
+      onSuccess?.(...args);
+    },
+    onError: (e) => {
+      onError?.(e);
+    },
+    mutationFn: (data) => updateAccountProfile(queryClient)(data),
+  });
 };

@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { ApiClient, generateHeader, getAuthUserQueryOptions, tryCatch } from "../../../lib";
 
@@ -19,31 +19,15 @@ export const updateMainProfile = async (data) => {
   return res.json();
 };
 
-export const updateMainProfileAction = (queryClient) => async (formData) => {
-  formData.delete("intent");
-
-  const { error, data } = await tryCatch(updateMainProfile(formData));
-
-  if (
-    (typeof error?.code === "number" && error?.code !== 422) ||
-    error?.message === "Failed to fetch"
-  ) {
-    throw error;
-  }
-
-  if (data) {
-    queryClient.invalidateQueries({ queryKey: getAuthUserQueryOptions().queryKey });
-  }
-
-  return { error, data };
-};
-
 export const useUpdateMainProfile = (options) => {
+  const queryClient = useQueryClient();
   const { onSuccess, onError, ...restConfig } = options || {};
 
   const mutation = useMutation({
     ...restConfig,
     onSuccess: (...args) => {
+      queryClient.invalidateQueries({ queryKey: getAuthUserQueryOptions().queryKey });
+
       onSuccess?.(...args);
     },
     onError: (e) => {

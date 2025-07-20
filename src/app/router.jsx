@@ -6,8 +6,6 @@ import queryClient from "./query-client";
 import protectedLoader from "./root/loader";
 import { clientLoader as silentLoginLoader } from "../features/auth/api/index";
 
-import { clientAction as userAction } from "../features/users/api";
-
 import { ErrorElement, RouteErrorElement } from "../components/errors";
 import ProtectedRoot from "./root";
 import LoginPage from "../pages/login";
@@ -70,7 +68,6 @@ const router = createBrowserRouter([
       },
       {
         path: paths.protected.userSettings.path,
-        action: userAction(queryClient),
         errorElement: <RouteErrorElement />,
         element: <UserSettingsPage />,
       },
