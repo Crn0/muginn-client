@@ -1,21 +1,35 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { cva } from "class-variance-authority";
 
 import { cn } from "../../../utils";
 
-export default function LazyImage({ mainImage, lazyImage, className, alt }) {
+const image = cva(
+  "block aspect-square h-full w-full object-cover object-center opacity-0 transition-opacity delay-150 ease-in-out",
+  {
+    variants: {
+      variant: {
+        default: "rounded-none",
+        attachment: "rounded-md",
+      },
+    },
+
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+export default function LazyImage({ mainImage, lazyImage, className, variant, alt }) {
   const [loaded, setLoaded] = useState(false);
 
   return (
     <div
       className={cn("max-w-full bg-cover bg-center", className)}
-      style={{ backgroundImage: `url(${lazyImage})` }}
+      style={{ backgroundImage: `${!loaded ? `url(${lazyImage})` : ""}` }}
     >
       <img
-        className={cn(
-          "block aspect-square h-full w-full object-cover object-center opacity-0 transition-opacity delay-150 ease-in-out",
-          loaded && "opacity-100"
-        )}
+        className={cn(image({ variant }), loaded && "opacity-100")}
         src={mainImage}
         alt={alt ?? ""}
         onLoad={() => setLoaded(true)}
@@ -30,4 +44,5 @@ LazyImage.propTypes = {
   alt: PropTypes.string,
   mainImage: PropTypes.string.isRequired,
   lazyImage: PropTypes.string.isRequired,
+  variant: PropTypes.oneOf(["default", "attachment"]),
 };
