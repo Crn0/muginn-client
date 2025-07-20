@@ -39,6 +39,7 @@ export default function FormConfirmation({ message, isSubmitting, renderSubmitBu
               reset();
               setHasMadeChange(false);
             }}
+            disabled={isSubmitting}
           >
             Reset
           </Button>
