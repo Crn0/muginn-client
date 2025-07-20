@@ -51,8 +51,7 @@ describe("User Main Profile Form", () => {
     renderRouteComponent();
 
     expect(screen.getByTestId("user-profile-preview")).toBeInTheDocument();
-    expect(screen.getByAltText("crno's avatar")).toBeInTheDocument();
     expect(screen.getByAltText("Profile background")).toBeInTheDocument();
-    expect(screen.getByAltText("crno's nameplate avatar")).toBeInTheDocument();
+    expect(screen.getAllByAltText("crno's avatar").length).toBe(2);
   });
 });
