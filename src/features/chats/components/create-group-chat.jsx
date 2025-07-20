@@ -74,6 +74,7 @@ export default function CreateGroupChat() {
           name='avatar'
           label='Upload Avatar'
           testId='chat-avatar'
+          className='bg-indigo-400 text-white hover:opacity-75'
           accept={ACCEPTED_IMAGE_TYPES.join(",")}
           onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
           serverError={createChatMutation?.error}
