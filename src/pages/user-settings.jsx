@@ -86,6 +86,7 @@ export default function UserSettingsPage() {
   return (
     <ErrorBoundary FallbackComponent={ErrorElement}>
       <SettingLayout
+        id='user-settings'
         title='User Settings'
         leftTab={leftTab}
         setLeftTab={handleLeftTabChange}
@@ -95,6 +96,7 @@ export default function UserSettingsPage() {
         rightNavButtons={rightNavButtons}
         headerContent={
           <ConfirmationDialog
+            parentId='user-setting'
             icon='danger'
             title='Log Out'
             body='Are you sure you want to logut?'

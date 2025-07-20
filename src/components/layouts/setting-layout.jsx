@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 export default function SettingLayout({
+  id,
   title,
   leftTab,
   rightTab,
@@ -14,7 +15,7 @@ export default function SettingLayout({
   const visibleRightNavButtons = rightNavButtons.filter((btn) => btn.section === leftTab);
 
   return (
-    <div>
+    <div id={id}>
       <header>
         <h1>{title}</h1>
 
@@ -55,6 +56,7 @@ export default function SettingLayout({
 }
 
 SettingLayout.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   leftTab: PropTypes.string.isRequired,
   rightTab: PropTypes.string.isRequired,
