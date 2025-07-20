@@ -1,14 +1,16 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 
-import { MessageAttachment, NameplatePreview } from "../../../components/ui/preview";
+import { NameplatePreview } from "../../../components/ui/preview";
 import { formatDate } from "../../../utils";
 import { DropDownMenu } from "../../../components/ui/dropdown";
 import { Button } from "../../../components/ui/button";
 import DeleteMessage from "./delete-message";
+import MessageAttachments from "./message-attachments";
 
 export default function Message({ message }) {
+  const ref = useRef();
   const [isHover, setIsHover] = useState(false);
 
   const show = () => setIsHover(true);
@@ -16,45 +18,43 @@ export default function Message({ message }) {
   const hide = () => setIsHover(false);
 
   return (
-    <div className={`${isHover ? "" : ""}`} onMouseEnter={show} onMouseLeave={hide}>
-      <div>
-        <NameplatePreview
-          username={message.user.username}
-          displayName={message.user.profile.displayName}
-          asset={message.user.profile.avatar}
-        />
-        <time dateTime={message.createdAt}>{formatDate(message.createdAt)}</time>
-
+    <div className='relative grid gap-2 p-1' onMouseEnter={show} onMouseLeave={hide} ref={ref}>
+      <div className='flex items-center-safe justify-between'>
+        <div className='flex items-center-safe gap-2'>
+          <NameplatePreview
+            username={message.user.username}
+            displayName={message.user.profile.displayName}
+            asset={message.user.profile.avatar}
+          />
+          <time className='text-xs font-light' dateTime={message.createdAt}>
+            {formatDate(message.createdAt)}
+          </time>
+        </div>
         {isHover && (
-          <div>
-            <DropDownMenu
-              id={message.id}
-              renderButtonTrigger={(options) => (
-                <div>
-                  <Button
-                    type='button'
-                    testId='drop-down-trigger'
-                    onClick={options.onClick}
-                    ref={options.triggerRef}
-                  >
-                    <HiDotsHorizontal />
-                  </Button>
-                </div>
-              )}
-            >
-              <DeleteMessage chatId={message.chatId} messageId={message.id} />
-            </DropDownMenu>
-          </div>
+          <DropDownMenu
+            id={message.id}
+            className='absolute top-10 left-20 z-50 h-100 bg-black sm:left-[70%]'
+            renderButtonTrigger={(options) => (
+              <Button
+                testId='drop-down-trigger'
+                type='button'
+                variant='outline'
+                onClick={options.onClick}
+                ref={options.triggerRef}
+              >
+                <HiDotsHorizontal />
+              </Button>
+            )}
+          >
+            <DeleteMessage chatId={message.chatId} messageId={message.id} />
+          </DropDownMenu>
         )}
       </div>
 
       <div>
-        <div>{message.content}</div>
+        <p className='ml-10'>{message.content}</p>
 
-        {message.attachments.length > 0 &&
-          message.attachments.map((attachment) => (
-            <MessageAttachment key={attachment.id} attachment={attachment} />
-          ))}
+        <MessageAttachments attachments={message.attachments} />
       </div>
     </div>
   );
