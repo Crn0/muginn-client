@@ -13,7 +13,7 @@ import { Button } from "../../../components/ui/button";
 
 const TEXTAREA_MAX_LEN = MAX_CONTENT_LENGTH;
 
-function FormChildren({ selectedFiles, setSelectedFiles, serverError, isSuccess }) {
+function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending, isSuccess }) {
   const {
     reset,
     setValue,
@@ -101,7 +101,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isSuccess 
           }}
         />
 
-        <Button type='submit' className='sm:hidden'>
+        <Button type='submit' className='sm:hidden' isLoading={isPending} disabled={isPending}>
           <IoIosSend />
         </Button>
       </div>
@@ -137,6 +137,7 @@ export default function CreateMessage({ chatId }) {
         setSelectedFiles={setSelectedFiles}
         serverError={createMessage.error}
         isSuccess={createMessage.isSuccess}
+        isPending={createMessage.isPending}
       />
     </Form>
   );
@@ -156,4 +157,5 @@ FormChildren.propTypes = {
   setSelectedFiles: PropTypes.func.isRequired,
   serverError: PropTypes.instanceOf(CustomError),
   isSuccess: PropTypes.bool.isRequired,
+  isPending: PropTypes.bool.isRequired,
 };
