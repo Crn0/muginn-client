@@ -11,6 +11,7 @@ const image = cva(
       variant: {
         default: "rounded-none",
         attachment: "rounded-md",
+        avatar: "rounded-full",
       },
     },
 
