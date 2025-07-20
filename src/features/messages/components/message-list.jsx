@@ -30,7 +30,7 @@ export default function MessageList({ chatId }) {
           canLoadMore={messagesQuery.hasNextPage}
         />
       )}
-      <ul aria-label='messages'>
+      <ul aria-label='messages' className='grid gap-1'>
         {messages.map((message) => (
           <li key={message.id} aria-label={`comment-${message.content}-${message.id}`}>
             <Message key={message.id} message={message} />
