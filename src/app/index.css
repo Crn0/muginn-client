@@ -1,1 +1,19 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@tailwind utilities;
+
+@utility scrollbar {
+  &::-webkit-scrollbar {
+    height: 0.8rem;
+    border-radius: 1rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #313338;
+    border-radius: 1rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 1rem;
+  }
+}
