@@ -101,7 +101,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
           }}
         />
 
-        <Button type='submit' className='sm:hidden' isLoading={isPending} disabled={isPending}>
+        <Button type='submit' isLoading={isPending} disabled={isPending}>
           <IoIosSend />
         </Button>
       </div>
