@@ -34,7 +34,7 @@ export default function UpdateAccountProfile() {
 
   return (
     <>
-      <div>
+      <div id='user-detail'>
         <div>
           <BackgroundAvatar asset={user.profile.backgroundAvatar} alt='Profile background' />
         </div>
@@ -82,6 +82,7 @@ export default function UpdateAccountProfile() {
 
             <FormDialog
               id='update-username'
+              parentId='user-detail'
               title='Change your username'
               descriptions={["Enter a new username"]}
               mode='onBlur'
@@ -143,11 +144,12 @@ export default function UpdateAccountProfile() {
         </div>
       </div>
 
-      <div data-testid='password-auth'>
+      <div id='user-authentication' data-testid='password-auth'>
         <h2>Password and Authentication</h2>
 
         <FormDialog
           id='update-password'
+          parentId='user-authentication'
           title='Update your password'
           descriptions={["Enter your current password and a new password."]}
           mode='onBlur'
