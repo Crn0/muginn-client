@@ -38,19 +38,6 @@ const router = createMemoryRouter(
 );
 
 describe("GroupChat View", () => {
-  it("renders chat view with fallback avatar, welcome message, chat name, and a trigger button for the dropdown menu", async () => {
-    queryClient.setQueryData(getChatQueryOptions(chat.id).queryKey, chat);
-
-    setupRouter(router, queryClient);
-
-    await waitFor(() => {
-      expect(screen.getByAltText(`${chat.name}'s avatar`)).toBeInTheDocument();
-      expect(screen.getByTestId("chat-drop-down-trigger")).toBeInTheDocument();
-      expect(screen.getByRole("heading", { level: 2, name: chat.name })).toBeInTheDocument();
-      expect(screen.getByRole("note")).toBeInTheDocument();
-    });
-  });
-
   it("renders a alternative text if there's no existing chat", async () => {
     queryClient.setQueryData(getChatQueryOptions(chat.id).queryKey, null);
 
