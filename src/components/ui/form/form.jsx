@@ -23,7 +23,11 @@ export default function Form({ schema, onSubmit, className, id, children, isCurr
 
 const formPropTypes = {
   onSubmit: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.func,
+    PropTypes.arrayOf(PropTypes.element),
+  ]).isRequired,
   className: PropTypes.string,
   id: PropTypes.string.isRequired,
   options: PropTypes.exact({
