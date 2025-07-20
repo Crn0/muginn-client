@@ -5,33 +5,17 @@ import { faker } from "@faker-js/faker";
 import LazyImage from "../lazy-image";
 
 const asset = {
-  url: faker.image.avatar(),
-  images: [
-    {
-      url: faker.image.avatar(),
-      format: "jpg",
-      size: 300,
-    },
-  ],
-};
-
-const fallBackAsset = {
-  image: faker.image.avatarGitHub(),
+  mainImage: faker.image.avatarGitHub(),
   lazyImage: faker.image.dataUri(),
 };
 
 describe("LazyImage Component", () => {
-  it("should render asset image when it is provided", () => {
-    render(<LazyImage asset={asset} fallBackAsset={fallBackAsset} alt='lazy-image-test' />);
+  it("should render image when it is provided", () => {
+    render(
+      <LazyImage mainImage={asset.mainImage} lazyImage={asset.lazyImage} alt='lazy-image-test' />
+    );
 
     expect(screen.getByAltText("lazy-image-test")).toBeInTheDocument();
-    expect(screen.getByAltText("lazy-image-test").src).toBe(asset.url);
-  });
-
-  it("should render a fallback images if there is no asset provided", () => {
-    render(<LazyImage fallBackAsset={fallBackAsset} alt='lazy-image-test' />);
-
-    expect(screen.getByAltText("lazy-image-test")).toBeInTheDocument();
-    expect(screen.getByAltText("lazy-image-test").src).toBe(fallBackAsset.image);
+    expect(screen.getByAltText("lazy-image-test").src).toBe(asset.mainImage);
   });
 });
