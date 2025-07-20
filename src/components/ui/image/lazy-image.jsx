@@ -45,5 +45,5 @@ LazyImage.propTypes = {
   alt: PropTypes.string,
   mainImage: PropTypes.string.isRequired,
   lazyImage: PropTypes.string.isRequired,
-  variant: PropTypes.oneOf(["default", "attachment"]),
+  variant: PropTypes.oneOf(["default", "attachment", "avatar", "backgroundAvatar"]),
 };
