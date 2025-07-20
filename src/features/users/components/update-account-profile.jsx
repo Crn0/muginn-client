@@ -7,11 +7,9 @@ import { getAuthUserQueryOptions } from "../../../lib";
 import { useUserSettingsTabStore } from "../../../stores";
 import { usernameSchema, passwordSchema } from "../schema";
 import { FormDialog, Input } from "../../../components/ui/form/index";
-import { LazyImage } from "../../../components/ui/image";
+import { UserAvatar, BackgroundAvatar } from "../../../components/ui/image";
 import { Button } from "../../../components/ui/button";
 import { Spinner } from "../../../components/ui/spinner";
-import avatar from "../../../assets/avatar.png";
-import avatarLazy from "../../../assets/avatar-lazy.png";
 
 export default function UpdateAccountProfile() {
   const { isLoading, isFetching, data: user } = useQuery({ ...getAuthUserQueryOptions() });
@@ -38,21 +36,13 @@ export default function UpdateAccountProfile() {
     <>
       <div>
         <div>
-          <LazyImage
-            asset={user.profile.backgroundAvatar}
-            fallBackAsset={{
-              image: avatar,
-              lazyImage: avatarLazy,
-            }}
-            alt='Profile background'
-          />
+          <BackgroundAvatar asset={user.profile.backgroundAvatar} alt='Profile background' />
         </div>
 
         <div>
           <div>
-            <LazyImage
+            <UserAvatar
               asset={user.profile.avatar}
-              fallBackAsset={{ image: avatar, lazyImage: avatarLazy }}
               alt={`${user.profile.displayName || user.username}'s avatar`}
             />
           </div>
