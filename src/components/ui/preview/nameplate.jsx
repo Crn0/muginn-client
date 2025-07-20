@@ -6,11 +6,7 @@ import { UserAvatar } from "../image";
 export default function NameplatePreview({ username, displayName, className, asset }) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <UserAvatar
-        asset={asset}
-        alt={`${displayName || username}'s nameplate avatar`}
-        variant='user'
-      />
+      <UserAvatar asset={asset} alt={`${displayName || username}'s avatar`} variant='user' />
       <div className='font-sans text-sm'>{displayName || username}</div>
     </div>
   );

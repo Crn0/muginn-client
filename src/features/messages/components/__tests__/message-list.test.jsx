@@ -52,7 +52,7 @@ describe("Message List", () => {
     messages.forEach((message) => {
       expect(
         screen.queryByRole("img", {
-          name: `${message.user.profile.displayName || message.user.username}'s nameplate avatar`,
+          name: `${message.user.profile.displayName || message.user.username}'s avatar`,
         })
       ).toBeInTheDocument();
 

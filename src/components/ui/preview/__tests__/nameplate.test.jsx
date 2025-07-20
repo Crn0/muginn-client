@@ -23,15 +23,15 @@ describe("NameplatePreview Component", () => {
     render(<NameplatePreview username={username} displayName={displayName} asset={asset} />);
 
     expect(screen.getByText(displayName)).toBeInTheDocument();
-    expect(screen.getByAltText(`${displayName}'s nameplate avatar`)).toBeInTheDocument();
-    expect(screen.getByAltText(`${displayName}'s nameplate avatar`).src).toBe(asset.url);
+    expect(screen.getByAltText(`${displayName}'s avatar`)).toBeInTheDocument();
+    expect(screen.getByAltText(`${displayName}'s avatar`).src).toBe(asset.url);
   });
 
   it("should render the users' username when display name is falsy and avatar", () => {
     render(<NameplatePreview username={username} displayName='' asset={asset} />);
 
     expect(screen.getByText(username)).toBeInTheDocument();
-    expect(screen.getByAltText(`${username}'s nameplate avatar`)).toBeInTheDocument();
-    expect(screen.getByAltText(`${username}'s nameplate avatar`).src).toBe(asset.url);
+    expect(screen.getByAltText(`${username}'s avatar`)).toBeInTheDocument();
+    expect(screen.getByAltText(`${username}'s avatar`).src).toBe(asset.url);
   });
 });
