@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
-import PropTypes from "prop-types";
 import { useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useActionData, useNavigation, useSubmit } from "react-router-dom";
