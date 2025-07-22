@@ -12,6 +12,7 @@ const image = cva(
         default: "rounded-none",
         attachment: "rounded-md",
         avatar: "rounded-full",
+        backgroundAvatar: "object-fill h-50 sm:h-100 rounded-md",
       },
     },
 

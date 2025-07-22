@@ -15,14 +15,15 @@ export default function BackgroundAvatar({ asset, alt, size, className }) {
   const { mainImage, lazyImage } = getAvatar(asset, fallback);
 
   return (
-    <LazyImage
-      mainImage={mainImage}
-      lazyImage={lazyImage}
-      alt={alt}
-      size={size}
-      variant='backgroundAvatar'
-      className={cn(className)}
-    />
+    <div className={cn("flex-1", className)}>
+      <LazyImage
+        mainImage={mainImage}
+        lazyImage={lazyImage}
+        alt={alt}
+        size={size}
+        variant='backgroundAvatar'
+      />
+    </div>
   );
 }
 
