@@ -53,8 +53,7 @@ const File = forwardRef(
     });
 
     return (
-      <div>
-        {fieldButton}
+      <div className='flex flex-col items-center-safe gap-2'>
         <FileWrapper
           label={label}
           className={className}
@@ -76,6 +75,7 @@ const File = forwardRef(
             multiple={multiple}
           />
         </FileWrapper>
+        {fieldButton}
       </div>
     );
   }
