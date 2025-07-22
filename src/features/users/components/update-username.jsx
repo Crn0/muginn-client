@@ -15,10 +15,11 @@ export default function UpdateUsername({ user, isUserFetching }) {
   const onSubmit = (data) => accountMutation.mutate(data);
 
   return (
-    <div data-testid='username'>
-      <h2>Username</h2>
+    <div data-testid='username' className='flex items-center-safe justify-between'>
       <div>
-        <span>{user.username}</span>
+        <h2>Username</h2>
+
+        <p>{user.username}</p>
       </div>
 
       <FormDialog
@@ -27,6 +28,7 @@ export default function UpdateUsername({ user, isUserFetching }) {
         title='Change your username'
         descriptions={["Enter a new username"]}
         mode='onBlur'
+        className='fixed bottom-3/12 w-fit sm:bottom-10'
         schema={usernameSchema}
         onSubmit={onSubmit}
         done={isFormDone}

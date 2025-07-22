@@ -15,33 +15,34 @@ export default function UpdateAccountProfile() {
 
   return (
     <>
-      <div id='user-detail'>
-        <div>
-          <BackgroundAvatar asset={user.profile.backgroundAvatar} alt='Profile background' />
-        </div>
+      <div
+        id='user-detail'
+        className='flex flex-col rounded-md border border-slate-900 p-1 sm:w-4xl'
+      >
+        <BackgroundAvatar asset={user.profile.backgroundAvatar} alt='Profile background' />
 
-        <div>
-          <div>
+        <div className='flex items-center-safe justify-between'>
+          <div className='flex items-center-safe gap-2'>
             <UserAvatar
               asset={user.profile.avatar}
               alt={`${user.profile.displayName || user.username}'s avatar`}
+              className='-mt-5 w-20 rounded-full bg-black'
             />
+
+            <p data-testid='username-info' className='font-bold'>
+              {user.profile.displayName || user.username}
+            </p>
           </div>
 
-          <div data-testid='username-info'>
-            <span>{user.profile.displayName || user.username}</span>
-          </div>
-
-          <div>
-            <Button type='button'>Edit User Profile</Button>
-          </div>
+          <Button type='button'>Edit User Profile</Button>
         </div>
 
-        <div>
-          <div data-testid='display-name'>
-            <h2>Display Name</h2>
+        <div className='mt-5 grid gap-5'>
+          <div data-testid='display-name' className='flex items-center-safe justify-between'>
             <div>
-              <span>{user.profile.displayName || "You haven't added a display name yet."}</span>
+              <h2>Display Name</h2>
+
+              <p>{user.profile.displayName || "You haven't added a display name yet."}</p>
             </div>
 
             <Button
@@ -57,10 +58,11 @@ export default function UpdateAccountProfile() {
 
           <UpdateUsername user={user} isUserFetching={userQuery.isFetching} />
 
-          <div data-testid='email'>
-            <h2>Email</h2>
+          <div data-testid='email' className='flex items-center-safe justify-between'>
             <div>
-              <span>{user.email || "You haven't added a email yet."}</span>
+              <h2>Email</h2>
+
+              <p>{user.email || "You haven't added a email yet."}</p>
             </div>
 
             <Button type='button' testId='edit-email'>
