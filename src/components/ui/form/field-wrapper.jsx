@@ -7,7 +7,7 @@ export default function FieldWrapper({ label, className, isRequired, error, chil
   return (
     <div className='flex flex-1 flex-col place-content-center gap-3'>
       <Label label={label} isRequired={isRequired} className={className}>
-        <div className='mt-1 flex-1'>{children}</div>
+        <div className='mt-1 flex h-full w-full flex-1 justify-center-safe'>{children}</div>
       </Label>
       <Error errorMessage={error?.message} />
     </div>
