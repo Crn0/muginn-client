@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 
-import { cn } from "../../../utils";
 import { useDisclosureWithClickOutside } from "../../../hooks";
 import { Dialog } from "../dialog";
 
@@ -57,6 +56,7 @@ export default function FormDialog({
       buttonTrigger={buttonTrigger}
       ref={dialogRef}
       open={disclosure.isOpen}
+      className={className}
     >
       <>
         <div className='grid'>
@@ -82,10 +82,7 @@ export default function FormDialog({
             }
             id={id}
             aria-label='form'
-            className={cn(
-              "grid place-content-center-safe place-items-center-safe gap-10",
-              className
-            )}
+            className='grid place-content-center-safe place-items-center-safe gap-10'
           >
             <div className='grid place-content-center-safe place-items-center-safe gap-5'>
               {children}
