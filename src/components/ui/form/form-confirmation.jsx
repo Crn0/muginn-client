@@ -26,26 +26,21 @@ export default function FormConfirmation({ message, isSubmitting, renderSubmitBu
   if (!hasMadeChange) return null;
 
   return (
-    <div>
-      <div>
-        <p>{message}</p>
-      </div>
+    <div className='fixed top-11/12 z-50 flex items-center-safe justify-center-safe gap-2 border-2 border-gray-900 bg-gray-950 p-2'>
+      <p>{message}</p>
 
-      <div>
-        <div>
-          <Button
-            type='button'
-            onClick={() => {
-              reset();
-              setHasMadeChange(false);
-            }}
-            disabled={isSubmitting}
-          >
-            Reset
-          </Button>
-        </div>
-        <div>{renderSubmitButton()}</div>
-      </div>
+      <Button
+        type='button'
+        onClick={() => {
+          reset();
+          setHasMadeChange(false);
+        }}
+        disabled={isSubmitting}
+      >
+        Reset
+      </Button>
+
+      {renderSubmitButton()}
     </div>
   );
 }
