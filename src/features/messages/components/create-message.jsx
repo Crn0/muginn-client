@@ -17,6 +17,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
   const {
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext();
 
@@ -28,6 +29,8 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
       setSelectedFiles([]);
     }
   }, [isSuccess, reset, setSelectedFiles]);
+
+  const disableSubmitButton = watch("attachments")?.length === 0 && !watch("content")?.trim?.();
 
   return (
     <div className='grid border-1 border-slate-900 p-1'>
@@ -101,7 +104,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
           }}
         />
 
-        <Button type='submit' isLoading={isPending} disabled={isPending}>
+        <Button type='submit' isLoading={isPending} disabled={disableSubmitButton || isPending}>
           <IoIosSend />
         </Button>
       </div>
