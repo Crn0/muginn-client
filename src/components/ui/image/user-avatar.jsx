@@ -17,13 +17,7 @@ export default function UserAvatar({ asset, alt, className }) {
 
   return (
     <div className={cn("w-10", className)}>
-      <LazyImage
-        className='p-1'
-        mainImage={mainImage}
-        lazyImage={lazyImage}
-        variant='avatar'
-        alt={alt}
-      />
+      <LazyImage mainImage={mainImage} lazyImage={lazyImage} variant='avatar' alt={alt} />
     </div>
   );
 }
