@@ -21,7 +21,12 @@ const Input = forwardRef(
     });
 
     return (
-      <FieldWrapper label={label} error={error} isRequired={required}>
+      <FieldWrapper
+        className='sm:h-auto sm:flex-0'
+        label={label}
+        error={error}
+        isRequired={required}
+      >
         <input
           name={name}
           type={type}
