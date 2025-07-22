@@ -95,7 +95,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
           placeholder='Message'
           rows='1'
           maxLength={TEXTAREA_MAX_LEN}
-          className='flex-1 resize-none border-none shadow-none outline-none'
+          variant='message'
           serverError={serverError}
           onChange={(e) => {
             setValue("content", e.target.value);

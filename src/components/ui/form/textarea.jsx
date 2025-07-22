@@ -1,13 +1,27 @@
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
+import { cva } from "class-variance-authority";
 
 import { cn } from "../../../utils";
 import FieldWrapper from "./field-wrapper";
 import { useInputErrorHandler } from "../../../hooks";
 
+const textarea = cva("flex-1", {
+  variants: {
+    variant: {
+      default: "border-2 border-black bg-white",
+      message: "resize-none border-none shadow-none outline-none",
+      aboutMe: "resize-none border-2 border-gray-900 bg-gray-950",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
 const TextArea = forwardRef(
-  ({ serverError, className, name, maxLength, required, label = "", ...props }, ref) => {
+  ({ serverError, className, variant, name, maxLength, required, label = "", ...props }, ref) => {
     const {
       register,
       setError,
@@ -21,10 +35,10 @@ const TextArea = forwardRef(
     });
 
     return (
-      <FieldWrapper label={label} className='items-stretch' error={error} isRequired={required}>
+      <FieldWrapper label={label} className={cn(className)} error={error} isRequired={required}>
         <textarea
           name={name}
-          className={cn("flex-1", className)}
+          className={textarea({ variant })}
           maxLength={maxLength}
           aria-invalid={error?.message ? "true" : "false"}
           ref={ref}
@@ -45,6 +59,7 @@ TextArea.propTypes = {
   maxLength: PropTypes.number.isRequired,
   required: PropTypes.bool,
   serverError: PropTypes.instanceOf(Error),
+  variant: PropTypes.oneOf(["message", "aboutMe", "default"]),
 };
 
 export default TextArea;
