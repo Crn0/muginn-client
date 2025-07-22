@@ -15,11 +15,11 @@ export default function SettingLayout({
   const visibleRightNavButtons = rightNavButtons.filter((btn) => btn.section === leftTab);
 
   return (
-    <div id={id}>
-      <header>
-        <h1>{title}</h1>
+    <div id={id} className='flex min-h-dvh flex-col gap-5 bg-black p-1 text-white'>
+      <header className='flex flex-col gap-2'>
+        <h1 className='self-center-safe font-mono'>{title}</h1>
 
-        <nav aria-label='left-navigation'>
+        <nav className='flex justify-between sm:justify-evenly' aria-label='left-navigation'>
           {leftNavButtons.map(({ name, defaultContent, buttonText, button: Component }) => (
             <Component
               key={name}
@@ -34,9 +34,9 @@ export default function SettingLayout({
         </nav>
       </header>
 
-      <main>
+      <main className='flex flex-1 flex-col gap-5'>
         <aside>
-          <nav aria-label='right-navigation'>
+          <nav className='flex justify-evenly' aria-label='right-navigation'>
             {visibleRightNavButtons.map(({ name, buttonText, button: Component }) => (
               <Component
                 key={name}
@@ -49,7 +49,9 @@ export default function SettingLayout({
           </nav>
         </aside>
 
-        <section>{typeof children === "function" ? children() : children}</section>
+        <section className='flex flex-1 flex-col justify-center-safe gap-5 sm:items-center-safe'>
+          {typeof children === "function" ? children() : children}
+        </section>
       </main>
     </div>
   );
