@@ -28,7 +28,7 @@ export default function LazyImage({ mainImage, lazyImage, className, variant, al
   return (
     <div
       className={cn("max-w-full bg-cover bg-center", className)}
-      style={{ backgroundImage: `${!loaded ? `url(${lazyImage})` : ""}` }}
+      style={{ backgroundImage: `url(${lazyImage})` }}
     >
       <img
         className={cn(image({ variant }), loaded && "opacity-100")}
