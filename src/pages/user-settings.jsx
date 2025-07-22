@@ -96,23 +96,31 @@ export default function UserSettingsPage() {
         rightNavButtons={rightNavButtons}
         headerContent={
           <ConfirmationDialog
-            parentId='user-setting'
+            parentId='user-settings'
             icon='danger'
             title='Log Out'
             body='Are you sure you want to logut?'
             isDone={logout.isSuccess}
             renderButtonTrigger={({ onClick }) => (
-              <Button type='button' onClick={onClick}>
-                <span>
-                  Log Out <RxExit color='red' />
-                </span>
+              <Button
+                className='flex gap-5'
+                type='button'
+                variant='outline-destructive'
+                onClick={onClick}
+              >
+                <p> Log Out </p>
+                <RxExit color='red' />
               </Button>
             )}
             confirmButton={
-              <Button type='button' onClick={logout.mutate} disabled={logout.isPending}>
-                <span>
-                  Log Out <RxExit color='red' />
-                </span>
+              <Button
+                className='flex gap-5'
+                type='button'
+                variant='destructive'
+                onClick={logout.mutate}
+                disabled={logout.isPending}
+              >
+                <p> Log Out </p>
               </Button>
             }
           />
