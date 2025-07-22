@@ -4,6 +4,21 @@ import { cva } from "class-variance-authority";
 
 import { cn } from "../../../utils";
 
+const container = cva("bg-cente max-w-full bg-cover", {
+  variants: {
+    variant: {
+      default: "rounded-none",
+      attachment: "rounded-md",
+      avatar: "rounded-full",
+      backgroundAvatar: "rounded-md",
+    },
+  },
+
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
 const image = cva(
   "block aspect-square h-full w-full object-cover object-center opacity-0 transition-opacity delay-150 ease-in-out",
   {
@@ -27,7 +42,7 @@ export default function LazyImage({ mainImage, lazyImage, className, variant, al
 
   return (
     <div
-      className={cn("max-w-full bg-cover bg-center", className)}
+      className={cn(container({ variant }), className)}
       style={{ backgroundImage: `url(${lazyImage})` }}
     >
       <img
