@@ -12,7 +12,7 @@ import { Form, Input, File, TextArea, FormConfirmation } from "../../../componen
 import { Button } from "../../../components/ui/button";
 import { NameplatePreview, UserProfilePreview } from "../../../components/ui/preview";
 
-function FormChildren({ user, serverError, isPending, isSuccess }) {
+function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
   const { reset, watch } = useFormContext();
 
   const avatarRef = useRef();
@@ -32,10 +32,11 @@ function FormChildren({ user, serverError, isPending, isSuccess }) {
   useEffect(() => {
     if (isSuccess) {
       reset();
+      onReset();
       avatarPreview.reset();
       backgroundAvatarPreview.reset();
     }
-  }, [avatarPreview, backgroundAvatarPreview, isSuccess, reset]);
+  }, [avatarPreview, backgroundAvatarPreview, isSuccess, onReset, reset]);
 
   return (
     <>
@@ -178,6 +179,7 @@ export default function UpdateUserMainProfile() {
           serverError={accountMutation.error}
           isPending={accountMutation.isPending}
           isSuccess={accountMutation.isSuccess}
+          onReset={() => accountMutation.reset()}
         />
       </Form>
     </div>
@@ -215,4 +217,5 @@ FormChildren.propTypes = {
   }).isRequired,
   isSuccess: PropTypes.bool.isRequired,
   isPending: PropTypes.bool.isRequired,
+  onReset: PropTypes.func.isRequired,
 };
