@@ -40,9 +40,10 @@ describe("User Main Profile Form", () => {
     expect(screen.getByRole("form")).toBeInTheDocument();
     expect(screen.getByLabelText("Display Name")).toBeInTheDocument();
     expect(screen.getByLabelText("Display Name").value).toBe(user.profile.displayName);
-    expect(screen.getAllByLabelText("Change Avatar")).toHaveLength(2);
-    expect(screen.getByText("Background Avatar")).toBeInTheDocument();
-    expect(screen.getByText("Avatar")).toBeInTheDocument();
+    expect(screen.getByLabelText("Avatar")).toBeInTheDocument();
+    expect(screen.getByLabelText("Banner")).toBeInTheDocument();
+    expect(screen.getByText("Change Avatar")).toBeInTheDocument();
+    expect(screen.getByText("Change Banner")).toBeInTheDocument();
     expect(screen.getByLabelText("About Me")).toBeInTheDocument();
     expect(screen.getByLabelText("About Me").value).toBe(user.profile.aboutMe);
   });

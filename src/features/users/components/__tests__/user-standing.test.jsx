@@ -7,10 +7,10 @@ import UserStanding from "../user-standing";
 import { getAuthUserQueryOptions } from "../../../../lib";
 
 const reasons = [
-  "Changing your username is not allowed",
-  "Changing your email is not allowed",
-  "Changing your password is not allowed",
-  "Account deletion is not allowed",
+  "Changing your username is not allowed ❌",
+  "Changing your email is not allowed ❌",
+  "Changing your password is not allowed ❌",
+  "Account deletion is not allowed ❌",
 ];
 
 const queryClient = new QueryClient();
@@ -53,7 +53,7 @@ describe("User Standing", () => {
     renderComponent();
 
     expect(
-      screen.getByText("You are a Full Member with unrestricted access to all features.")
+      screen.getByText("You are a Full Member with unrestricted access to all features ✅")
     ).toBeInTheDocument();
     expect(screen.queryByText("Features Not Available in Demo:")).not.toBeInTheDocument();
     expect(screen.queryByTestId("limitation-reasons")).not.toBeInTheDocument();
