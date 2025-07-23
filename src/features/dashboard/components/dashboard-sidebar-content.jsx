@@ -106,7 +106,11 @@ export default function DashboardSidebarContent() {
         </ErrorBoundary>
 
         <div className='grid place-content-center'>
-          <Link to={paths.protected.userSettings.getHref()} className='text-gray-300'>
+          <Link
+            to={paths.protected.userSettings.getHref()}
+            className='text-gray-300'
+            state={{ prevPathName: location.pathname }}
+          >
             <IoIosSettings />
           </Link>
         </div>

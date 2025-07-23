@@ -1,4 +1,9 @@
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
+import { SlClose } from "react-icons/sl";
+
+import { paths } from "../../configs";
+import { Link } from "../ui/link";
 
 export default function SettingLayout({
   id,
@@ -12,12 +17,21 @@ export default function SettingLayout({
   headerContent,
   children,
 }) {
+  const location = useLocation();
+
   const visibleRightNavButtons = rightNavButtons.filter((btn) => btn.section === leftTab);
+
+  const prevPathName = location.state?.prevPathName || paths.protected.dashboard.me.getHref();
 
   return (
     <div id={id} className='flex min-h-dvh flex-col gap-5 bg-black p-1 text-white'>
       <header className='flex flex-col gap-2'>
-        <h1 className='self-center-safe font-mono'>{title}</h1>
+        <div className='flex justify-between sm:justify-evenly'>
+          <h1 className='self-center-safe font-mono'>{title}</h1>
+          <Link to={prevPathName} variant='outline'>
+            <SlClose className='text-2xl' />
+          </Link>
+        </div>
 
         <nav className='flex justify-between sm:justify-evenly' aria-label='left-navigation'>
           {leftNavButtons.map(({ name, defaultContent, buttonText, button: Component }) => (
