@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
-import { createPortal } from "react-dom";
 
 import { cn } from "../../../utils";
+import { Portal } from "../../../lib";
 
 const Dialog = forwardRef(({ parentId, id, className, open, buttonTrigger, children }, ref) => (
   <>
     {buttonTrigger}
-    {open &&
-      createPortal(
+    {open && (
+      <Portal parentId={parentId}>
         <dialog
           id={id}
           data-inside-portal='true'
@@ -21,9 +21,9 @@ const Dialog = forwardRef(({ parentId, id, className, open, buttonTrigger, child
           open={open}
         >
           {children}
-        </dialog>,
-        document.getElementById(parentId)
-      )}
+        </dialog>
+      </Portal>
+    )}
   </>
 ));
 
