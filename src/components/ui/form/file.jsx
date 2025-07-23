@@ -71,7 +71,10 @@ const File = forwardRef(
             accept={accept}
             ref={mergeRefs(ref, inputRef)}
             onBlur={required ? rest.onBlur : () => {}}
-            onChange={typeof onChange === "function" ? onChange : rest.onChange}
+            onChange={(e) => {
+              onChange?.(e);
+              rest.onChange(e);
+            }}
             multiple={multiple}
           />
         </FileWrapper>
