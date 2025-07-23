@@ -49,7 +49,7 @@ export default function SettingLayout({
           </nav>
         </aside>
 
-        <section className='flex flex-1 flex-col justify-center-safe gap-5 sm:items-center-safe'>
+        <section className='flex flex-1'>
           {typeof children === "function" ? children() : children}
         </section>
       </main>

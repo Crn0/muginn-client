@@ -14,7 +14,7 @@ export default function UpdateAccountProfile() {
   const setTabs = useUserSettingsTabStore((state) => state.setTabs);
 
   return (
-    <>
+    <div className='flex flex-1 flex-col justify-center-safe gap-5 sm:items-center-safe'>
       <div
         id='user-detail'
         className='flex flex-col rounded-md border border-slate-900 p-1 sm:w-4xl'
@@ -73,6 +73,6 @@ export default function UpdateAccountProfile() {
       </div>
 
       <UpdateAuthentication user={user} isUserFetching={userQuery.isFetching} />
-    </>
+    </div>
   );
 }
