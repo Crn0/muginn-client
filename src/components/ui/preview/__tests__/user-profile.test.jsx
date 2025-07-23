@@ -36,12 +36,26 @@ const user = {
 
 describe("UserProfilePreview Component", () => {
   it("should render the user's profile", () => {
-    render(<UserProfilePreview user={user} renderProfileButton={renderProfileButton} />);
+    const {
+      username,
+      profile: { displayName, aboutMe, avatar, backgroundAvatar },
+    } = user;
 
-    expect(screen.getByText(user.username)).toBeInTheDocument();
-    expect(screen.getByText(user.profile.displayName)).toBeInTheDocument();
-    expect(screen.getByText(user.profile.aboutMe)).toBeInTheDocument();
-    expect(screen.getByAltText(`${user.profile.displayName}'s avatar`)).toBeInTheDocument();
+    render(
+      <UserProfilePreview
+        username={username}
+        displayName={displayName}
+        aboutMe={aboutMe}
+        avatar={avatar}
+        backgroundAvatar={backgroundAvatar}
+        renderProfileButton={renderProfileButton}
+      />
+    );
+
+    expect(screen.getByText(username)).toBeInTheDocument();
+    expect(screen.getByText(displayName)).toBeInTheDocument();
+    expect(screen.getByText(aboutMe)).toBeInTheDocument();
+    expect(screen.getByAltText(`${displayName}'s avatar`)).toBeInTheDocument();
     expect(screen.getByAltText("Profile background")).toBeInTheDocument();
     expect(screen.getByText("Example Button")).toBeInTheDocument();
   });
