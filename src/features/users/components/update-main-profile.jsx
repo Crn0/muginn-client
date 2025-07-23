@@ -1,32 +1,122 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
-import { useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useActionData, useNavigation, useSubmit } from "react-router-dom";
+import PropTypes from "prop-types";
+import { useFormContext } from "react-hook-form";
+import { useEffect, useRef } from "react";
 
+import { CustomError } from "../../../errors";
+import { Portal, useGetUser } from "../../../lib";
+import { useUpdateMainProfile } from "../api";
 import { userMainProfileSchema, ACCEPTED_IMAGE_TYPES, MAX_ABOUT_ME_LEN } from "../schema";
-import { getAuthUserQueryOptions } from "../../../lib";
 import { Form, Input, File, TextArea, FormConfirmation } from "../../../components/ui/form/index";
 import { Button } from "../../../components/ui/button";
-import { Spinner } from "../../../components/ui/spinner";
 import { NameplatePreview, UserProfilePreview } from "../../../components/ui/preview";
 
-export default function UpdateUserMainProfile() {
-  const { isLoading, data: user } = useQuery({ ...getAuthUserQueryOptions() });
-
-  const updatedProfile = useActionData();
-  const navigate = useNavigation();
-  const submit = useSubmit();
+function FormChildren({ user, serverError, isPending, isSuccess }) {
+  const { reset, watch } = useFormContext();
 
   const avatarRef = useRef();
   const backgroundAvatarRef = useRef();
 
-  if (isLoading && !user) {
-    return <Spinner />;
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
 
-  const isSubmitting = navigate.state === "submitting";
+  return (
+    <>
+      <Input type='text' name='displayName' label='Display Name' serverError={serverError} />
 
-  const onSubmit = (methods) => (data) => {
+      <File
+        name='avatar'
+        label='Avatar'
+        testId='user-avatar'
+        accept={ACCEPTED_IMAGE_TYPES.join(",")}
+        onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
+        serverError={serverError}
+        renderFieldButton={() => (
+          <Button
+            className='w-50'
+            type='button'
+            size='sm'
+            onClick={() => avatarRef.current.click()}
+            tabIndex={1}
+          >
+            Change Avatar
+          </Button>
+        )}
+        ref={avatarRef}
+      />
+
+      <File
+        name='backgroundAvatar'
+        label='Banner'
+        testId='user-background-avatar'
+        accept={ACCEPTED_IMAGE_TYPES.join(",")}
+        onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
+        serverError={serverError}
+        renderFieldButton={() => (
+          <Button
+            className='w-50'
+            type='button'
+            onClick={() => backgroundAvatarRef.current.click()}
+            tabIndex={1}
+          >
+            Change Banner
+          </Button>
+        )}
+        ref={backgroundAvatarRef}
+      />
+
+      <TextArea
+        name='aboutMe'
+        label='About Me'
+        variant='aboutMe'
+        className='sm:w-lg'
+        maxLength={MAX_ABOUT_ME_LEN}
+        serverError={serverError}
+      />
+
+      <FormConfirmation
+        message='Careful — you have unsaved changes!'
+        isSubmitting={isPending}
+        renderSubmitButton={() => (
+          <Button type='submit' isLoading={isPending} disabled={isPending}>
+            <span>Save Changes</span>
+          </Button>
+        )}
+      />
+
+      <Portal parentId='main-profile'>
+        <UserProfilePreview
+          className='sm:flex-1'
+          user={user}
+          renderProfileButton={() => <Button type='button'>Example Button</Button>}
+        >
+          <div>
+            <h4 className='font-bold'>NAMEPLATE PREVIEW</h4>
+
+            <NameplatePreview
+              username={user.username}
+              displayName={user.profile.displayName}
+              asset={user.profile.avatar}
+              className='border-2 border-gray-900 bg-gray-950 p-1'
+            />
+          </div>
+        </UserProfilePreview>
+      </Portal>
+    </>
+  );
+}
+
+export default function UpdateUserMainProfile() {
+  const userQuery = useGetUser();
+
+  const accountMutation = useUpdateMainProfile();
+
+  const user = userQuery.data;
+
+  const onSubmit = (data) => {
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
@@ -37,113 +127,60 @@ export default function UpdateUserMainProfile() {
       }
     });
 
-    submit(formData, { method: "PATCH", encType: "multipart/form-data" });
-
-    methods.reset();
+    accountMutation.mutate(formData);
   };
 
   return (
-    <Form
-      id='Main-Profile-Form'
-      onSubmit={onSubmit}
-      schema={userMainProfileSchema}
-      mode='onBlur'
-      defaultValues={{ displayName: "", aboutMe: "" }}
-      values={{ displayName: user?.profile?.displayName, aboutMe: user?.profile?.aboutMe }}
-      isCurried
-    >
-      <>
-        <div>
-          <div>
-            <Input
-              type='text'
-              name='displayName'
-              label='Display Name'
-              serverError={updatedProfile?.error}
-            />
-          </div>
-
-          <div>
-            <div>
-              <File
-                name='avatar'
-                label='Change Avatar'
-                testId='user-avatar'
-                accept={ACCEPTED_IMAGE_TYPES.join(",")}
-                onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
-                serverError={updatedProfile?.error}
-                renderFieldButton={() => (
-                  <Button type='button' onClick={() => avatarRef.current.click()} tabIndex={1}>
-                    <p>Avatar</p>
-                  </Button>
-                )}
-                ref={avatarRef}
-              />
-            </div>
-
-            <div>
-              <File
-                name='backgroundAvatar'
-                label='Change Avatar'
-                testId='user-background-avatar'
-                accept={ACCEPTED_IMAGE_TYPES.join(",")}
-                onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
-                serverError={updatedProfile?.error}
-                renderFieldButton={() => (
-                  <Button
-                    type='button'
-                    onClick={() => backgroundAvatarRef.current.click()}
-                    tabIndex={1}
-                  >
-                    <p>Background Avatar</p>
-                  </Button>
-                )}
-                ref={backgroundAvatarRef}
-              />
-            </div>
-          </div>
-
-          <div>
-            <TextArea
-              name='aboutMe'
-              label='About Me'
-              maxLength={MAX_ABOUT_ME_LEN}
-              serverError={updatedProfile?.error}
-            />
-          </div>
-
-          <div>
-            <FormConfirmation
-              message='Careful — you have unsaved changes!'
-              isSubmitting={isSubmitting}
-              renderSubmitButton={() => (
-                <Button type='submit' isLoading={isSubmitting} disabled={isSubmitting}>
-                  <span>Save Changes</span>
-                </Button>
-              )}
-            />
-          </div>
-        </div>
-
-        <div>
-          <UserProfilePreview
-            user={user}
-            renderProfileButton={() => <Button type='button'>Example Button</Button>}
-          >
-            <>
-              <div>
-                <h4>NAMEPLATE PREVIEW</h4>
-              </div>
-
-              <NameplatePreview
-                username={user.username}
-                displayName={user.profile.displayName}
-                asset={user.profile.avatar}
-              />
-            </>
-          </UserProfilePreview>
-        </div>
-      </>
-    </Form>
+    <div id='main-profile' className='grid flex-1 gap-5 sm:flex'>
+      <Form
+        id='Main-Profile-Form'
+        className='grid gap-5 sm:flex-2'
+        onSubmit={onSubmit}
+        schema={userMainProfileSchema}
+        mode='onBlur'
+        defaultValues={{ displayName: "", aboutMe: "" }}
+        values={{ displayName: user?.profile?.displayName, aboutMe: user?.profile?.aboutMe ?? "" }}
+      >
+        <FormChildren
+          user={user}
+          serverError={accountMutation.error}
+          isPending={accountMutation.isPending}
+          isSuccess={accountMutation.isSuccess}
+        />
+      </Form>
+    </div>
   );
 }
+
+FormChildren.propTypes = {
+  serverError: PropTypes.instanceOf(CustomError),
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    profile: PropTypes.shape({
+      displayName: PropTypes.string,
+      aboutMe: PropTypes.string,
+      avatar: PropTypes.shape({
+        url: PropTypes.string,
+        images: PropTypes.arrayOf(
+          PropTypes.shape({
+            url: PropTypes.string,
+            size: PropTypes.number,
+            format: PropTypes.string,
+          })
+        ),
+      }),
+      backgroundAvatar: PropTypes.shape({
+        url: PropTypes.string,
+        images: PropTypes.arrayOf(
+          PropTypes.shape({
+            url: PropTypes.string,
+            size: PropTypes.number,
+            format: PropTypes.string,
+          })
+        ),
+      }),
+    }).isRequired,
+  }).isRequired,
+  isSuccess: PropTypes.bool.isRequired,
+  isPending: PropTypes.bool.isRequired,
+};
