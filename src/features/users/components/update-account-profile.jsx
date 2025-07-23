@@ -34,7 +34,14 @@ export default function UpdateAccountProfile() {
             </p>
           </div>
 
-          <Button type='button'>Edit User Profile</Button>
+          <Button
+            type='button'
+            onClick={() => {
+              setTabs({ leftTab: "profiles", rightTab: "mainProfile" });
+            }}
+          >
+            Edit User Profile
+          </Button>
         </div>
 
         <div className='mt-5 grid gap-5'>
