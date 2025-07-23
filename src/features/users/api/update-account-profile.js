@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { ApiClient, generateHeader, tryCatch } from "../../../lib";
+import { ApiClient, generateHeader, getAuthUserQueryOptions, tryCatch } from "../../../lib";
 import { resetStore } from "../../../stores";
 
 export const updateUsername = async (data) => {
@@ -42,7 +42,13 @@ const updateAccountProfile = (queryClient) => async (data) => {
   const intent = data?.intent;
 
   if (intent === "update:accountProfile:username") {
-    return updateUsername(data);
+    const { error, data: resData } = await tryCatch(updateUsername(data));
+
+    if (error) throw error;
+
+    queryClient.invalidateQueries(getAuthUserQueryOptions().queryKey);
+
+    return resData;
   }
 
   if (intent === "update:accountProfile:password") {
