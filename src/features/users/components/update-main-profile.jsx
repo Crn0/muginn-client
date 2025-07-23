@@ -7,7 +7,12 @@ import { CustomError } from "../../../errors";
 import { useFilePreview } from "../../../hooks";
 import { Portal, useGetUser } from "../../../lib";
 import { useUpdateMainProfile } from "../api";
-import { userMainProfileSchema, ACCEPTED_IMAGE_TYPES, MAX_ABOUT_ME_LEN } from "../schema";
+import {
+  userMainProfileSchema,
+  ACCEPTED_IMAGE_TYPES,
+  MAX_ABOUT_ME_LEN,
+  MAX_DISPLAY_NAME_LEN,
+} from "../schema";
 import { Form, Input, File, TextArea, FormConfirmation } from "../../../components/ui/form/index";
 import { Button } from "../../../components/ui/button";
 import { NameplatePreview, UserProfilePreview } from "../../../components/ui/preview";
@@ -58,7 +63,13 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
       <input type='hidden' {...register("intent")} />
       <input type='hidden' {...register("avatarId")} />
 
-      <Input type='text' name='displayName' label='Display Name' serverError={serverError} />
+      <Input
+        type='text'
+        name='displayName'
+        label='Display Name'
+        serverError={serverError}
+        maxLength={MAX_DISPLAY_NAME_LEN}
+      />
 
       <div className='grid place-content-center-safe gap-2'>
         <File
