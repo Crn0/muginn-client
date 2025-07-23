@@ -1,13 +1,14 @@
-import { createMemoryRouter, useRouteError } from "react-router-dom";
+import { createMemoryRouter, Outlet, useRouteError } from "react-router-dom";
 import { describe, it, expect, beforeEach } from "vitest";
 import { screen, waitFor, within } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import setupRouter from "./mocks/utils/setup-router";
-import { getAuthUserQueryOptions } from "../../lib/auth";
+import { getAuthUserQueryOptions, useGetUser } from "../../lib/auth";
 import { paths } from "../../configs/index";
 import { setToken, getToken } from "../../stores";
 import { generateAccessToken } from "../../../test/utils/data-generator";
+import { Spinner } from "../../components/ui/spinner";
 import UserSettingsPage from "../user-settings";
 
 function ErrorElement() {
@@ -21,17 +22,32 @@ function ErrorElement() {
   );
 }
 
+function Protected() {
+  const userQuery = useGetUser();
+
+  if (userQuery.isLoading) return <Spinner />;
+
+  return <Outlet />;
+}
+
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
 const routes = [
   {
-    path: paths.protected.userSettings.getHref(),
+    path: paths.protected.root.path,
     errorElement: <ErrorElement />,
     element: (
       <QueryClientProvider client={queryClient}>
-        <UserSettingsPage />
+        <Protected />
       </QueryClientProvider>
     ),
+    children: [
+      {
+        path: paths.protected.userSettings.path,
+        errorElement: <ErrorElement />,
+        element: <UserSettingsPage />,
+      },
+    ],
   },
   {
     path: paths.login.path,
@@ -43,7 +59,7 @@ const router = createMemoryRouter(routes, {
   initialEntries: [paths.protected.userSettings.getHref()],
 });
 
-describe.skip("User Settings Page", () => {
+describe("User Settings Page", () => {
   const form = {
     invalid: {
       displayName: Array.from({ length: 100 }, () => "foo").join(""),
@@ -84,27 +100,29 @@ describe.skip("User Settings Page", () => {
 
       setupRouter(router, queryClient);
 
-      expect(screen.getByText("User Settings")).toBeInTheDocument();
-
-      const leftNav = screen.getByLabelText("left-navigation");
-      const rightNav = screen.getByLabelText("right-navigation");
-
-      expect(leftNav).toBeInTheDocument();
-      expect(rightNav).toBeInTheDocument();
-
-      leftNavButtons.forEach((name) => {
-        expect(within(leftNav).getByRole("button", { name })).toBeInTheDocument();
-      });
-
-      rightNavButtons.forEach((name) => {
-        expect(within(rightNav).getByRole("button", { name })).toBeInTheDocument();
-      });
-
-      nonActiveNavButtons.forEach((name) => {
-        expect(within(rightNav).queryByRole("button", { name })).not.toBeInTheDocument();
-      });
-
       expect(screen.getByTestId("spinner")).toBeInTheDocument();
+
+      await waitFor(() => {
+        expect(screen.getByText("User Settings")).toBeInTheDocument();
+
+        const leftNav = screen.getByLabelText("left-navigation");
+        const rightNav = screen.getByLabelText("right-navigation");
+
+        expect(leftNav).toBeInTheDocument();
+        expect(rightNav).toBeInTheDocument();
+
+        leftNavButtons.forEach((name) => {
+          expect(within(leftNav).getByRole("button", { name })).toBeInTheDocument();
+        });
+
+        rightNavButtons.forEach((name) => {
+          expect(within(rightNav).getByRole("button", { name })).toBeInTheDocument();
+        });
+
+        nonActiveNavButtons.forEach((name) => {
+          expect(within(rightNav).queryByRole("button", { name })).not.toBeInTheDocument();
+        });
+      });
 
       await waitFor(() => {
         const user = queryClient.getQueryData(getAuthUserQueryOptions().queryKey);
@@ -137,15 +155,13 @@ describe.skip("User Settings Page", () => {
 
       expect(screen.getByText(`${username}`)).toBeInTheDocument();
 
-      expect(
-        screen.getByAltText(`${displayName || username}'s nameplate avatar`)
-      ).toBeInTheDocument();
-      expect(screen.getByAltText(`${displayName || username}'s avatar`)).toBeInTheDocument();
+      expect(screen.getAllByAltText(`${displayName || username}'s avatar`).length).toBe(2);
       expect(screen.getByAltText("Profile background")).toBeInTheDocument();
       expect(screen.getByRole("button", { name: "Example Button" })).toBeInTheDocument();
       expect(screen.getByLabelText("Display Name")).toBeInTheDocument();
       expect(screen.getByLabelText("About Me")).toBeInTheDocument();
-      expect(screen.getAllByText("Change Avatar")).toHaveLength(2);
+      expect(screen.getByText("Change Avatar")).toBeInTheDocument();
+      expect(screen.getByLabelText("Display Name")).toBeInTheDocument();
     });
 
     it("renders the username form when the user clicks the edit username button", async () => {
