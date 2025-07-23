@@ -12,6 +12,8 @@ const link = cva(
         default: "text-blue-500 hover:opacity-75",
         button:
           "inline-flex items-center justify-center rounded-md bg-indigo-400 p-5 text-center text-sm font-medium whitespace-nowrap text-white no-underline transition-colors hover:opacity-75",
+        outline:
+          "focus-visible:ring-ring inline-flex items-center justify-center text-inherit rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-4 focus-visible:ring-blue-500 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50      bg-inherit hover:bg-transparent hover:opacity-75",
       },
       size: {
         default: "h-9 px-4 py-2",
@@ -35,6 +37,7 @@ export default function Link({
   size,
   testId = "",
   onClick = () => {},
+  ...props
 }) {
   return (
     <RouterLink
@@ -43,6 +46,7 @@ export default function Link({
       data-testid={testId}
       onClick={onClick}
       className={cn(link({ variant, size }), className)}
+      {...props}
     >
       {children}
     </RouterLink>
