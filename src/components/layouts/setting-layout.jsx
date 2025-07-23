@@ -34,11 +34,12 @@ export default function SettingLayout({
         </div>
 
         <nav className='flex justify-between sm:justify-evenly' aria-label='left-navigation'>
-          {leftNavButtons.map(({ name, defaultContent, buttonText, button: Component }) => (
+          {leftNavButtons.map(({ name, defaultContent, intent, buttonText, button: Component }) => (
             <Component
               key={name}
               name={name}
               tab={leftTab}
+              intent={intent}
               buttonText={buttonText}
               setTab={() => setLeftTab(name, defaultContent)}
             />
@@ -51,11 +52,12 @@ export default function SettingLayout({
       <main className='flex flex-1 flex-col gap-5'>
         <aside>
           <nav className='flex justify-evenly' aria-label='right-navigation'>
-            {visibleRightNavButtons.map(({ name, buttonText, button: Component }) => (
+            {visibleRightNavButtons.map(({ name, intent, buttonText, button: Component }) => (
               <Component
                 key={name}
                 name={name}
                 tab={rightTab}
+                intent={intent}
                 buttonText={buttonText}
                 setTab={setRightTab}
               />

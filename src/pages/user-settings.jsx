@@ -21,12 +21,14 @@ const leftNavButtons = [
     buttonText: "My Account",
     button: ButtonTab,
     defaultContent: "security",
+    intent: "primary",
   },
   {
     name: "profiles",
     buttonText: "Profiles",
     button: ButtonTab,
     defaultContent: "mainProfile",
+    intent: "primary",
   },
 ];
 
@@ -36,18 +38,21 @@ const rightNavButtons = [
     buttonText: "Security",
     section: "myAccount",
     button: ButtonTab,
+    intent: "secondary",
   },
   {
     name: "userStanding",
     buttonText: "Standing",
     section: "myAccount",
     button: ButtonTab,
+    intent: "secondary",
   },
   {
     name: "mainProfile",
     buttonText: "Main Profile",
     section: "profiles",
     button: ButtonTab,
+    intent: "secondary",
   },
 ];
 
