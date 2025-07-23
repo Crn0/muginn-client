@@ -2,7 +2,39 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { ApiClient, generateHeader, getAuthUserQueryOptions, tryCatch } from "../../../lib";
 
-export const updateMainProfile = async (data) => {
+export const deleteBackgroundAvatar = async () => {
+  const headers = generateHeader();
+
+  const { error, data: res } = await tryCatch(
+    ApiClient.callApi("users/me/profile/background-avatar", {
+      headers,
+      authenticatedRequest: true,
+      method: "DELETE",
+    })
+  );
+
+  if (error) throw error;
+
+  return res;
+};
+
+export const deleteAvatar = async () => {
+  const headers = generateHeader();
+
+  const { error, data: res } = await tryCatch(
+    ApiClient.callApi("users/me/profile/avatar", {
+      headers,
+      authenticatedRequest: true,
+      method: "DELETE",
+    })
+  );
+
+  if (error) throw error;
+
+  return res;
+};
+
+export const updateProfile = async (data) => {
   const headers = generateHeader();
 
   const { error, data: res } = await tryCatch(
@@ -17,6 +49,18 @@ export const updateMainProfile = async (data) => {
   if (error) throw error;
 
   return res.json();
+};
+
+export const updateMainProfile = async (formData) => {
+  const intent = formData.get("intent");
+
+  if (intent === "update:mainProfile") return updateProfile(formData);
+
+  if (intent === "delete:backgroundAvatar") return deleteBackgroundAvatar();
+
+  if (intent === "delete:avatar") return deleteAvatar();
+
+  throw Error(`invalid ${intent}`);
 };
 
 export const useUpdateMainProfile = (options) => {

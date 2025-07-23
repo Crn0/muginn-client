@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
 import PropTypes from "prop-types";
 import { useFormContext } from "react-hook-form";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { CustomError } from "../../../errors";
 import { useFilePreview } from "../../../hooks";
@@ -11,12 +11,24 @@ import { userMainProfileSchema, ACCEPTED_IMAGE_TYPES, MAX_ABOUT_ME_LEN } from ".
 import { Form, Input, File, TextArea, FormConfirmation } from "../../../components/ui/form/index";
 import { Button } from "../../../components/ui/button";
 import { NameplatePreview, UserProfilePreview } from "../../../components/ui/preview";
+import RemoveAvatar from "./remove-avatar";
+
+const getAsset = (shouldRender, previewAsset, avatarAsset) => {
+  if (!shouldRender) return null;
+
+  return previewAsset?.url ? previewAsset : avatarAsset;
+};
 
 function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
-  const { reset, watch } = useFormContext();
+  const { reset, watch, register } = useFormContext();
 
   const avatarRef = useRef();
   const backgroundAvatarRef = useRef();
+
+  const [previewState, setPreviewState] = useState({
+    background: true,
+    avatar: true,
+  });
 
   const displayName = watch("displayName") || user.profile.displayName;
   const aboutMe = watch("aboutMe") || user.profile.aboutMe;
@@ -24,10 +36,12 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
   const avatarPreview = useFilePreview();
   const backgroundAvatarPreview = useFilePreview();
 
-  const avatarAsset = avatarPreview?.asset.url ? avatarPreview?.asset : user.profile.avatar;
-  const backgroundAvatarAsset = backgroundAvatarPreview?.asset.url
-    ? backgroundAvatarPreview?.asset
-    : user.profile.backgroundAvatar;
+  const avatarAsset = getAsset(previewState.avatar, avatarPreview?.asset, user.profile.avatar);
+  const backgroundAvatarAsset = getAsset(
+    previewState.background,
+    backgroundAvatarPreview?.asset,
+    user.profile.backgroundAvatar
+  );
 
   useEffect(() => {
     if (isSuccess) {
@@ -35,63 +49,85 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
       onReset();
       avatarPreview.reset();
       backgroundAvatarPreview.reset();
+      setPreviewState({ avatar: true, background: true });
     }
   }, [avatarPreview, backgroundAvatarPreview, isSuccess, onReset, reset]);
 
   return (
     <>
+      <input type='hidden' {...register("intent")} />
+      <input type='hidden' {...register("avatarId")} />
+
       <Input type='text' name='displayName' label='Display Name' serverError={serverError} />
 
-      <File
-        name='avatar'
-        label='Avatar'
-        testId='user-avatar'
-        accept={ACCEPTED_IMAGE_TYPES.join(",")}
-        onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
-        onChange={(e) => {
-          const { files } = e.target;
+      <div className='grid place-content-center-safe gap-2'>
+        <File
+          name='avatar'
+          label='Avatar'
+          testId='user-avatar'
+          accept={ACCEPTED_IMAGE_TYPES.join(",")}
+          onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
+          onChange={(e) => {
+            const { files } = e.target;
 
-          avatarPreview.setFile(files[0]);
-        }}
-        serverError={serverError}
-        renderFieldButton={() => (
-          <Button
-            className='w-50'
-            type='button'
-            size='sm'
-            onClick={() => avatarRef.current.click()}
-            tabIndex={1}
-          >
-            Change Avatar
-          </Button>
-        )}
-        ref={avatarRef}
-      />
+            avatarPreview.setFile(files[0]);
+          }}
+          serverError={serverError}
+          renderFieldButton={() => (
+            <Button
+              className='w-50'
+              type='button'
+              size='sm'
+              onClick={() => avatarRef.current.click()}
+              tabIndex={1}
+            >
+              Change Avatar
+            </Button>
+          )}
+          ref={avatarRef}
+        />
 
-      <File
-        name='backgroundAvatar'
-        label='Banner'
-        testId='user-background-avatar'
-        accept={ACCEPTED_IMAGE_TYPES.join(",")}
-        onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
-        onChange={(e) => {
-          const { files } = e.target;
+        <RemoveAvatar
+          intent='delete:avatar'
+          buttonText='Remove Avatar'
+          hasAvatar={!!user.profile.backgroundAvatar}
+          onClick={() => setPreviewState((prev) => ({ ...prev, avatar: false }))}
+        />
+      </div>
 
-          backgroundAvatarPreview.setFile(files[0]);
-        }}
-        serverError={serverError}
-        renderFieldButton={() => (
-          <Button
-            className='w-50'
-            type='button'
-            onClick={() => backgroundAvatarRef.current.click()}
-            tabIndex={1}
-          >
-            Change Banner
-          </Button>
-        )}
-        ref={backgroundAvatarRef}
-      />
+      <div className='grid place-content-center-safe gap-2'>
+        <File
+          name='backgroundAvatar'
+          label='Banner'
+          testId='user-background-avatar'
+          accept={ACCEPTED_IMAGE_TYPES.join(",")}
+          onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
+          onChange={(e) => {
+            const { files } = e.target;
+
+            backgroundAvatarPreview.setFile(files[0]);
+          }}
+          serverError={serverError}
+          renderFieldButton={() => (
+            <Button
+              className='w-50'
+              type='button'
+              onClick={() => backgroundAvatarRef.current.click()}
+              tabIndex={1}
+            >
+              Change Banner
+            </Button>
+          )}
+          ref={backgroundAvatarRef}
+        />
+
+        <RemoveAvatar
+          intent='delete:backgroundAvatar'
+          buttonText='Remove Banner'
+          hasAvatar={!!user.profile.backgroundAvatar}
+          onClick={() => setPreviewState((prev) => ({ ...prev, background: false }))}
+        />
+      </div>
 
       <TextArea
         name='aboutMe'
@@ -108,6 +144,7 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
         onReset={() => {
           avatarPreview.reset();
           backgroundAvatarPreview.reset();
+          setPreviewState({ avatar: true, background: true });
         }}
         renderSubmitButton={() => (
           <Button type='submit' isLoading={isPending} disabled={isPending}>

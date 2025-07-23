@@ -47,4 +47,5 @@ export const userMainProfileSchema = z.object({
       "Max image size is 10MB"
     )
     .optional(),
+  avatarId: z.string().optional(),
 });
