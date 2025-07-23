@@ -4,6 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { useEffect, useRef } from "react";
 
 import { CustomError } from "../../../errors";
+import { useFilePreview } from "../../../hooks";
 import { Portal, useGetUser } from "../../../lib";
 import { useUpdateMainProfile } from "../api";
 import { userMainProfileSchema, ACCEPTED_IMAGE_TYPES, MAX_ABOUT_ME_LEN } from "../schema";
@@ -17,11 +18,24 @@ function FormChildren({ user, serverError, isPending, isSuccess }) {
   const avatarRef = useRef();
   const backgroundAvatarRef = useRef();
 
+  const displayName = watch("displayName") || user.profile.displayName;
+  const aboutMe = watch("aboutMe") || user.profile.aboutMe;
+
+  const avatarPreview = useFilePreview();
+  const backgroundAvatarPreview = useFilePreview();
+
+  const avatarAsset = avatarPreview?.asset.url ? avatarPreview?.asset : user.profile.avatar;
+  const backgroundAvatarAsset = backgroundAvatarPreview?.asset.url
+    ? backgroundAvatarPreview?.asset
+    : user.profile.backgroundAvatar;
+
   useEffect(() => {
     if (isSuccess) {
       reset();
+      avatarPreview.reset();
+      backgroundAvatarPreview.reset();
     }
-  }, [isSuccess, reset]);
+  }, [avatarPreview, backgroundAvatarPreview, isSuccess, reset]);
 
   return (
     <>
@@ -33,6 +47,11 @@ function FormChildren({ user, serverError, isPending, isSuccess }) {
         testId='user-avatar'
         accept={ACCEPTED_IMAGE_TYPES.join(",")}
         onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
+        onChange={(e) => {
+          const { files } = e.target;
+
+          avatarPreview.setFile(files[0]);
+        }}
         serverError={serverError}
         renderFieldButton={() => (
           <Button
@@ -54,6 +73,11 @@ function FormChildren({ user, serverError, isPending, isSuccess }) {
         testId='user-background-avatar'
         accept={ACCEPTED_IMAGE_TYPES.join(",")}
         onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
+        onChange={(e) => {
+          const { files } = e.target;
+
+          backgroundAvatarPreview.setFile(files[0]);
+        }}
         serverError={serverError}
         renderFieldButton={() => (
           <Button
@@ -80,6 +104,10 @@ function FormChildren({ user, serverError, isPending, isSuccess }) {
       <FormConfirmation
         message='Careful — you have unsaved changes!'
         isSubmitting={isPending}
+        onReset={() => {
+          avatarPreview.reset();
+          backgroundAvatarPreview.reset();
+        }}
         renderSubmitButton={() => (
           <Button type='submit' isLoading={isPending} disabled={isPending}>
             <span>Save Changes</span>
@@ -90,7 +118,11 @@ function FormChildren({ user, serverError, isPending, isSuccess }) {
       <Portal parentId='main-profile'>
         <UserProfilePreview
           className='sm:flex-1'
-          user={user}
+          username={user.username}
+          displayName={displayName}
+          aboutMe={aboutMe}
+          avatar={avatarAsset}
+          backgroundAvatar={backgroundAvatarAsset}
           renderProfileButton={() => <Button type='button'>Example Button</Button>}
         >
           <div>
@@ -98,8 +130,8 @@ function FormChildren({ user, serverError, isPending, isSuccess }) {
 
             <NameplatePreview
               username={user.username}
-              displayName={user.profile.displayName}
-              asset={user.profile.avatar}
+              displayName={displayName}
+              asset={avatarAsset}
               className='border-2 border-gray-900 bg-gray-950 p-1'
             />
           </div>
