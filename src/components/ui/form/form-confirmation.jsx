@@ -4,7 +4,12 @@ import { useFormContext } from "react-hook-form";
 
 import { Button } from "../button";
 
-export default function FormConfirmation({ message, isSubmitting, renderSubmitButton }) {
+export default function FormConfirmation({
+  message,
+  isSubmitting,
+  renderSubmitButton,
+  onReset = () => {},
+}) {
   const {
     reset,
     formState: { isDirty },
@@ -26,7 +31,7 @@ export default function FormConfirmation({ message, isSubmitting, renderSubmitBu
   if (!hasMadeChange) return null;
 
   return (
-    <div className='fixed top-11/12 z-50 flex items-center-safe justify-center-safe gap-2 border-2 border-gray-900 bg-gray-950 p-2'>
+    <div className='fixed top-11/12 z-50 flex items-center-safe justify-center-safe gap-2 border-2 border-gray-900 bg-gray-950 p-2 sm:left-5/12'>
       <p>{message}</p>
 
       <Button
@@ -34,6 +39,7 @@ export default function FormConfirmation({ message, isSubmitting, renderSubmitBu
         onClick={() => {
           reset();
           setHasMadeChange(false);
+          onReset();
         }}
         disabled={isSubmitting}
       >
@@ -49,4 +55,5 @@ FormConfirmation.propTypes = {
   message: PropTypes.string.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   renderSubmitButton: PropTypes.func.isRequired,
+  onReset: PropTypes.func,
 };
