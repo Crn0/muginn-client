@@ -100,7 +100,7 @@ export default function DashboardSidebarContent() {
           <NameplatePreview
             username={user.username}
             displayName={user.profile.displayName}
-            asset={user.profile.asset}
+            asset={user.profile.avatar}
             className='flex-[0.9]'
           />
         </ErrorBoundary>
