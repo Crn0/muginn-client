@@ -20,7 +20,7 @@ export default function Message({ message }) {
   return (
     <div
       id={message.id}
-      className='relative grid gap-2 p-1'
+      className='relative grid gap-2 p-5'
       onMouseEnter={show}
       onMouseLeave={hide}
       ref={ref}
@@ -39,7 +39,7 @@ export default function Message({ message }) {
         {isHover && (
           <DropDownMenu
             id={message.id}
-            className='absolute top-10 left-20 z-50 h-100 bg-black sm:left-[70%]'
+            className='absolute -top-50 right-25 z-50 h-100 w-50 bg-black sm:right-15'
             renderButtonTrigger={(options) => (
               <Button
                 testId='drop-down-trigger'
