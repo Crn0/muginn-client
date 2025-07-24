@@ -1,14 +1,22 @@
 import PropTypes from "prop-types";
-import { useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { cn } from "../../../utils";
 import { useDisclosureWithClickOutside } from "../../../hooks";
+import { DropDownMenuProvider } from "./context/dropdown-menu-context";
 
 export default function DropDownMenu({ id, className, renderButtonTrigger, children }) {
   const ref = useRef();
   const triggerRef = useRef();
 
   const disclosure = useDisclosureWithClickOutside(false, ref, triggerRef);
+
+  const contextValue = useMemo(
+    () => ({
+      ...disclosure,
+    }),
+    [disclosure]
+  );
 
   const buttonTrigger = renderButtonTrigger({
     triggerRef,
@@ -20,7 +28,7 @@ export default function DropDownMenu({ id, className, renderButtonTrigger, child
   });
 
   return (
-    <>
+    <DropDownMenuProvider.Provider value={contextValue}>
       {buttonTrigger}
       {disclosure.isOpen && (
         <div
@@ -35,7 +43,7 @@ export default function DropDownMenu({ id, className, renderButtonTrigger, child
           {typeof children === "function" ? children() : children}
         </div>
       )}
-    </>
+    </DropDownMenuProvider.Provider>
   );
 }
 
