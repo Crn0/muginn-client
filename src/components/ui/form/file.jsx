@@ -72,8 +72,8 @@ const File = forwardRef(
             ref={mergeRefs(ref, inputRef)}
             onBlur={required ? rest.onBlur : () => {}}
             onChange={(e) => {
-              onChange?.(e);
               rest.onChange(e);
+              onChange?.(e);
             }}
             multiple={multiple}
           />
