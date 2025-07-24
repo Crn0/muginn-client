@@ -60,13 +60,15 @@ export default function ConfirmationDialog({
           <h2>{title}</h2>
         </div>
 
-        <div className='flex items-center-safe'>
-          {body && (
+        {typeof body === "string" ? (
+          <div className='flex items-center-safe'>
             <div>
               <p>{body}</p>
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          body
+        )}
 
         <div className='flex items-center-safe justify-end-safe gap-5'>
           <Button
@@ -92,7 +94,7 @@ ConfirmationDialog.propTypes = {
   confirmButton: PropTypes.element,
   renderButtonTrigger: PropTypes.func,
   title: PropTypes.string.isRequired,
-  body: PropTypes.string,
+  body: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   cancelButtonText: PropTypes.node,
   isDone: PropTypes.bool.isRequired,
   icon: PropTypes.oneOf(["danger", "info"]),
