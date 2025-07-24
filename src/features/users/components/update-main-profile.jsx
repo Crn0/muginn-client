@@ -25,7 +25,7 @@ const getAsset = (shouldRender, previewAsset, avatarAsset) => {
 };
 
 function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
-  const { reset, watch, register } = useFormContext();
+  const { reset, watch, register, setValue } = useFormContext();
 
   const avatarRef = useRef();
   const backgroundAvatarRef = useRef();
@@ -144,9 +144,14 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
         name='aboutMe'
         label='About Me'
         variant='aboutMe'
-        className='sm:w-lg'
+        className='w-full'
         maxLength={MAX_ABOUT_ME_LEN}
         serverError={serverError}
+        onChange={(e) => {
+          setValue("content", e.target.value);
+          e.target.style.height = "auto";
+          e.target.style.height = `${e.target.scrollHeight}px`;
+        }}
       />
 
       <FormConfirmation
