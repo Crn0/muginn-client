@@ -93,6 +93,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
           type='text'
           name='content'
           placeholder='Message'
+          className='w-full'
           rows='1'
           maxLength={TEXTAREA_MAX_LEN}
           variant='message'
