@@ -81,7 +81,7 @@ export default function Message({ message }) {
       </div>
 
       <div>
-        <p className='ml-10'>{message.content}</p>
+        <p>{message.content}</p>
 
         <MessageAttachments attachments={message.attachments} />
       </div>
