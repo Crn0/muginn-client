@@ -11,8 +11,16 @@ export default function DropDownMenu({ id, className, renderButtonTrigger, child
 
   const disclosure = useDisclosureWithClickOutside(false, ref, triggerRef);
 
+  const [hide, setHide] = useState(false);
+
   const contextValue = useMemo(
     () => ({
+      show: () => setHide(false),
+      hide: () => setHide(true),
+      reset: () => {
+        setHide(false);
+        disclosure.close();
+      },
       ...disclosure,
     }),
     [disclosure]
@@ -35,6 +43,7 @@ export default function DropDownMenu({ id, className, renderButtonTrigger, child
           id={id}
           className={cn(
             "mt-4 grid h-[80%] max-h-90 w-2xs self-center-safe justify-self-center-safe border-2 border-gray-900 p-4",
+            `${hide ? "hidden" : ""}`,
             className
           )}
           role='menu'
