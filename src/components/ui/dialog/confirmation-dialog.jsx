@@ -23,6 +23,7 @@ export default function ConfirmationDialog({
   title,
   isDone,
   icon,
+  className,
   body = "",
   cancelButtonText = "cancel",
   onCancel = () => {},
@@ -53,7 +54,13 @@ export default function ConfirmationDialog({
     }
   }, [isDone, close]);
   return (
-    <Dialog buttonTrigger={buttonTrigger} open={isOpen} ref={dialogRef} parentId={parentId}>
+    <Dialog
+      buttonTrigger={buttonTrigger}
+      open={isOpen}
+      ref={dialogRef}
+      parentId={parentId}
+      className={className}
+    >
       <>
         <div className='flex items-center-safe gap-1'>
           {Icon(icon)}
@@ -91,6 +98,7 @@ export default function ConfirmationDialog({
 
 ConfirmationDialog.propTypes = {
   parentId: PropTypes.string.isRequired,
+  className: PropTypes.string,
   confirmButton: PropTypes.element,
   renderButtonTrigger: PropTypes.func,
   title: PropTypes.string.isRequired,
