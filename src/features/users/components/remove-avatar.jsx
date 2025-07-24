@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 
 import { Button } from "../../../components/ui/button";
 
-export default function RemoveAvatar({ hasAvatar, intent, buttonText, onClick }) {
+export default function RemoveAvatar({ hasAvatar, intent, buttonText, onClick, disabled }) {
   const { setValue } = useFormContext();
 
   if (!hasAvatar) return null;
@@ -20,6 +20,7 @@ export default function RemoveAvatar({ hasAvatar, intent, buttonText, onClick })
 
         onClick();
       }}
+      disabled={disabled}
     >
       {buttonText}
     </Button>
@@ -31,4 +32,5 @@ RemoveAvatar.propTypes = {
   intent: PropTypes.oneOf(["delete:backgroundAvatar", "delete:avatar"]),
   buttonText: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };

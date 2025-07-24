@@ -103,6 +103,7 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
           buttonText='Remove Avatar'
           hasAvatar={!!user.profile.backgroundAvatar}
           onClick={() => setPreviewState((prev) => ({ ...prev, avatar: false }))}
+          disabled={!previewState.background}
         />
       </div>
 
@@ -137,6 +138,7 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
           buttonText='Remove Banner'
           hasAvatar={!!user.profile.backgroundAvatar}
           onClick={() => setPreviewState((prev) => ({ ...prev, background: false }))}
+          disabled={!previewState.avatar}
         />
       </div>
 
