@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 
 import { NameplatePreview } from "../../../components/ui/preview";
@@ -11,18 +11,41 @@ import MessageAttachments from "./message-attachments";
 
 export default function Message({ message }) {
   const ref = useRef();
+  const timeoutRef = useRef(null);
+
   const [isHover, setIsHover] = useState(false);
 
-  const show = () => setIsHover(true);
+  const onMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
 
-  const hide = () => setIsHover(false);
+    setIsHover(true);
+  };
+
+  const onMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsHover(false);
+      timeoutRef.current = null;
+    }, 1000);
+  };
+
+  useEffect(
+    () => () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    },
+    []
+  );
 
   return (
     <div
       id={message.id}
       className='relative grid gap-2 p-5'
-      onMouseEnter={show}
-      onMouseLeave={hide}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       ref={ref}
     >
       <div className='flex items-center-safe justify-between'>
