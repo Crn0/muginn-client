@@ -1,13 +1,13 @@
 import Proptypes from "prop-types";
 
-import { MessageAttachment } from "../../../components/ui/preview";
 import { cn } from "../../../utils";
+import { MessageAttachment } from "../../../components/ui/preview";
 
-export default function MessageAttachments({ attachments }) {
+export default function MessageAttachments({ attachments, className }) {
   if (attachments.length <= 0) return null;
 
   return (
-    <div className='flex w-auto flex-wrap gap-1 sm:w-lg'>
+    <div className={cn("flex w-auto flex-wrap gap-1 sm:w-lg", className)}>
       {attachments.map((attachment, i) => (
         <MessageAttachment
           key={attachment.id}
@@ -34,4 +34,5 @@ MessageAttachments.propTypes = {
       ),
     })
   ),
+  className: Proptypes.string,
 };
