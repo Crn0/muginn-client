@@ -13,6 +13,7 @@ export default function DeleteMessage({ chatId, messageId }) {
     <ConfirmationDialog
       parentId={messageId}
       isDone={deleteMessage.isSuccess}
+      className='fixed top-50'
       title='Delete Message'
       icon='danger'
       body='Are you sure you want to delete this message?'
