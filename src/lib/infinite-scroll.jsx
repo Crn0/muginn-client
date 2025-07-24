@@ -16,7 +16,11 @@ export default function InfiniteScroll({
   const ref = useInfiniteScroll(loadMore, isLoading, canLoadMore, options);
 
   return (
-    <Component data-testid={testId} ref={ref} className={cn("h-px", className)}>
+    <Component
+      data-testid={testId}
+      ref={ref}
+      className={cn("flex h-px justify-center-safe", className)}
+    >
       {isLoading && <Spinner />}
     </Component>
   );
