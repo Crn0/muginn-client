@@ -18,7 +18,13 @@ export default function Message({ message }) {
   const hide = () => setIsHover(false);
 
   return (
-    <div className='relative grid gap-2 p-1' onMouseEnter={show} onMouseLeave={hide} ref={ref}>
+    <div
+      id={message.id}
+      className='relative grid gap-2 p-1'
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      ref={ref}
+    >
       <div className='flex items-center-safe justify-between'>
         <div className='flex items-center-safe gap-2'>
           <NameplatePreview
