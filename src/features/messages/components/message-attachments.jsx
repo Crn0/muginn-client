@@ -7,7 +7,7 @@ export default function MessageAttachments({ attachments }) {
   if (attachments.length <= 0) return null;
 
   return (
-    <div className='flex flex-wrap gap-1'>
+    <div className='flex w-auto flex-wrap gap-1 sm:w-lg'>
       {attachments.map((attachment, i) => (
         <MessageAttachment
           key={attachment.id}
