@@ -98,6 +98,10 @@ export const getInfiniteMessagesQueryOptions = (chatId) =>
     initialPageParam: null,
     queryKey: ["messages", chatId],
     queryFn: ({ pageParam: cursorHref }) => getMessages(chatId, cursorHref),
+    select: (data) => ({
+      pages: [...data.pages].reverse(),
+      pageParams: [...data.pageParams].reverse(),
+    }),
     getNextPageParam: ({ pagination }) => pagination.nextHref,
     getPreviousPageParam: ({ pagination }) => pagination.prevHref,
   });
