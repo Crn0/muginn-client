@@ -75,7 +75,7 @@ export default function Message({ message }) {
               </Button>
             )}
           >
-            <DeleteMessage chatId={message.chatId} messageId={message.id} />
+            <DeleteMessage message={message} />
           </DropDownMenu>
         )}
       </div>
