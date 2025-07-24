@@ -8,17 +8,15 @@ import { Spinner } from "../../../components/ui/spinner";
 export default function MessageList({ chatId }) {
   const messagesQuery = useInfiniteMessages(chatId);
 
-  if (messagesQuery.isLoading) {
+  const messages = messagesQuery.data?.pages?.flatMap((page) => page.messages) ?? [];
+
+  if (messagesQuery.isLoading && !messages.length) {
     return (
-      <div className='absolute top-[50%] left-[50%]'>
+      <div className='flex flex-1 items-center-safe justify-center-safe'>
         <Spinner />
       </div>
     );
   }
-
-  const messages = messagesQuery.data?.pages?.flatMap((page) => page.messages) ?? [];
-
-  if (!messages?.length) return null;
 
   return (
     <>
@@ -28,9 +26,10 @@ export default function MessageList({ chatId }) {
           loadMore={() => messagesQuery.fetchNextPage()}
           isLoading={messagesQuery.isFetchingNextPage}
           canLoadMore={messagesQuery.hasNextPage}
+          options={{ delay: 1000 }}
         />
       )}
-      <ul aria-label='messages' className='grid gap-1'>
+      <ul aria-label='messages' className='flex flex-1 flex-col justify-end-safe gap-1'>
         {messages.map((message) => (
           <li key={message.id} aria-label={`comment-${message.content}-${message.id}`}>
             <Message key={message.id} message={message} />
