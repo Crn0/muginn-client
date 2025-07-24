@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { cn } from "../../../utils";
 import { useDisclosureWithClickOutside } from "../../../hooks";
@@ -17,6 +17,7 @@ export default function DropDownMenu({ id, className, renderButtonTrigger, child
     () => ({
       show: () => setHide(false),
       hide: () => setHide(true),
+      toggleVisibility: () => setHide((state) => !state),
       reset: () => {
         setHide(false);
         disclosure.close();
@@ -34,6 +35,12 @@ export default function DropDownMenu({ id, className, renderButtonTrigger, child
     },
     ...disclosure,
   });
+
+  useEffect(() => {
+    if (!disclosure.isOpen) {
+      setHide(false);
+    }
+  }, [disclosure.isOpen]);
 
   return (
     <DropDownMenuProvider.Provider value={contextValue}>
