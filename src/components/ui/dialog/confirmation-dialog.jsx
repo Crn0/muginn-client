@@ -25,6 +25,7 @@ export default function ConfirmationDialog({
   icon,
   body = "",
   cancelButtonText = "cancel",
+  onCancel = () => {},
 }) {
   const dialogRef = useRef();
   const triggerRef = useRef();
@@ -70,7 +71,10 @@ export default function ConfirmationDialog({
         <div className='flex items-center-safe justify-end-safe gap-5'>
           <Button
             type='button'
-            onClick={() => close()}
+            onClick={() => {
+              close();
+              onCancel();
+            }}
             ref={cancelRef}
             className='focus:ring-4 focus:ring-blue-500 focus:outline-none'
           >
@@ -92,4 +96,5 @@ ConfirmationDialog.propTypes = {
   cancelButtonText: PropTypes.node,
   isDone: PropTypes.bool.isRequired,
   icon: PropTypes.oneOf(["danger", "info"]),
+  onCancel: PropTypes.func,
 };
