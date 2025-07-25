@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 
-import { NameplatePreview } from "../../../components/ui/preview";
 import { formatDate } from "../../../utils";
+import { NameplatePreview } from "../../../components/ui/preview";
 import { DropDownMenu } from "../../../components/ui/dropdown";
 import { Button } from "../../../components/ui/button";
 import DeleteMessage from "./delete-message";
@@ -62,7 +62,7 @@ export default function Message({ message }) {
         {isHover && (
           <DropDownMenu
             id={message.id}
-            className='absolute -top-50 right-25 z-50 h-100 w-50 bg-black sm:right-15'
+            className='fixed top-45 right-15 z-50 min-h-9/12 w-50 overflow-hidden bg-black sm:top-50 sm:right-15'
             renderButtonTrigger={(options) => (
               <Button
                 testId='drop-down-trigger'
