@@ -14,7 +14,7 @@ export default function NameplatePreview({ username, displayName, className, ass
 
 NameplatePreview.propTypes = {
   username: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
+  displayName: PropTypes.string,
   className: PropTypes.string,
   asset: PropTypes.shape({
     url: PropTypes.string,
