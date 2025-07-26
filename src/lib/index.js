@@ -1,5 +1,6 @@
 export * from "./auth";
 export * from "./react-query";
+export * from "./permissions";
 export { default as tryCatch } from "./try-catch";
 export { default as ApiClient } from "./api-client";
 export { default as generateHeader } from "./generate-header";
@@ -8,3 +9,6 @@ export { default as generateId } from "./generate-id";
 export { default as InfiniteScroll } from "./infinite-scroll";
 export { default as errorHandler } from "./error-handler";
 export { default as Portal } from "./portal";
+export { default as policies } from "./policies";
+export { default as useAuthorization } from "./use-authorization";
+export { default as Authorization } from "./authorization";
