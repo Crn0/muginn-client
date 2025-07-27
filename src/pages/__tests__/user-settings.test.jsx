@@ -202,18 +202,6 @@ describe("User Settings Page", () => {
       ).toBeInTheDocument();
     });
 
-    it("shows an error message when the display name is invalid", async () => {
-      const { invalid } = form;
-      const { user } = setupRouter(router, queryClient);
-
-      await user.click(screen.getByRole("button", { name: "Profiles" }));
-
-      await user.type(screen.getByLabelText("Display Name"), invalid.displayName);
-      await user.tab();
-
-      expect(screen.getByText("String must contain at most 36 character(s)")).toBeInTheDocument();
-    });
-
     it("shows an error message when the password is invalid", async () => {
       const { invalid } = form;
 

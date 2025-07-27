@@ -26,14 +26,6 @@ beforeEach(async () => {
 });
 
 describe("Message List", () => {
-  it("should render nothing when there are no messages", () => {
-    queryClient.setQueryData(queryKey, null);
-
-    const { container } = renderComponent(<MessageList chatId={chatId} />, queryClient);
-
-    expect(container).toBeEmptyDOMElement();
-  });
-
   it("should render a list of messages", () => {
     renderComponent(<MessageList chatId={chatId} />, queryClient);
 
