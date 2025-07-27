@@ -3,3 +3,5 @@ export * from "./get-chats";
 export * from "./get-chat";
 export * from "./join-chat";
 export * from "./leave-chat";
+export * from "./get-member";
+export * from "./get-my-membership";
