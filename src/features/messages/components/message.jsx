@@ -81,7 +81,7 @@ export default function Message({ message }) {
       </div>
 
       <div>
-        <p>{message.content}</p>
+        <p className='break-all whitespace-pre-wrap'>{message.content}</p>
 
         <MessageAttachments attachments={message.attachments} />
       </div>
