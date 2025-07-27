@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 
+import { formatDate } from "../../../utils";
 import { useDeleteMessage } from "../api/delete-message";
 import { useDropDownMenu } from "../../../components/ui/dropdown/context/dropdown-menu-context";
 import { ConfirmationDialog } from "../../../components/ui/dialog";
 import { Button } from "../../../components/ui/button";
-import MessageAttachments from "./message-attachments";
-import { formatDate } from "../../../utils";
 import { NameplatePreview } from "../../../components/ui/preview";
+import MessageAttachments from "./message-attachments";
 
 export default function DeleteMessage({ message }) {
   const deleteMessage = useDeleteMessage({ chatId: message.chatId, messageId: message.id });
@@ -16,7 +16,7 @@ export default function DeleteMessage({ message }) {
     <ConfirmationDialog
       parentId={message.id}
       isDone={deleteMessage.isSuccess}
-      className='fixed top-50'
+      className='fixed top-5'
       title='Delete Message'
       icon='danger'
       body={
@@ -35,7 +35,9 @@ export default function DeleteMessage({ message }) {
           </div>
 
           <div>
-            <p>{message.content}</p>
+            <p className='w-50 overflow-hidden overflow-ellipsis whitespace-nowrap'>
+              {message.content}
+            </p>
 
             <MessageAttachments attachments={message.attachments} className='w-50 sm:w-sm' />
           </div>
