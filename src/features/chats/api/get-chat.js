@@ -9,8 +9,8 @@ export const chatResponseSchema = z.object({
   name: z.string().nullable(),
   type: z.enum(["GroupChat", "DirectChat"]),
   isPrivate: z.boolean(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date().nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime().nullable(),
   avatar: z
     .object({
       url: z.string(),
