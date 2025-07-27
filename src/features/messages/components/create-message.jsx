@@ -103,6 +103,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
             e.target.style.height = "auto";
             e.target.style.height = `${e.target.scrollHeight}px`;
           }}
+          style={{ ...(isSuccess ? { height: "auto" } : {}) }}
         />
 
         <Button type='submit' isLoading={isPending} disabled={disableSubmitButton || isPending}>
