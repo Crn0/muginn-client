@@ -95,15 +95,19 @@ class ApiClient {
       return window.location.replace(paths.silentLogin.getHref(redirectTo));
     }
 
-    const { error: invalidAccessTokenError, data: firstRes } = await tryCatch(() =>
+    const { error: firstResError, data: firstRes } = await tryCatch(() =>
       callAPIWithToken(url, token, conf)
     );
 
-    if (!invalidAccessTokenError && firstRes) {
+    if (firstResError && firstResError?.code !== 401) {
+      throw firstResError;
+    }
+
+    if (!firstResError) {
       return firstRes;
     }
 
-    if (invalidAccessTokenError?.code === 401) {
+    if (firstResError?.code === 401) {
       refreshPromise = this.#provider.refreshToken();
 
       const { error, data: newToken } = await tryCatch(refreshPromise);
@@ -116,11 +120,11 @@ class ApiClient {
       refreshPromise = null;
     }
 
-    const { error: resError, data: secondRes } = await tryCatch(() =>
+    const { error: secondResError, data: secondRes } = await tryCatch(() =>
       callAPIWithToken(url, token, conf)
     );
 
-    if (resError) throw resError;
+    if (secondResError) throw secondResError;
 
     return secondRes;
   }
