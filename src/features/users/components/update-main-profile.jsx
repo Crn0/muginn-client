@@ -101,7 +101,7 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
         <RemoveAvatar
           intent='delete:avatar'
           buttonText='Remove Avatar'
-          hasAvatar={!!user.profile.backgroundAvatar}
+          hasAvatar={!!user.profile.avatar}
           onClick={() => setPreviewState((prev) => ({ ...prev, avatar: false }))}
           disabled={!previewState.background}
         />
