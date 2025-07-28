@@ -29,7 +29,10 @@ export default function UpdateAccountProfile() {
               className='-mt-5 w-20 rounded-full bg-black'
             />
 
-            <p data-testid='username-info' className='font-bold'>
+            <p
+              data-testid='username-info'
+              className='w-30 overflow-hidden font-bold overflow-ellipsis whitespace-nowrap'
+            >
               {user.profile.displayName || user.username}
             </p>
           </div>

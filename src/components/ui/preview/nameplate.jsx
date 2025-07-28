@@ -7,7 +7,9 @@ export default function NameplatePreview({ username, displayName, className, ass
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <UserAvatar asset={asset} alt={`${displayName || username}'s avatar`} variant='user' />
-      <div className='font-sans text-sm'>{displayName || username}</div>
+      <p className='w-45 overflow-hidden font-sans text-sm overflow-ellipsis whitespace-nowrap'>
+        {displayName || username}
+      </p>
     </div>
   );
 }
