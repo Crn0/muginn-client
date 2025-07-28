@@ -61,7 +61,9 @@ export default function DeleteMessage({ message }) {
             </div>
 
             <div>
-              <p>{message.content}</p>
+              <p className='w-50 overflow-hidden overflow-ellipsis whitespace-nowrap sm:w-100'>
+                {message.content}
+              </p>
 
               <MessageAttachments attachments={message.attachments} className='w-50 sm:w-sm' />
             </div>
