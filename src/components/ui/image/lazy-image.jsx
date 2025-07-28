@@ -28,6 +28,7 @@ const image = cva(
         attachment: "rounded-md",
         avatar: "rounded-full",
         backgroundAvatar: "object-fill h-50 sm:h-100 rounded-md",
+        icon: "rounded-full p-5",
       },
     },
 
@@ -61,5 +62,5 @@ LazyImage.propTypes = {
   alt: PropTypes.string,
   mainImage: PropTypes.string.isRequired,
   lazyImage: PropTypes.string.isRequired,
-  variant: PropTypes.oneOf(["default", "attachment", "avatar", "backgroundAvatar"]),
+  variant: PropTypes.oneOf(["default", "attachment", "avatar", "backgroundAvatar", "icon"]),
 };

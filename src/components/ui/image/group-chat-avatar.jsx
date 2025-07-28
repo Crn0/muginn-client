@@ -5,23 +5,15 @@ import { cn } from "../../../utils";
 import getAvatar from "./get-avatar";
 import LazyImage from "./lazy-image";
 
-// import avatarMain from "../../../assets/avatar.png";
-// import avatarLazy from "../../../assets/avatar-lazy.png";
-
-// const fallback = {
-//   main: avatarMain,
-//   lazy: avatarLazy,
-// };
-
 const avatar = cva("", {
   variants: {
     variant: {
-      default: "rounded-full p-5",
-      banner: "",
+      icon: "rounded-full p-5",
+      avatar: "rounded-full",
     },
   },
   defaultVariants: {
-    variant: "default",
+    variant: "icon",
   },
 });
 
@@ -31,27 +23,22 @@ const getInitials = (alt) =>
     .map((n) => n[0])
     .join(alt.includes("-") ? "-" : "");
 
-export default function GroupChatAvatar({ asset, alt, className, variant = "default" }) {
-  const { mainImage, lazyImage } = getAvatar(asset, null);
+export default function GroupChatAvatar({ asset, alt, className, variant = "icon" }) {
+  const { mainImage, lazyImage } = getAvatar(asset);
 
   const initials = getInitials(alt ?? "");
 
-  if (!mainImage && !lazyImage && variant === "banner") {
+  if (!mainImage && !lazyImage && variant === "avatar") {
     return null;
   }
 
-  if (!mainImage && !lazyImage && variant === "default") {
+  if (!mainImage && !lazyImage && variant === "icon") {
     return <div className={("w-10", cn(avatar({ variant }), className))}>{initials}</div>;
   }
 
   return (
     <div className={cn("w-10", className)}>
-      <LazyImage
-        mainImage={mainImage}
-        lazyImage={lazyImage}
-        className={avatar({ variant })}
-        alt={alt}
-      />
+      <LazyImage mainImage={mainImage} lazyImage={lazyImage} variant={variant} alt={alt} />
     </div>
   );
 }
@@ -59,7 +46,7 @@ export default function GroupChatAvatar({ asset, alt, className, variant = "defa
 GroupChatAvatar.propTypes = {
   className: PropTypes.string,
   alt: PropTypes.string,
-  variant: PropTypes.oneOf(["default", "banner"]),
+  variant: PropTypes.oneOf(["icon", "avatar"]),
   asset: PropTypes.shape({
     url: PropTypes.string,
     images: PropTypes.arrayOf(
