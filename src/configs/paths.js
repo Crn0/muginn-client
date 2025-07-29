@@ -51,6 +51,7 @@ const protectedRoot = makeRoute("/");
 
 // Protected subroutes
 const userSettings = makeRoute("users/me/user-settings", protectedRoot);
+const chatSettings = makeRoute("chats/:chatId/settings", protectedRoot);
 
 const dashboardRoot = makeRoute("chats", protectedRoot);
 const dashboardMe = makeRoute("me", dashboardRoot);
@@ -68,6 +69,7 @@ export default {
   app,
   protected: {
     userSettings,
+    chatSettings,
     root: protectedRoot,
     dashboard: {
       root: dashboardRoot,

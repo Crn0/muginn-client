@@ -11,6 +11,7 @@ import ProtectedRoot from "./root";
 import LoginPage from "../pages/login";
 import RegisterPage from "../pages/register";
 import UserSettingsPage from "../pages/user-settings";
+import ChatSettingsPage from "../pages/chat-settings";
 import SilentLoginPage from "../pages/silent-login";
 import DashBoardPage from "../pages/dashboard";
 import DashBoardMe from "../features/dashboard/components/dashboard-me";
@@ -70,6 +71,11 @@ const router = createBrowserRouter([
         path: paths.protected.userSettings.path,
         errorElement: <RouteErrorElement />,
         element: <UserSettingsPage />,
+      },
+      {
+        path: paths.protected.chatSettings.path,
+        errorElement: <RouteErrorElement />,
+        element: <ChatSettingsPage />,
       },
     ],
   },
