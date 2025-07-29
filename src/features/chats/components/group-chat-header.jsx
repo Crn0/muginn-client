@@ -9,11 +9,11 @@ import { cn } from "../../../utils";
 import { useChat, useMyMembership } from "../api";
 import { Authorization, permissions, policies } from "../../../lib";
 import { DropDownMenu } from "../../../components/ui/dropdown";
+import { Link } from "../../../components/ui/link";
 import { Button } from "../../../components/ui/button";
 import { Spinner } from "../../../components/ui/spinner";
 
 import LeaveGroupChat from "./leave-group-chat";
-import { Link } from "../../../components/ui/link";
 
 function HeaderChildren({ chat }) {
   const location = useLocation();
@@ -73,13 +73,7 @@ export default function GroupChatHeader({ chatId }) {
 
   const chat = chatQuery?.data;
 
-  if (chatQuery.isLoading && !chat) {
-    return (
-      <div className='absolute top-50 left-[50%]'>
-        <Spinner />
-      </div>
-    );
-  }
+  if (!chatQuery.data) return null;
 
   return (
     <div className='flex flex-1 p-2'>
