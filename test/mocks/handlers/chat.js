@@ -81,6 +81,127 @@ export default [
       })
     )
   ),
+  http.get(
+    `${baseUrl}/:chatId`,
+    withAuth(
+      withUser(async ({ params }) => {
+        await networkDelay();
+
+        try {
+          const { chatId } = params;
+
+          const chat = db.chat.findFirst({
+            where: {
+              id: {
+                equals: chatId,
+              },
+            },
+          });
+
+          return HttpResponse.json(
+            {
+              ...chat,
+              ownerId: chat.owner.id,
+              avatar: chat?.avatar ?? null,
+              updatedAt: chat?.updatedAt ? new Date(chat.updatedAt).toISOString() : null,
+            },
+            {
+              status: 200,
+            }
+          );
+        } catch (e) {
+          return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        }
+      })
+    )
+  ),
+  http.get(
+    `${baseUrl}/:chatId/me`,
+    withAuth(
+      withUser(async ({ user, params }) => {
+        await networkDelay();
+
+        try {
+          const { chatId } = params;
+
+          const membership = db.userOnChat.findFirst({
+            where: {
+              chat: {
+                id: {
+                  equals: chatId,
+                },
+              },
+              user: {
+                id: {
+                  equals: user.id,
+                },
+              },
+            },
+          });
+
+          return HttpResponse.json(membership, {
+            status: 200,
+          });
+        } catch (e) {
+          return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        }
+      })
+    )
+  ),
+  http.get(
+    `${baseUrl}/:chatId/members`,
+    withAuth(
+      withUser(async ({ params }) => {
+        await networkDelay();
+
+        try {
+          const { chatId } = params;
+
+          const members = db.userOnChat
+            .findMany({
+              where: {
+                chat: {
+                  id: {
+                    equals: chatId,
+                  },
+                },
+              },
+            })
+            .map((member) => ({
+              ...member.user,
+              status: "Online",
+              lastSeenAt: null,
+              profile: {
+                ...db.profile.findFirst({
+                  where: {
+                    user: { id: { equals: member.user.id } },
+                  },
+                }),
+                displayName: null,
+                avatar: null,
+              },
+              serverProfile: {
+                ...member,
+                mutedUntil: null,
+              },
+            }));
+
+          return HttpResponse.json(
+            {
+              members,
+              memberCount: members?.length ?? 0,
+              pagination: { prevHref: null, nextHref: null },
+            },
+            {
+              status: 200,
+            }
+          );
+        } catch (e) {
+          return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        }
+      })
+    )
+  ),
   http.post(
     baseUrl,
     withAuth(
@@ -159,6 +280,28 @@ export default [
         }
 
         return HttpResponse.json({ id: createdChat.id }, { status: 200 });
+      })
+    )
+  ),
+  http.patch(
+    `${baseUrl}/:chatId/profile`,
+    withAuth(
+      withUser(async ({ request, params }) => {
+        try {
+          const { chatId } = params;
+          const body = await request.clone().formData();
+
+          const chat = db.chat.update({
+            where: { id: { equals: chatId } },
+            data: {
+              ...Object.fromEntries(body),
+            },
+          });
+
+          return HttpResponse.json({ id: chat.id }, { status: 200 });
+        } catch (e) {
+          return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        }
       })
     )
   ),

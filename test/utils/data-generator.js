@@ -29,6 +29,70 @@ export const createUser = () => {
   return Object.freeze({ displayName, username, password });
 };
 
+export const createChat = (data) => {
+  let chat;
+
+  const user = db.user.findFirst({
+    where: {
+      id: {
+        equals: data.ownerId,
+      },
+    },
+  });
+
+  const permissions = db.permission.findMany({
+    name: {
+      in: ["send_message", "view_chat"],
+    },
+  });
+
+  if (data.type === "GroupChat") {
+    chat = db.chat.create({
+      owner: user,
+      name: data.name,
+      type: data.type,
+      isPrivate: false,
+    });
+
+    const roles = [
+      db.role.create({
+        permissions,
+        chat,
+      }),
+    ];
+
+    db.userOnChat.create({
+      user,
+      roles,
+      chat,
+    });
+  } else {
+    chat = db.chat.create({
+      type: data.type,
+      isPrivate: true,
+    });
+
+    const users = db.user.findMany({ where: { id: { in: [data.memberIds] } } });
+
+    const roles = [
+      db.role.create({
+        permissions,
+        chat,
+      }),
+    ];
+
+    users.forEach((u) =>
+      db.userOnChat.create({
+        roles,
+        chat,
+        user: u,
+      })
+    );
+  }
+
+  return chat;
+};
+
 export const generateAccessToken = (username) => {
   const secret = env.getValue("tokenSecret");
 

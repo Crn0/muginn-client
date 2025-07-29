@@ -62,6 +62,6 @@ export default factory({
     chat: oneOf("chat"),
     roles: manyOf("role"),
     joinedAt: () => new Date().toISOString(),
-    mutedUntil: nullable(Date),
+    mutedUntil: nullable(new Date().toDateString(), { defaultsToNull: true }),
   },
 });
