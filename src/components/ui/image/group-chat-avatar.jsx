@@ -9,7 +9,7 @@ const avatar = cva("", {
   variants: {
     variant: {
       icon: "rounded-full p-5",
-      avatar: "rounded-full",
+      avatar: "rounded-full border-2 border-gray-900 bg-gray-950 p-5 text-center",
     },
   },
   defaultVariants: {
@@ -29,7 +29,20 @@ export default function GroupChatAvatar({ asset, alt, className, variant = "icon
   const initials = getInitials(alt ?? "");
 
   if (!mainImage && !lazyImage && variant === "avatar") {
-    return null;
+    return (
+      <div
+        className={
+          ("w-10",
+          cn(
+            avatar({ variant }),
+            className,
+            "border-2 border-gray-900 bg-gray-950 p-5 text-center"
+          ))
+        }
+      >
+        {initials}
+      </div>
+    );
   }
 
   if (!mainImage && !lazyImage && variant === "icon") {

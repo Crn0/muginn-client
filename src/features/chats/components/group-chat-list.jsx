@@ -40,7 +40,7 @@ export default function GroupChatList() {
           to={`/chats/${chat.id}`}
           variant='button'
           size='icon'
-          className='overflow-hidden bg-slate-950 text-xs'
+          className='overflow-hidden rounded-full border-2 border-gray-900 bg-gray-950 p-5 text-center text-xs'
           onClick={() => {
             manual();
             close();
