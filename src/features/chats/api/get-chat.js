@@ -46,7 +46,9 @@ export const getChat = async (chatId) => {
 
   if (!parsedData.success) {
     errorHandler(res, {
+      code: 422,
       data: resData,
+      message: `Validation failed: ${parsedData.error.issues.length} errors detected in body`,
       ...parsedData.error,
     });
   }
