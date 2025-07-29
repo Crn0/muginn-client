@@ -1,0 +1,26 @@
+import PropTypes from "prop-types";
+import { FaExclamationTriangle } from "react-icons/fa";
+
+import { paths } from "../../configs";
+import { Link } from "../ui/link";
+
+export default function NotFound({
+  title = "Page Not Found",
+  message = "The page you’re looking for doesn’t exist.",
+}) {
+  return (
+    <div className='flex h-dvh flex-col items-center justify-center space-y-4 bg-black px-4 py-8 text-center text-white'>
+      <FaExclamationTriangle className='text-5xl text-yellow-500' aria-label='Warning icon' />
+      <h1 className='text-2xl font-semibold'>{title}</h1>
+      <p className='max-w-md text-white/70'>{message}</p>
+      <Link to={paths.protected.root.getHref()} variant='button'>
+        Go Home
+      </Link>
+    </div>
+  );
+}
+
+NotFound.propTypes = {
+  title: PropTypes.string,
+  message: PropTypes.string,
+};
