@@ -15,9 +15,11 @@ export default function AwaitErrorElement() {
   }, [error, navigate]);
 
   return (
-    <div role='alert'>
-      <p>Something went wrong:</p>
-      <pre className='text-red-600'>{error.message}</pre>
+    <div className='grid h-dvh place-content-center place-items-center bg-black text-white'>
+      <div role='alert'>
+        <p className='font-extralight italic'>Something went wrong:</p>
+        <pre className='text-red-600'>{error?.message || error?.statusText || "Unknown error"}</pre>
+      </div>
     </div>
   );
 }
