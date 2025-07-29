@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { paths } from "../configs";
 import { getAuthUserQueryOptions } from "../lib";
-import { AwaitErrorElement, ErrorElement } from "../components/errors";
+import { RedirectErrorElement, ErrorElement } from "../components/errors";
 import { Spinner } from "../components/ui/spinner";
 
 function Wrapper() {
@@ -57,7 +57,7 @@ export default function SilentLogin() {
         </div>
       }
     >
-      <Await resolve={loaderData} errorElement={<AwaitErrorElement />}>
+      <Await resolve={loaderData} errorElement={<RedirectErrorElement />}>
         <ErrorBoundary FallbackComponent={ErrorElement}>
           <Wrapper />
         </ErrorBoundary>

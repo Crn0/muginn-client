@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAsyncError, useNavigate } from "react-router-dom";
 
-export default function AwaitErrorElement() {
+export default function RedirectErrorElement() {
   const error = useAsyncError();
   const navigate = useNavigate();
 
