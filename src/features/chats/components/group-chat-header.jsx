@@ -107,7 +107,9 @@ export default function GroupChatHeader({ chatId }) {
                 )}
               >
                 <>
-                  <p className='overflow-hidden'>{chat.name}</p>
+                  <p className='w-50 overflow-hidden overflow-ellipsis whitespace-nowrap sm:w-100'>
+                    {chat.name}
+                  </p>
                   <p className='text-lg'>
                     {!options.isOpen ? <MdOutlineKeyboardArrowDown /> : <IoCloseSharp />}
                   </p>
