@@ -1,6 +1,9 @@
 import { Outlet, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
+import { hasTouchSupport } from "../../../lib";
 import { useChat } from "../../chats/api";
+import { useDashboardDrawer } from "../../../components/layouts/context";
 import { Spinner } from "../../../components/ui/spinner";
 
 export default function DashboardContent() {
@@ -9,6 +12,15 @@ export default function DashboardContent() {
   const chatQuery = useChat(params.chatId, {
     enabled: !!params.chatId && params.chatId !== "me",
   });
+
+  const drawer = useDashboardDrawer(DashboardContent);
+
+  useEffect(() => {
+    if (chatQuery.data && hasTouchSupport() && drawer.isAutoDrawer) {
+      drawer.manual();
+      drawer.close();
+    }
+  }, [chatQuery.data, drawer]);
 
   if (chatQuery.isLoading && !chatQuery.data)
     return (

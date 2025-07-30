@@ -12,3 +12,4 @@ export { default as Portal } from "./portal";
 export { default as policies } from "./policies";
 export { default as useAuthorization } from "./use-authorization";
 export { default as Authorization } from "./authorization";
+export { default as hasTouchSupport } from "./has-touch-support";
