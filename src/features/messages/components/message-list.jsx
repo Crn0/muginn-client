@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
 import { useInfiniteMessages } from "../api/get-messages";
 import Message from "./message";
@@ -8,7 +9,15 @@ import { Spinner } from "../../../components/ui/spinner";
 export default function MessageList({ chatId }) {
   const messagesQuery = useInfiniteMessages(chatId);
 
+  const [messageNode, setMessageNode] = useState(null);
+
   const messages = messagesQuery.data?.pages?.flatMap((page) => page.messages) ?? [];
+
+  useEffect(() => {
+    if (messageNode) {
+      messageNode.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messageNode]);
 
   if (messagesQuery.isLoading && !messages.length) {
     return (
@@ -30,8 +39,12 @@ export default function MessageList({ chatId }) {
         />
       )}
       <ul aria-label='messages' className='flex flex-1 flex-col justify-end-safe gap-1'>
-        {messages.map((message) => (
-          <li key={message.id} aria-label={`comment-${message.content}-${message.id}`}>
+        {messages.map((message, index, arr) => (
+          <li
+            ref={index === arr.length - 1 ? setMessageNode : null}
+            key={message.id}
+            aria-label={`comment-${message.content}-${message.id}`}
+          >
             <Message key={message.id} message={message} />
           </li>
         ))}
