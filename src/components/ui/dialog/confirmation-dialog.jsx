@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useRef, useEffect } from "react";
 import { CgDanger } from "react-icons/cg";
-import { FaExclamation } from "react-icons/fa";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 
 import { useDisclosureWithClickOutside } from "../../../hooks";
 import Dialog from "./dialog";
@@ -10,7 +10,7 @@ import { Button } from "../button";
 function Icon(type) {
   const icon = {
     danger: <CgDanger color='red' aria-hidden='true' />,
-    info: <FaExclamation aria-hidden='true' />,
+    info: <IoIosInformationCircleOutline aria-hidden='true' />,
   };
 
   return icon[type] ?? null;
