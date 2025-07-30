@@ -26,7 +26,7 @@ export default function DashboardLayout({ title, children }) {
   return (
     <DashboardDrawerContext.Provider value={contextValue}>
       <div className='flex min-h-dvh flex-col gap-2 bg-black text-white' ref={containerRef}>
-        <header className='flex items-center justify-center gap-2 p-2 sm:grid sm:place-content-center sm:gap-0'>
+        <header className='fixed top-auto z-50 flex w-full items-center justify-center gap-2 bg-black p-2 sm:static sm:grid sm:place-content-center sm:gap-0'>
           <Button
             type='button'
             className='sm:hidden'
