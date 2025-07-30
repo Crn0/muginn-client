@@ -24,9 +24,9 @@ export default function UpdateAuthentication({ user, isUserFetching }) {
     <div
       id='user-authentication'
       data-testid='password-auth'
-      className='grid place-content-center-safe place-items-center-safe gap-1 sm:w-4xl'
+      className='grid place-content-center-safe place-items-center-safe gap-2 sm:w-4xl'
     >
-      <h2>Password and Authentication</h2>
+      <h2 className='font-bold'>Password and Authentication</h2>
 
       <FormDialog
         id='update-password'

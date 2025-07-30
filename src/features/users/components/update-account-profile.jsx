@@ -5,6 +5,7 @@ import { UserAvatar, BackgroundAvatar } from "../../../components/ui/image";
 import { Button } from "../../../components/ui/button";
 import UpdateUsername from "./update-username";
 import UpdateAuthentication from "./update-authentication";
+import DeleteAccount from "./delete-account";
 
 export default function UpdateAccountProfile() {
   const userQuery = useGetUser();
@@ -82,7 +83,10 @@ export default function UpdateAccountProfile() {
         </div>
       </div>
 
-      <UpdateAuthentication user={user} isUserFetching={userQuery.isFetching} />
+      <div className='grid place-content-center-safe place-items-center-safe gap-5 p-5'>
+        <UpdateAuthentication user={user} isUserFetching={userQuery.isFetching} />
+        <DeleteAccount />
+      </div>
     </div>
   );
 }
