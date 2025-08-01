@@ -138,7 +138,7 @@ export default function UpdateChatProfile() {
 
   if ((chatQuery.isLoading && !chat) || (membersQuery.isLoading && !memberCount)) {
     return (
-      <div>
+      <div className='flex flex-1 items-center-safe justify-center-safe bg-black text-white'>
         <Spinner />
       </div>
     );
