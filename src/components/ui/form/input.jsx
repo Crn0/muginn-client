@@ -7,12 +7,14 @@ import { useInputErrorHandler } from "../../../hooks";
 import { cn } from "../../../utils";
 
 const Input = forwardRef(
-  ({ label, serverError, className, type, name, required, ...props }, ref) => {
+  ({ label, serverError, className, type, name, required, onChange = () => {}, ...props }, ref) => {
     const {
       register,
       setError,
       formState: { errors },
     } = useFormContext();
+
+    const { ...rest } = register(name);
 
     const error = useInputErrorHandler(name, {
       serverError,
@@ -36,8 +38,12 @@ const Input = forwardRef(
             className
           )}
           ref={ref}
-          {...register(name)}
+          {...rest}
           {...props}
+          onChange={(e) => {
+            rest.onChange(e);
+            onChange(e);
+          }}
         />
       </FieldWrapper>
     );
@@ -53,6 +59,7 @@ Input.propTypes = {
   name: PropTypes.string.isRequired,
   required: PropTypes.bool,
   serverError: PropTypes.instanceOf(Error),
+  onChange: PropTypes.func,
 };
 
 export default Input;

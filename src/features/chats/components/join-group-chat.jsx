@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import { paths } from "../../../configs";
 import { useJoinGroupChat } from "../api";
@@ -23,6 +24,14 @@ export default function JoinGroupChat() {
       reset();
     };
 
+  const isDone = joinChatMutation.isSuccess || joinChatMutation.error?.code === 409;
+
+  useEffect(() => {
+    if (isDone) {
+      joinChatMutation.reset();
+    }
+  }, [isDone, joinChatMutation]);
+
   return (
     <FormDialog
       isCurried
@@ -33,7 +42,7 @@ export default function JoinGroupChat() {
       mode='onBlur'
       schema={joinChatChatSchema}
       onSubmit={onSubmit}
-      done={joinChatMutation.isSuccess}
+      done={isDone}
       renderButtonTrigger={(options) => (
         <Button
           type='button'
@@ -67,6 +76,11 @@ export default function JoinGroupChat() {
         name='chatId'
         label='Invite ID'
         serverError={joinChatMutation?.error}
+        onChange={() => {
+          if (joinChatMutation.error?.code === 404) {
+            joinChatMutation.reset();
+          }
+        }}
         required
       />
     </FormDialog>

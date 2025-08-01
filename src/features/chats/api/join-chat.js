@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { ApiClient, tryCatch } from "../../../lib";
 import { getChatsQueryOptions } from "./get-chats";
+import { ValidationError } from "../../../errors";
 
 export const joinGroupChat = async ({ chatId }) => {
   const { error } = await tryCatch(
@@ -10,6 +11,18 @@ export const joinGroupChat = async ({ chatId }) => {
       method: "POST",
     })
   );
+
+  if (error.code === 404) {
+    throw new ValidationError({
+      error: error.message,
+      fields: [
+        {
+          message: error.message,
+          path: ["chatId"],
+        },
+      ],
+    });
+  }
 
   if (error) throw error;
 };
