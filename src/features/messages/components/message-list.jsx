@@ -38,7 +38,7 @@ export default function MessageList({ chatId }) {
           options={{ delay: 1000 }}
         />
       )}
-      <ul aria-label='messages' className='flex flex-1 flex-col justify-end-safe gap-1'>
+      <ul aria-label='messages' className='flex flex-1 flex-col gap-1'>
         {messages.map((message, index, arr) => (
           <li
             ref={index === arr.length - 1 ? setMessageNode : null}
