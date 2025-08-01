@@ -5,8 +5,6 @@ import { setToken, getToken } from "../stores";
 import errorHandler from "./error-handler";
 import tryCatch from "./try-catch";
 
-let refreshPromise = null;
-
 const callAPIWithToken = async (url, token, configs) => {
   configs.headers.set("Authorization", `Bearer ${token}`);
 
@@ -40,7 +38,19 @@ const callAPIWithoutToken = async (url, configs) => {
 class ApiClient {
   #baseURL;
 
+  #refreshPromise = null;
+
   #provider;
+
+  async #waitForBackgroundRefresh() {
+    if (this.#refreshPromise) {
+      const { error } = await tryCatch(this.#refreshPromise);
+
+      this.#refreshPromise = null;
+
+      if (error) throw error;
+    }
+  }
 
   constructor(baseURL, provider) {
     this.#baseURL = baseURL;
@@ -66,14 +76,8 @@ class ApiClient {
 
     let token = this.#provider.getToken();
 
-    if (refreshPromise !== null) {
-      const { error } = await tryCatch(refreshPromise);
-
-      if (error?.code === 401 || error?.message === "Failed to fetch") throw error;
-
-      token = this.#provider.getToken();
-      refreshPromise = null;
-    }
+    await this.#waitForBackgroundRefresh(url);
+    token = this.#provider.getToken();
 
     // when the user authenticated using google auth get a new accessToken
     if (!token) {
@@ -94,18 +98,21 @@ class ApiClient {
       return firstRes;
     }
 
-    if (firstResError?.code === 401) {
-      refreshPromise = this.#provider.refreshToken();
+    if (firstResError?.code === 401 && !this.#refreshPromise) {
+      this.#refreshPromise = this.#provider.refreshToken();
 
-      const { error, data: newToken } = await tryCatch(refreshPromise);
+      const { error, data: newToken } = await tryCatch(this.#refreshPromise);
 
       if (error?.code === 401 || error?.message === "Failed to fetch") throw error;
 
       this.#provider.setToken(newToken);
 
-      token = newToken;
-      refreshPromise = null;
+      this.#refreshPromise = null;
     }
+
+    await this.#waitForBackgroundRefresh();
+
+    token = this.#provider.getToken();
 
     const { error: secondResError, data: secondRes } = await tryCatch(() =>
       callAPIWithToken(url, token, conf)
