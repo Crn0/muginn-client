@@ -15,7 +15,7 @@ export default function MessageList({ chatId }) {
 
   useEffect(() => {
     if (messageNode) {
-      messageNode.scrollIntoView({ behavior: "auto" });
+      messageNode?.scrollIntoView?.({ behavior: "auto" });
     }
   }, [messageNode]);
 
