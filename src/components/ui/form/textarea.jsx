@@ -21,12 +21,27 @@ const textarea = cva("flex-1", {
 });
 
 const TextArea = forwardRef(
-  ({ serverError, className, variant, name, maxLength, required, label = "", ...props }, ref) => {
+  (
+    {
+      serverError,
+      className,
+      variant,
+      name,
+      maxLength,
+      required,
+      label = "",
+      onChange = () => {},
+      ...props
+    },
+    ref
+  ) => {
     const {
       register,
       setError,
       formState: { errors },
     } = useFormContext();
+
+    const { ...rest } = register(name);
 
     const error = useInputErrorHandler(name, {
       serverError,
@@ -42,7 +57,11 @@ const TextArea = forwardRef(
           maxLength={maxLength}
           aria-invalid={error?.message ? "true" : "false"}
           ref={ref}
-          {...register(name)}
+          {...rest}
+          onChange={(e) => {
+            onChange(e);
+            rest.onChange(e);
+          }}
           {...props}
         />
       </FieldWrapper>
@@ -60,6 +79,7 @@ TextArea.propTypes = {
   required: PropTypes.bool,
   serverError: PropTypes.instanceOf(Error),
   variant: PropTypes.oneOf(["message", "aboutMe", "default"]),
+  onChange: PropTypes.func,
 };
 
 export default TextArea;

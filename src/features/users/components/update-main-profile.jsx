@@ -25,7 +25,7 @@ const getAsset = (shouldRender, previewAsset, avatarAsset) => {
 };
 
 function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
-  const { reset, watch, register, setValue } = useFormContext();
+  const { reset, watch, register } = useFormContext();
 
   const avatarRef = useRef();
   const backgroundAvatarRef = useRef();
@@ -36,7 +36,7 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
   });
 
   const displayName = watch("displayName") || user.profile.displayName;
-  const aboutMe = watch("aboutMe") || user.profile.aboutMe;
+  const aboutMe = watch("aboutMe") ?? user.profile.aboutMe;
 
   const avatarPreview = useFilePreview();
   const backgroundAvatarPreview = useFilePreview();
@@ -150,7 +150,6 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
         maxLength={MAX_ABOUT_ME_LEN}
         serverError={serverError}
         onChange={(e) => {
-          setValue("content", e.target.value);
           e.target.style.height = "auto";
           e.target.style.height = `${e.target.scrollHeight}px`;
         }}
