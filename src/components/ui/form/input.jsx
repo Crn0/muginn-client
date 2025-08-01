@@ -7,7 +7,20 @@ import { useInputErrorHandler } from "../../../hooks";
 import { cn } from "../../../utils";
 
 const Input = forwardRef(
-  ({ label, serverError, className, type, name, required, onChange = () => {}, ...props }, ref) => {
+  (
+    {
+      label,
+      serverError,
+      className,
+      type,
+      name,
+      required,
+      onChange = () => {},
+      autoComplete = "off",
+      ...props
+    },
+    ref
+  ) => {
     const {
       register,
       setError,
@@ -44,6 +57,7 @@ const Input = forwardRef(
             rest.onChange(e);
             onChange(e);
           }}
+          autoComplete={autoComplete}
         />
       </FieldWrapper>
     );
@@ -60,6 +74,7 @@ Input.propTypes = {
   required: PropTypes.bool,
   serverError: PropTypes.instanceOf(Error),
   onChange: PropTypes.func,
+  autoComplete: PropTypes.string,
 };
 
 export default Input;
