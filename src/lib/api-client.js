@@ -8,9 +8,7 @@ import tryCatch from "./try-catch";
 let refreshPromise = null;
 
 const callAPIWithToken = async (url, token, configs) => {
-  if (!configs.headers.get("Authorization")) {
-    configs.headers.set("Authorization", `Bearer ${token}`);
-  }
+  configs.headers.set("Authorization", `Bearer ${token}`);
 
   const res = await fetch(url, {
     ...configs,
@@ -79,20 +77,9 @@ class ApiClient {
 
     // when the user authenticated using google auth get a new accessToken
     if (!token) {
-      // refreshPromise = this.#provider.refreshToken();
-
-      // const { error, data: newToken } = await tryCatch(refreshPromise);
-
-      // if (error?.code === 401 || error?.message === "Failed to fetch") throw error;
-
-      // this.#provider.setToken(newToken);
-
-      // token = newToken;
-      // refreshPromise = null;
-
       const redirectTo = window.location.pathname + window.location.search;
 
-      return window.location.replace(paths.silentLogin.getHref(redirectTo));
+      return window.location.replace(paths.silentLogin.getHref({ redirectTo }));
     }
 
     const { error: firstResError, data: firstRes } = await tryCatch(() =>
