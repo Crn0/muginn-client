@@ -35,7 +35,7 @@ export default function DeleteAccount() {
             className='fixed top-50'
             title='You Own Chats'
             icon='info'
-            body='In order to delete your accout you must first delete all of chats that you own.'
+            body='In order to delete your account you must first delete all of chats that you own.'
             onCancel={reset}
             renderButtonTrigger={({ onClick }) => (
               <Button
