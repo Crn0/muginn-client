@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getChatsQueryOptions } from "../api/get-chats";
-import { Spinner } from "../../../components/ui/spinner";
 import { Link } from "../../../components/ui/link";
 import { UserAvatar } from "../../../components/ui/image";
 import avatar from "../../../assets/avatar.png";
@@ -12,15 +11,10 @@ const fallback = { image: avatar, lazyImage: avatarLazy };
 export default function DirectChatList() {
   const chatsQuery = useQuery({
     ...getChatsQueryOptions(),
-    // throwOnError: (e) => e.response?.status >= 500 || e.message.toLowerCase() === "failed to fetch",
   });
 
   if (chatsQuery.isLoading && !chatsQuery.data) {
-    return (
-      <div>
-        <Spinner />
-      </div>
-    );
+    return null;
   }
 
   const chats = Array.isArray(chatsQuery.data)
