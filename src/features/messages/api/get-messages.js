@@ -96,7 +96,7 @@ export const getMessages = async (chatId, cursor) => {
 export const getInfiniteMessagesQueryOptions = (chatId) =>
   infiniteQueryOptions({
     initialPageParam: null,
-    queryKey: ["messages", chatId],
+    queryKey: ["chats", chatId, "messages"],
     queryFn: ({ pageParam: cursorHref }) => getMessages(chatId, cursorHref),
     select: (data) => ({
       pages: [...data.pages].reverse(),
