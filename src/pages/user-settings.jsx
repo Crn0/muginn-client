@@ -4,6 +4,7 @@ import { RxExit } from "react-icons/rx";
 
 import { paths } from "../configs";
 import { useLogout } from "../lib";
+import { chatSocket } from "../features/chats/socket";
 import { useUserSettingsTabStore } from "../stores";
 import { ErrorElement } from "../components/errors";
 import { SettingLayout } from "../components/layouts";
@@ -75,7 +76,12 @@ export default function UserSettingsPage() {
   const navigate = useNavigate();
 
   const logout = useLogout({
-    onSuccess: () => navigate(paths.login.getHref({ redirectTo: null }), { replace: true }),
+    onSuccess: () => {
+      if (chatSocket.connected) {
+        chatSocket.disconnect();
+      }
+      navigate(paths.login.getHref({ redirectTo: null }), { replace: true });
+    },
   });
 
   const leftTab = useUserSettingsTabStore((s) => s.leftTab);

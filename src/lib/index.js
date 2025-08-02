@@ -13,3 +13,5 @@ export { default as policies } from "./policies";
 export { default as useAuthorization } from "./use-authorization";
 export { default as Authorization } from "./authorization";
 export { default as hasTouchSupport } from "./has-touch-support";
+export { default as createSocket } from "./create-socket";
+export { default as debug } from "./debug";

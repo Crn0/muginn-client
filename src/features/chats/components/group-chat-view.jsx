@@ -1,12 +1,15 @@
 import { useParams } from "react-router-dom";
 
 import { useChat } from "../api/get-chat";
+import { useChatSocket } from "../hooks";
 import { ChatLayout } from "../../../components/layouts";
 import Messages from "../../messages/components/messages";
 
 export default function GroupChatView() {
   const { chatId } = useParams();
   const { data: chat } = useChat(chatId);
+
+  useChatSocket(chat?.id);
 
   if (!chat) {
     return (
