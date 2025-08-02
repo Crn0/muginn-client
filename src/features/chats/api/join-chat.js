@@ -12,7 +12,7 @@ export const joinGroupChat = async ({ chatId }) => {
     })
   );
 
-  if (error.code === 404) {
+  if (error?.code === 404) {
     throw new ValidationError({
       error: error.message,
       fields: [
