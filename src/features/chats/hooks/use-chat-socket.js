@@ -27,6 +27,8 @@ export default function useChatSocket(chatId) {
 
     chatSocket.emit(CHAT_JOIN, chatId);
 
+    chatSocket.on("connect_error", (e) => debug(e));
+
     return () => {
       debug(`user disconnecting to chat ${chatId}`);
       chatSocket.off(roomEvent, handleMessage);
