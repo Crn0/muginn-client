@@ -28,5 +28,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "typings.d.ts", "vite-env.d.ts"]
+  "include": ["src", "typings.d.ts", "vite-env.d.ts", "test/setup/setup.ts"]
 }
