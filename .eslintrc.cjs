@@ -7,6 +7,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
+    "plugin:import/typescript",
     "prettier",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
@@ -47,5 +48,6 @@ module.exports = {
         specialLink: ["to"],
       },
     ],
+    "import/prefer-default-export": "off",
   },
 };
