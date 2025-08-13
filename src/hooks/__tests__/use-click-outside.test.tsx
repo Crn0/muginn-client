@@ -3,11 +3,11 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import useClickOutside from "../use-click-outside";
+import { useClickOutside } from "@/hooks/use-click-outside";
 
 function TestComponent() {
   const [isOpen, setIsOpen] = useState(true);
-  const ref = useRef();
+  const ref = useRef(null);
 
   useClickOutside(ref, null, isOpen, () => setIsOpen(false));
 
@@ -28,7 +28,7 @@ describe("useClickOutside hook", () => {
   it("should close the dialog when clicking outside", async () => {
     render(<TestComponent />);
 
-    const dialog = screen.queryByTestId("dialog");
+    const dialog = screen.getByTestId("dialog");
 
     await userEvent.click(dialog);
 

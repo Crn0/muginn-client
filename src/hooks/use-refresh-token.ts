@@ -1,10 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 
-import { getAuthUserQueryOptions, refreshToken, tryCatch } from "../lib";
-import { useAuthStore, getIsRefreshingToken } from "../stores";
+import { getAuthUserQueryOptions, refreshToken, tryCatch } from "@/lib";
+import { useAuthStore, getIsRefreshingToken } from "@/stores";
 
-export default function useRefreshToken() {
+export const useRefreshToken = () => {
   const queryClient = useQueryClient();
 
   const setToken = useAuthStore((state) => state.setToken);
@@ -56,4 +56,4 @@ export default function useRefreshToken() {
     () => ({ isRefreshingToken, isSuccess, isPending, isError, error, refresh }),
     [error, isSuccess, isError, isPending, isRefreshingToken, refresh]
   );
-}
+};
