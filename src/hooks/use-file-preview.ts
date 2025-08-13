@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import imageCompression from "browser-image-compression";
+import imageCompression, { type Options } from "browser-image-compression";
 
-export default function useFilePreview(
-  options = {
+export const useFilePreview = (
+  options: Options = {
     maxSizeMB: 1,
     maxWidthOrHeight: 64,
     useWebWorker: true,
-    signal: null,
+    signal: undefined,
     maxIteration: 10,
     fileType: "",
     initialQuality: 0,
     alwaysKeepResolution: false,
   }
-) {
-  const prevFile = useRef(null);
-  const urlsToRevoke = useMemo(() => [], []);
+) => {
+  const prevFile = useRef<File | null>(null);
+  const urlsToRevoke = useMemo<string[]>(() => [], []);
 
   const [file, setFile] = useState(null);
 
-  const [objectUrl, setObjectUrl] = useState(null);
-  const [images, setImages] = useState([]);
+  const [objectUrl, setObjectUrl] = useState<string | null>(null);
+  const [images, setImages] = useState<{ url: string; size: number; type: string }[]>([]);
 
   const reset = useCallback(() => {
     prevFile.current = null;
@@ -55,7 +55,7 @@ export default function useFilePreview(
 
     setObjectUrl(url);
 
-    handleCompression(file).then((res) => {
+    handleCompression().then((res) => {
       setImages((prev) => {
         const lowResUrl = URL.createObjectURL(res);
 
@@ -67,7 +67,7 @@ export default function useFilePreview(
 
         urlsToRevoke.push(lowResUrl);
 
-        return prev.concat(image);
+        return [...prev, image];
       });
     });
   }, [file, objectUrl, options, urlsToRevoke]);
@@ -79,4 +79,4 @@ export default function useFilePreview(
     [reset]
   );
   return state;
-}
+};

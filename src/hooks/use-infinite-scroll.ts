@@ -1,15 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export default function useInfiniteScroll(
-  loadMore,
-  isLoading,
-  canLoadMore,
-  options = { root: null, rootMargin: "0px", threshold: 0, delay: 0 }
-) {
-  const observer = useRef(null);
-  const [nodeRef, setNode] = useState(null);
+export interface UseInfiniteScrollOptions extends IntersectionObserverInit {
+  delay: number;
+}
 
-  const setNodeRef = useCallback((node) => {
+export const useInfiniteScroll = (
+  loadMore: () => void,
+  isLoading: boolean,
+  canLoadMore: boolean,
+  options: UseInfiniteScrollOptions = { root: null, rootMargin: "0px", threshold: 0, delay: 0 }
+) => {
+  const observer = useRef<IntersectionObserver | null>(null);
+  const [nodeRef, setNode] = useState<HTMLElement | null>(null);
+
+  const setNodeRef = useCallback((node: HTMLElement | null) => {
     setNode(node);
   }, []);
 
@@ -41,4 +45,4 @@ export default function useInfiniteScroll(
   }, [isLoading, canLoadMore, loadMore, options, nodeRef]);
 
   return setNodeRef;
-}
+};

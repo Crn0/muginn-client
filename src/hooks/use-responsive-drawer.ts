@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export default function useResponsiveDrawer(screenSize) {
+export const useResponsiveDrawer = (screenSize: number) => {
   const [isAutoDrawer, setIsAutoDrawer] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [clientWidth, setClientWidth] = useState(window.innerWidth);
@@ -48,4 +48,4 @@ export default function useResponsiveDrawer(screenSize) {
   }, [clientWidth, isAutoDrawer, isDrawerOpen, screenSize]);
 
   return state;
-}
+};

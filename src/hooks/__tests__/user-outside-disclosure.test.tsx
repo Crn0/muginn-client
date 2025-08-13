@@ -3,11 +3,11 @@ import { describe, it, expect } from "vitest";
 import { act, render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import useDisclosureWithClickOutside from "../use-disclosure-click-outside";
+import { useDisclosureWithClickOutside } from "@/hooks/use-disclosure-click-outside";
 
 function TestComponent() {
   const dialogRef = useRef(null);
-  const { isOpen, open, close } = useDisclosureWithClickOutside(true, dialogRef);
+  const { isOpen, open, close } = useDisclosureWithClickOutside(true, dialogRef, null);
 
   return (
     <div>
