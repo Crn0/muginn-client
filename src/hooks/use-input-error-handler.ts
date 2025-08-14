@@ -6,12 +6,12 @@ import type { ValidationError } from "@/errors";
 type ServerError = InstanceType<typeof ValidationError>;
 
 interface UseInputErrorHandlerOptions {
-  formError: FieldError;
-  serverError: ServerError;
+  formError: FieldError | null;
+  serverError: ServerError | null;
   setError: (name: string, error: ErrorOption) => void;
 }
 
-const invalidCredential = (error: Error) =>
+const invalidCredential = (error: Error | null) =>
   error?.message === "Invalid user credentials"
     ? { code: "invalid_credentials", message: error.message }
     : null;
