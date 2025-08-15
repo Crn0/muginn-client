@@ -21,20 +21,14 @@ export function useInputErrorHandler(
   { setError, formError, serverError }: UseInputErrorHandlerOptions
 ) {
   const clientSide = formError;
-  const serverSide = serverError;
   const fieldError =
     serverError?.fields?.find?.((e) => e.path.includes(field)) || invalidCredential(serverError);
 
-  if (fieldError) {
-    serverSide.isServerError = true;
-    serverSide.message = fieldError.message;
-  }
-
   useEffect(() => {
-    if (serverSide?.isServerError && fieldError) {
-      setError(field, { type: fieldError.code, message: serverSide.message });
+    if (fieldError) {
+      setError(field, { type: fieldError.code, message: fieldError.message });
     }
   }, [setError, field]);
 
-  return clientSide || serverSide;
+  return clientSide || fieldError;
 }
