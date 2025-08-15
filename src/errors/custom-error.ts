@@ -1,6 +1,7 @@
 import { ApiError } from "./api-error";
 import { AuthError } from "./auth-error";
 import { InvalidError } from "./invalid-error";
+import { RedirectError } from "./redirect-error";
 import { ValidationError } from "./validation-error";
 
 export interface ICustomError extends Error {
@@ -32,6 +33,10 @@ export class CustomError extends Error implements ICustomError {
 
   isInvalidError(): this is InvalidError {
     return this instanceof InvalidError;
+  }
+
+  isRedirectError(): this is RedirectError {
+    return this instanceof RedirectError;
   }
 
   isValidationError(): this is ValidationError {
