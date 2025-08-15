@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { paths } from "@/configs";
 import { useAuthStore } from "@/stores";
 import { useGetUser } from "@/lib";
-import { useRefreshToken } from "@/lib";
+import { useRefreshToken } from "./use-refresh-token";
 
 export const useSilentLogin = () => {
   const [searchParams] = useSearchParams();
