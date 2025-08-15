@@ -1,8 +1,7 @@
-import PropTypes from "prop-types";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 import { paths } from "../../configs";
-import { Link } from "../ui/link";
+import { Link } from "@/components/ui/link";
 
 export default function NotFound({
   title = "Page Not Found",
@@ -19,8 +18,3 @@ export default function NotFound({
     </div>
   );
 }
-
-NotFound.propTypes = {
-  title: PropTypes.string,
-  message: PropTypes.string,
-};
