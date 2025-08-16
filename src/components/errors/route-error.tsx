@@ -1,4 +1,4 @@
-import type { CustomError } from "@/errors/custom-error";
+import type { CustomError } from "@/errors";
 import { useRouteError } from "react-router-dom";
 
 export default function RouteErrorElement() {
