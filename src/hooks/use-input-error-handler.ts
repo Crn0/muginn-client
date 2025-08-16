@@ -1,34 +1,35 @@
 import { useEffect } from "react";
-import type { FieldError, ErrorOption } from "react-hook-form";
 
-import type { ValidationError } from "@/errors";
+import type { ErrorOption } from "react-hook-form";
+
+import { ValidationError } from "@/errors";
 
 type ServerError = InstanceType<typeof ValidationError>;
 
 interface UseInputErrorHandlerOptions {
-  formError: FieldError | null;
   serverError: ServerError | null;
   setError: (name: string, error: ErrorOption) => void;
 }
 
-const invalidCredential = (error: Error | null) =>
-  error?.message === "Invalid user credentials"
-    ? { code: "invalid_credentials", message: error.message }
-    : null;
+const isInvalidCredentials = (
+  message: string | undefined
+): message is "invalid user credentials" => {
+  return (message as "invalid user credentials")?.toLowerCase() === "invalid user credentials";
+};
 
 export function useInputErrorHandler(
   field: string,
-  { setError, formError, serverError }: UseInputErrorHandlerOptions
+  { setError, serverError }: UseInputErrorHandlerOptions
 ) {
-  const clientSide = formError;
-  const fieldError =
-    serverError?.fields?.find?.((e) => e.path.includes(field)) || invalidCredential(serverError);
+  const fieldError = serverError?.fields?.find?.((e) => e.path.includes(field));
 
   useEffect(() => {
+    if (isInvalidCredentials(serverError?.message) && field === "username") {
+      setError(field, { type: "invalid_credentials", message: serverError.message });
+    }
+
     if (fieldError) {
       setError(field, { type: fieldError.code, message: fieldError.message });
     }
-  }, [setError, field]);
-
-  return clientSide || fieldError;
+  }, [setError, serverError, fieldError, field]);
 }
