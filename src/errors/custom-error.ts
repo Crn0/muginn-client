@@ -1,9 +1,3 @@
-import { ApiError } from "./api-error";
-import { AuthError } from "./auth-error";
-import { InvalidError } from "./invalid-error";
-import { RedirectError } from "./redirect-error";
-import { ValidationError } from "./validation-error";
-
 export interface ICustomError extends Error {
   code: number;
   response?: Response;
@@ -23,24 +17,8 @@ export class CustomError extends Error implements ICustomError {
   private _isOperational: boolean;
   private _response?: Response;
 
-  isApiError(): this is ApiError {
-    return this instanceof ApiError;
-  }
-
-  isAuthError(): this is AuthError {
-    return this instanceof AuthError;
-  }
-
-  isInvalidError(): this is InvalidError {
-    return this instanceof InvalidError;
-  }
-
-  isRedirectError(): this is RedirectError {
-    return this instanceof RedirectError;
-  }
-
-  isValidationError(): this is ValidationError {
-    return this instanceof ValidationError;
+  is<Base>(base: { new (...args: any[]): Base }): this is Base {
+    return this instanceof base;
   }
 
   constructor({ name, isOperational, message, code, response }: ICustomErrorOptions) {
