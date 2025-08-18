@@ -1,9 +1,11 @@
-import { RouterProvider } from "react-router-dom";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, type RouterProviderProps } from "react-router-dom";
+import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-export default function setupRouter(router, queryClient) {
+type TRouter = RouterProviderProps["router"];
+
+export const setupRouter = (router: TRouter, queryClient: QueryClient) => {
   return {
     user: userEvent.setup(),
     ...render(
@@ -12,4 +14,4 @@ export default function setupRouter(router, queryClient) {
       </QueryClientProvider>
     ),
   };
-}
+};

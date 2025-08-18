@@ -1,26 +1,30 @@
-import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 
-import { env, paths } from "../../../configs";
-import { cn } from "../../../utils";
-import { useRegister } from "../../../lib/auth";
-import { registerSchema } from "../schema";
-import { FieldSet, Form, Input } from "../../../components/ui/form/index";
-import { Button } from "../../../components/ui/button";
-import { Anchor, Link } from "../../../components/ui/link";
+import { env, paths } from "@/configs";
+import { cn } from "@/utils";
 
-const version = `v${env.getValue("apiVersion")}`;
+import { useRegister, registerSchema, type TRegister } from "@/lib/auth";
 
-const GOOGLE_URL = `${env.getValue("serverUrl")}/api/${version}/auth/google`;
+import { FieldSet, Form, Input } from "@/components/ui/form/index";
+import { Button } from "@/components/ui/button";
+import { Anchor, Link } from "@/components/ui/link";
 
-export default function RegisterForm({ onSuccess }) {
+export interface RegistterFormProps {
+  onSuccess: (...args: any[]) => void;
+}
+
+const version = `v${env.API_VERSION}`;
+
+const GOOGLE_URL = `${env.SERVER_URL}/api/${version}/auth/google`;
+
+export function RegisterForm({ onSuccess }: RegistterFormProps) {
   const [searchParams] = useSearchParams();
   const register = useRegister({ onSuccess });
 
   const redirectTo = searchParams.get("redirectTo");
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: TRegister) => {
     register.mutate(data);
   };
 
@@ -116,7 +120,3 @@ export default function RegisterForm({ onSuccess }) {
     </Form>
   );
 }
-
-RegisterForm.propTypes = {
-  onSuccess: PropTypes.func.isRequired,
-};

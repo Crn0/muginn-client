@@ -2,21 +2,28 @@ import { createMemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { faker } from "@faker-js/faker";
 
-import setupRouter from "./mocks/utils/setup-router";
+import { setupRouter } from "./mocks/utils/setup-router";
 import { paths } from "../../configs/index";
 import { createUser } from "../../../test/utils";
 import { getAuthUserQueryOptions } from "../../lib/auth";
 import { setToken } from "../../stores";
 import RegisterPage from "../register";
-import DashBoard, { dashBoardLoader } from "./mocks/dash-board";
+import { DashBoard, dashBoardLoader } from "./mocks/dash-board";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 const routes = [
   {
     path: paths.protected.dashboard.me.getHref(),
-    loader: dashBoardLoader,
+    loader: dashBoardLoader(queryClient),
     element: <DashBoard />,
   },
   {
@@ -139,7 +146,23 @@ describe("Register Page", () => {
 
       setToken("token");
 
-      queryClient.setQueryData(getAuthUserQueryOptions().queryKey, { username: valid.username });
+      queryClient.setQueryData(getAuthUserQueryOptions().queryKey, {
+        id: faker.string.uuid(),
+        email: null,
+        username: valid.username,
+        status: "Offline",
+        accountLevel: 1,
+        lastSeenAt: null,
+        openIds: [],
+        joinedAt: new Date().toISOString(),
+        updatedAt: null,
+        profile: {
+          displayName: valid.displayName,
+          aboutMe: null,
+          avatar: null,
+          backgroundAvatar: null,
+        },
+      });
 
       const router = createMemoryRouter(routes, {
         initialEntries: ["/register"],

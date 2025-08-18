@@ -1,13 +1,22 @@
 import { faker } from "@faker-js/faker";
 
-export default function createChats({
+interface CreateChatsOptions {
+  ownerId: string;
+  nameTemplate?: string;
+  avatar?: string;
+  type: "GroupChat" | "DirectChat";
+  isPrivate?: boolean;
+  length?: number;
+}
+
+export const createChats = ({
   ownerId,
   nameTemplate,
   avatar,
   type,
   isPrivate = false,
   length = 5,
-}) {
+}: CreateChatsOptions) => {
   if (type === "DirectChat") {
     return Array.from({ length }).map(() => ({
       id: faker.string.uuid(),
@@ -30,29 +39,4 @@ export default function createChats({
     type: "GroupChat",
     avatar: avatar ?? null,
   }));
-}
-
-// [
-//   {
-//     id: faker.string.uuid(),
-//     name: "test_group_chat",
-//     isPrivate: false,
-//     createdAt: new Date().toISOString(),
-//     updatedAt: null,
-//     type: "GroupChat",
-//     avatar: null,
-//     ownerId: "0197a596-301b-7052-a071-3049fe6124aa",
-//   },
-// ];
-
-// export const directChats = [
-//   {
-//     id: "0197a596-31eb-7330-857c-9d919e0630fe",
-//     name: null,
-//     isPrivate: true,
-//     createdAt: "2025-06-25T05:36:13.291Z",
-//     updatedAt: null,
-//     type: "DirectChat",
-//     avatar: null,
-//   },
-// ];
+};

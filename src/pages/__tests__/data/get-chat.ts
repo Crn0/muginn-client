@@ -1,6 +1,6 @@
 import { db } from "../../../../test/mocks";
 
-export default (username) =>
+export const getChats = (username: string) =>
   db.chat.findFirst({
     where: {
       owner: {

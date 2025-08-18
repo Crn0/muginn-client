@@ -1,27 +1,30 @@
-import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 
-import { env, paths } from "../../../configs";
-import { cn } from "../../../utils";
-import { useLogin } from "../../../lib/auth";
-import { loginSchema } from "../schema";
-import { FieldSet, Form, Input } from "../../../components/ui/form/index";
-import { Button } from "../../../components/ui/button";
-import { Link, Anchor } from "../../../components/ui/link";
+import { env, paths } from "@/configs";
+import { cn } from "@/utils";
 
-const version = `v${env.getValue("apiVersion")}`;
+import { useLogin, loginSchema, type TLogin } from "@/lib/auth";
+import { FieldSet, Form, Input } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Link, Anchor } from "@/components/ui/link";
 
-const GOOGLE_URL = `${env.getValue("serverUrl")}/api/${version}/auth/google`;
+export interface LoginFormProps {
+  onSuccess: (...args: any[]) => void;
+}
 
-export default function LoginForm({ onSuccess }) {
+const version = `v${env.API_VERSION}`;
+
+const GOOGLE_URL = `${env.SERVER_URL}/api/${version}/auth/google`;
+
+export function LoginForm({ onSuccess }: LoginFormProps) {
   const [searchParams] = useSearchParams();
 
   const login = useLogin({ onSuccess });
 
   const redirectTo = searchParams.get("redirectTo");
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: TLogin) => {
     login.mutate(data);
   };
   const onFocus = () => {
@@ -61,6 +64,7 @@ export default function LoginForm({ onSuccess }) {
             label='PASSWORD'
             className='sm:w-md sm:p-2'
             onFocus={onFocus}
+            serverError={login?.error}
             required
           />
         </div>
@@ -109,7 +113,3 @@ export default function LoginForm({ onSuccess }) {
     </Form>
   );
 }
-
-LoginForm.propTypes = {
-  onSuccess: PropTypes.func.isRequired,
-};

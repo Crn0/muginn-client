@@ -3,20 +3,24 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import { QueryClient } from "@tanstack/react-query";
 
-import setupRouter from "./mocks/utils/setup-router";
+import { setupRouter } from "./mocks/utils/setup-router";
 import { paths } from "../../configs/index";
 import LoginPage from "../login";
-import DashBoard, { dashBoardLoader } from "./mocks/dash-board";
+import { DashBoard, dashBoardLoader } from "./mocks/dash-board";
 import { setToken } from "../../stores";
 import { generateAccessToken } from "../../../test/utils";
 
 function ErrorBoundary() {
-  const error = useRouteError();
+  const error = useRouteError() as Error;
 
   return <div>{error.message}</div>;
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+  },
+});
 
 const routes = [
   {
@@ -139,6 +143,10 @@ describe("Login page", () => {
       await user.type(screen.getByLabelText("PASSWORD"), valid.password);
 
       await user.click(screen.getByRole("button", { name: "Log in" }));
+
+      await waitFor(() => {
+        expect(screen.getByTestId("spinner")).toBeInTheDocument();
+      });
 
       await waitFor(() => {
         expect(document.cookie.includes("refreshToken")).toBeTruthy();
