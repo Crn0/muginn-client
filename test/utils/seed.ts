@@ -1,4 +1,4 @@
-import { db } from "../mocks";
+import { db, GetEntity } from "../mocks";
 
 export const seedUser = () => {
   const users = [
@@ -23,8 +23,10 @@ export const seedUser = () => {
 
 export const seedChat = () => {
   const permissions = db.permission.findMany({
-    name: {
-      in: ["send_message", "view_chat"],
+    where: {
+      name: {
+        in: ["send_message", "view_chat"],
+      },
     },
   });
 
@@ -34,7 +36,7 @@ export const seedChat = () => {
         equals: ".crno.",
       },
     },
-  });
+  }) as GetEntity<"user">;
 
   const chat = db.chat.create({
     owner: user,
