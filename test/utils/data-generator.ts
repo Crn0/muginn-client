@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import jwt from "jsonwebtoken";
-import { db } from "../mocks";
+
+import { db, type GetEntity } from "../mocks";
 
 import { env } from "../../src/configs";
 
@@ -29,8 +30,13 @@ export const createUser = () => {
   return Object.freeze({ displayName, username, password });
 };
 
-export const createChat = (data) => {
-  let chat;
+export const createChat = (data: {
+  name: string;
+  ownerId: string;
+  type: string;
+  memberIds: string[];
+}) => {
+  let chat: GetEntity<"chat">;
 
   const user = db.user.findFirst({
     where: {
@@ -38,11 +44,13 @@ export const createChat = (data) => {
         equals: data.ownerId,
       },
     },
-  });
+  }) as GetEntity<"user">;
 
   const permissions = db.permission.findMany({
-    name: {
-      in: ["send_message", "view_chat"],
+    where: {
+      name: {
+        in: ["send_message", "view_chat"],
+      },
     },
   });
 
@@ -72,7 +80,7 @@ export const createChat = (data) => {
       isPrivate: true,
     });
 
-    const users = db.user.findMany({ where: { id: { in: [data.memberIds] } } });
+    const users = db.user.findMany({ where: { id: { in: data.memberIds } } });
 
     const roles = [
       db.role.create({
@@ -93,8 +101,8 @@ export const createChat = (data) => {
   return chat;
 };
 
-export const generateAccessToken = (username) => {
-  const secret = env.getValue("tokenSecret");
+export const generateAccessToken = (username: string) => {
+  const secret = env.TOKEN_SECRET;
 
   const user = db.user.findFirst({
     where: {

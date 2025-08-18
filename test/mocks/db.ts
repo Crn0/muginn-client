@@ -2,7 +2,21 @@
 import { factory, nullable, primaryKey, oneOf, manyOf } from "@mswjs/data";
 import { faker } from "@faker-js/faker";
 
-export default factory({
+export type DB = typeof db;
+
+export type GetEntity<Key extends keyof DB> = ReturnType<DB[Key]["create"]>;
+
+export type GetValue<Entity, Key extends keyof Entity> = Key extends keyof Entity
+  ? Entity[Key]
+  : never;
+
+export const db = factory({
+  image: {
+    id: primaryKey(faker.string.uuid),
+    url: String,
+    format: String,
+    size: Number,
+  },
   user: {
     id: primaryKey(faker.string.uuid),
     username: String,
@@ -12,7 +26,7 @@ export default factory({
     createdAt: () => new Date().toISOString(),
     updatedAt: nullable(Date),
     lastSeenAt: nullable(Date),
-    status: "Online",
+    status: String,
     profile: oneOf("profile"),
   },
   profile: {
@@ -21,14 +35,23 @@ export default factory({
     aboutMe: nullable(String),
     createdAt: () => new Date().toISOString(),
     updatedAt: nullable(Date),
-    avatar: null,
-    backgroundAvatar: null,
+    avatar: nullable({
+      url: String,
+      images: manyOf("image"),
+    }),
+    backgroundAvatar: nullable({
+      url: String,
+      images: manyOf("image"),
+    }),
     user: oneOf("user"),
   },
   chat: {
     id: primaryKey(faker.string.uuid),
     name: nullable(String),
-    avatar: null,
+    avatar: nullable({
+      url: String,
+      images: manyOf("image"),
+    }),
     isPrivate: Boolean,
     type: String,
     owner: nullable(oneOf("user")),
@@ -46,7 +69,7 @@ export default factory({
     members: manyOf("userOnChat"),
     permissions: manyOf("permission"),
     createdAt: () => new Date().toISOString(),
-    updatedAt: nullable(Date),
+    updatedAt: nullable(Date, { defaultsToNull: true }),
   },
   permission: {
     id: primaryKey(faker.string.uuid),
@@ -54,7 +77,7 @@ export default factory({
     members: manyOf("userOnChat"),
     roles: manyOf("role"),
     createdAt: () => new Date().toISOString(),
-    updatedAt: nullable(Date),
+    updatedAt: nullable(Date, { defaultsToNull: true }),
   },
   userOnChat: {
     id: primaryKey(faker.string.uuid),
@@ -62,6 +85,6 @@ export default factory({
     chat: oneOf("chat"),
     roles: manyOf("role"),
     joinedAt: () => new Date().toISOString(),
-    mutedUntil: nullable(new Date().toDateString(), { defaultsToNull: true }),
+    mutedUntil: nullable(Date, { defaultsToNull: true }),
   },
 });

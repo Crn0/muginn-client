@@ -5,7 +5,7 @@
  * overwrite method. `jest.fn()` mock functions can be passed here if the goal is to not only
  * mock the intersection observer, but its methods.
  */
-export default function setupIntersectionObserverMock({
+export const setupIntersectionObserverMock = ({
   root = null,
   rootMargin = "",
   thresholds = [],
@@ -13,8 +13,18 @@ export default function setupIntersectionObserverMock({
   observe = () => null,
   takeRecords = () => [],
   unobserve = () => null,
-} = {}) {
-  class MockIntersectionObserver {
+} = {}) => {
+  class MockIntersectionObserver implements IntersectionObserver {
+    root: Element | Document | null;
+    rootMargin: string;
+    thresholds: readonly number[];
+    disconnect(): void {}
+    observe(target: Element): void {}
+    takeRecords(): IntersectionObserverEntry[] {
+      return [];
+    }
+    unobserve(target: Element): void {}
+
     constructor() {
       this.root = root;
       this.rootMargin = rootMargin;
@@ -37,4 +47,4 @@ export default function setupIntersectionObserverMock({
     configurable: true,
     value: MockIntersectionObserver,
   });
-}
+};

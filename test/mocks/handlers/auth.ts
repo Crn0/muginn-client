@@ -1,16 +1,29 @@
 import { http, HttpResponse } from "msw";
 import { faker } from "@faker-js/faker";
-import db from "../db";
+import { db } from "../db";
 import { env } from "../../../src/configs";
-import { networkDelay, tokenFactor } from "../utils";
+import { networkDelay, tokenFactory } from "../utils";
 
-const baseUrl = `${env.getValue("serverUrl")}/api/v${env.getValue("apiVersion")}/auth`;
-const tokenSecret = env.getValue("tokenSecret");
+const baseUrl = `${env.SERVER_URL}/api/v${env.API_VERSION}/auth`;
+const tokenSecret = env.TOKEN_SECRET;
+const Token = tokenFactory({ secret: tokenSecret, idGenerator: faker.string.uuid });
 
-const Token = tokenFactor({ secret: tokenSecret, idGenerator: faker.string.uuid });
+interface RegisterRequestBody {
+  username: string;
+  password: string;
+  displayName?: string;
+}
 
-export default [
-  http.post(`${baseUrl}/register`, async ({ request }) => {
+interface LoginRequestBody {
+  username: string;
+  password: string;
+}
+
+export const authHandlers = [
+  http.get("", (r) => {
+    r;
+  }),
+  http.post<any, RegisterRequestBody>(`${baseUrl}/register`, async ({ request }) => {
     try {
       await networkDelay();
 
@@ -55,7 +68,7 @@ export default [
       return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
     }
   }),
-  http.post(`${baseUrl}/login`, async ({ request }) => {
+  http.post<any, LoginRequestBody>(`${baseUrl}/login`, async ({ request }) => {
     await networkDelay();
 
     try {
@@ -76,8 +89,8 @@ export default [
         );
       }
 
-      const refreshToken = Token.refreshToken(user.id, "1");
-      const token = Token.accessToken(user.id, "5");
+      const refreshToken = Token.refreshToken(user.id, 1);
+      const token = Token.accessToken(user.id, 5);
 
       return HttpResponse.json(
         { token },
@@ -89,7 +102,10 @@ export default [
         }
       );
     } catch (e) {
-      return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+      return HttpResponse.json(
+        { message: e?.message ?? "Server Error" },
+        { status: e?.code ?? 500 }
+      );
     }
   }),
   http.post(`${baseUrl}/refresh-tokens`, async () => {
@@ -104,8 +120,8 @@ export default [
 
       const { sub } = verifiedToken;
 
-      const refreshToken = Token.refreshToken(sub, "1");
-      const token = Token.accessToken(sub, "5");
+      const refreshToken = Token.refreshToken(sub, 1);
+      const token = Token.accessToken(sub, 5);
 
       return HttpResponse.json(
         { token },
@@ -118,8 +134,8 @@ export default [
       );
     } catch (e) {
       return HttpResponse.json(
-        { message: e?.message || "Server Error" },
-        { status: e?.message ? 401 : 500 }
+        { message: e?.message ?? "Server Error" },
+        { status: e?.code ?? 500 }
       );
     }
   }),
