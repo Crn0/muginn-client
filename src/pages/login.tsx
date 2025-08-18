@@ -1,11 +1,11 @@
 import { ErrorBoundary } from "react-error-boundary";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { paths } from "../configs";
-import { useAuthStore } from "../stores";
-import { ErrorElement } from "../components/errors";
-import { AuthLayout } from "../components/layouts";
-import { LoginForm } from "../features/auth/components";
+import { paths } from "@/configs";
+import { useAuthStore } from "@/stores";
+import { ErrorElement } from "@/components/errors";
+import { AuthLayout } from "@/components/layouts";
+import { LoginForm } from "@/features/auth/components";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -16,9 +16,9 @@ export default function LoginPage() {
 
   const setToken = useAuthStore((state) => state.setToken);
 
-  const onSuccess = ({ token }) => {
+  const onSuccess = ({ token }: { token: string }) => {
     setToken(token);
-    navigate(redirectTo || paths.dashboard.me.getHref(), { replace: true });
+    navigate(redirectTo || paths.protected.dashboard.me.getHref(), { replace: true });
   };
 
   return (

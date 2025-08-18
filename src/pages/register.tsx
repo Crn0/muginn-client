@@ -1,10 +1,10 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { paths } from "../configs";
-import { ErrorElement } from "../components/errors";
-import { AuthLayout } from "../components/layouts";
-import { RegisterForm } from "../features/auth/components";
+import { paths } from "@/configs";
+import { ErrorElement } from "@/components/errors";
+import { AuthLayout } from "@/components/layouts";
+import { RegisterForm } from "@/features/auth/components";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
