@@ -1,15 +1,8 @@
 import z from "zod";
 
-const toCamelCase = (str) =>
-  str
-    .toLowerCase()
-    .split("_")
-    .map((v, i) => (i === 0 ? v : v[0].toUpperCase() + v.slice(1)))
-    .join("");
-
-const envMap = {};
-
 const initEnv = () => {
+  const env = Object.entries(import.meta.env);
+
   const EnvSchema = z.object({
     SERVER_URL: z.string().optional().default("http://localhost:3000"),
     SERVER_MOCK_API_PORT: z.string().optional().default("3000"),
@@ -18,9 +11,9 @@ const initEnv = () => {
     NODE_ENV: z.enum(["prod", "dev", "test"]).default("dev"),
   });
 
-  const env = Object.entries(import.meta.env);
-
-  const envVars = env.reduce((acc, curr) => {
+  const envVars = env.reduce<{
+    [key: string]: string;
+  }>((acc, curr) => {
     const [key, value] = curr;
     if (key.startsWith("VITE_")) {
       acc[key.replace("VITE_", "")] = value;
@@ -41,21 +34,7 @@ ${Object.entries(parsedEnv.error.flatten().fieldErrors)
     );
   }
 
-  Object.entries(parsedEnv.data).forEach(([key, value]) => {
-    const newKey = toCamelCase(key);
-    envMap[newKey] = value;
-  });
+  return parsedEnv.data;
 };
 
-const getValue = (key) => {
-  if (!Object.prototype.hasOwnProperty.call(envMap, key))
-    throw new Error(`Missing environment variable: ${key}`);
-
-  return envMap[key];
-};
-
-const getEnv = () => ({ ...envMap });
-
-initEnv();
-
-export { getValue, getEnv };
+export const env = initEnv();
