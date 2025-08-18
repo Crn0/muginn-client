@@ -1,9 +1,13 @@
-import PropTypes from "prop-types";
+import type { PropsWithChildren } from "react";
 import { GiRaven } from "react-icons/gi";
 
-import { useSilentLogin } from "../../hooks";
+import { useSilentLogin } from "@/hooks";
 
-export default function AuthLayout({ title, children }) {
+export interface AuthLayoutProps extends PropsWithChildren {
+  title: string;
+}
+
+export function AuthLayout({ title, children }: AuthLayoutProps) {
   useSilentLogin();
 
   return (
@@ -22,8 +26,3 @@ export default function AuthLayout({ title, children }) {
     </div>
   );
 }
-
-AuthLayout.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.element.isRequired,
-};
