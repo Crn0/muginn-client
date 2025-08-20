@@ -1,10 +1,10 @@
-import type { KeyboardEvent, PropsWithChildren } from "react";
+import type { KeyboardEvent, PropsWithChildren, ReactNode } from "react";
 
 import { ErrorMessage } from "./error-message";
 import { cn } from "../../../utils";
 
 export interface FileWrapperProps extends PropsWithChildren {
-  label: string;
+  label: ReactNode;
   className?: string;
   isRequired: boolean;
   errorMessage: string | undefined;
