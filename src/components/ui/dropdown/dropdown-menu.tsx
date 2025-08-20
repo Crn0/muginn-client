@@ -9,16 +9,18 @@ import {
 } from "react";
 
 import { cn } from "@/utils";
-import { useDisclosureWithClickOutside } from "@/hooks";
+import { useDisclosureWithClickOutside, type TDisclosure } from "@/hooks";
 import { DropDownMenuProvider } from "./context/dropdown-menu-context";
 
 export interface DropDownMenuProps extends PropsWithChildren {
   id: string;
   className: string;
-  renderButtonTrigger: (opts: {
-    triggerRef: RefObject<HTMLButtonElement>;
-    onClick: () => void;
-  }) => ReactNode;
+  renderButtonTrigger: (
+    opts: {
+      triggerRef: RefObject<HTMLButtonElement>;
+      onClick: () => void;
+    } & TDisclosure
+  ) => ReactNode;
 }
 
 export function DropDownMenu({
