@@ -6,11 +6,10 @@ import { Dialog } from "./dialog";
 import { Icon, type Iconkey } from "./icon";
 
 export interface ConfirmationDialogProps {
-  id: string;
   parentId: string;
   className?: string;
   title: string;
-  body?: string;
+  body?: ReactNode;
   cancelButtonText?: string;
   isDone: boolean;
   icon: Iconkey;
