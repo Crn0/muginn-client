@@ -1,6 +1,10 @@
-import PropTypes from "prop-types";
+import type { PropsWithChildren } from "react";
 
-export default function ChatLayout({ title, children }) {
+export interface ChatLayoutProps extends PropsWithChildren {
+  title: string;
+}
+
+export function ChatLayout({ title, children }: ChatLayoutProps) {
   return (
     <div className='flex flex-1 flex-col gap-2'>
       <header className='flex justify-between border border-slate-900 p-5'>
@@ -11,8 +15,3 @@ export default function ChatLayout({ title, children }) {
     </div>
   );
 }
-
-ChatLayout.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.element.isRequired,
-};
