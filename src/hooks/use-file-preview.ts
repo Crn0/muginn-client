@@ -16,7 +16,7 @@ export const useFilePreview = (
   const prevFile = useRef<File | null>(null);
   const urlsToRevoke = useMemo<string[]>(() => [], []);
 
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [images, setImages] = useState<{ url: string; size: number; type: string }[]>([]);
