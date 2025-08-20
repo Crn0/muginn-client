@@ -1,11 +1,11 @@
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 
 import { Label } from "./label";
 import { ErrorMessage } from "./error-message";
 import { cn } from "@/utils";
 
 export interface FieldWrapperProps extends PropsWithChildren {
-  label: string;
+  label: ReactNode;
   className?: string;
   isRequired: boolean;
   errorMessage: string | undefined;

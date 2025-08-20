@@ -12,7 +12,7 @@ export type TFileRef = HTMLInputElement;
 export interface FileProps extends ComponentPropsWithRef<"input"> {
   name: string;
   testId: string;
-  label: string;
+  label: ReactNode;
   className?: string;
   serverError: InstanceType<typeof ValidationError> | null;
   renderFieldButton?: () => ReactNode;

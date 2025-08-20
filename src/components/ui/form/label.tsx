@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentPropsWithRef } from "react";
+import { forwardRef, type ComponentPropsWithRef, type ReactNode } from "react";
 
 import { cn } from "@/utils";
 
@@ -6,7 +6,7 @@ export type TLabelRef = HTMLLabelElement;
 
 export interface LabelProps extends ComponentPropsWithRef<"label"> {
   testId?: string;
-  label: string;
+  label: ReactNode;
   className?: string;
   isRequired?: boolean;
 }

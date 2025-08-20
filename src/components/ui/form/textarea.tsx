@@ -1,4 +1,9 @@
-import { forwardRef, type ComponentPropsWithRef, type PropsWithChildren } from "react";
+import {
+  forwardRef,
+  type ComponentPropsWithRef,
+  type PropsWithChildren,
+  type ReactNode,
+} from "react";
 import { useFormContext, type FieldError } from "react-hook-form";
 import { cva } from "class-variance-authority";
 
@@ -18,7 +23,7 @@ export interface TextAreaProps
     ComponentPropsWithRef<"textarea">,
     VariantPropKeys<typeof textareaVariants> {
   name: string;
-  label: string;
+  label: ReactNode;
   className?: string;
   serverError: InstanceType<typeof ValidationError> | null;
 }
