@@ -13,7 +13,8 @@ import { useDisclosureWithClickOutside, type TDisclosure } from "@/hooks";
 import { Dialog } from "@/components/ui/dialog";
 
 export interface FormDialogProps<Schema, TFormDialogValues extends FieldValues>
-  extends PropsWithChildren {
+  extends PropsWithChildren,
+    UseFormProps {
   id: string;
   parentId: string;
   title: string;
@@ -24,7 +25,6 @@ export interface FormDialogProps<Schema, TFormDialogValues extends FieldValues>
   className?: string;
   done: boolean;
   initial?: boolean;
-  options?: UseFormProps;
 
   renderButtonTrigger: (opts: {
     triggerRef: RefObject<HTMLButtonElement>;
@@ -43,7 +43,6 @@ export function FormDialog<
   title,
   descriptions,
   schema,
-  options,
   onSubmit,
   renderButtonTrigger,
   renderButtonCancel,
@@ -52,6 +51,7 @@ export function FormDialog<
   className = "",
   initial = false,
   done = false,
+  ...options
 }: FormDialogProps<Schema, TFormDialogValues>) {
   const dialogRef = useRef(null);
   const triggerRef = useRef(null);
