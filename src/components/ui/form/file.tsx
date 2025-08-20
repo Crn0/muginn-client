@@ -70,7 +70,7 @@ export const File = forwardRef<TFileRef, FileProps>(
             name={name}
             className='h-0 w-0 cursor-none opacity-0'
             data-testid={testId}
-            aria-invalid={error ? "true" : "false"}
+            aria-invalid={errorMessage ? "true" : "false"}
             accept={accept}
             ref={setInputRefs(ref, inputRef)}
             onBlur={required ? rest.onBlur : () => {}}
