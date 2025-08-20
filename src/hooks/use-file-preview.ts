@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { Image } from "@/types";
 import imageCompression, { type Options } from "browser-image-compression";
 
 export const useFilePreview = (
@@ -19,7 +20,7 @@ export const useFilePreview = (
   const [file, setFile] = useState<File | null>(null);
 
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
-  const [images, setImages] = useState<{ url: string; size: number; type: string }[]>([]);
+  const [images, setImages] = useState<Image[]>([]);
 
   const reset = useCallback(() => {
     prevFile.current = null;
@@ -62,7 +63,7 @@ export const useFilePreview = (
         const image = {
           url: lowResUrl,
           size: res.size,
-          type: res.type.split("/")[1],
+          format: res.type.split("/")[1],
         };
 
         urlsToRevoke.push(lowResUrl);
