@@ -1,7 +1,7 @@
 import type { CustomError } from "@/errors";
 import { useRouteError } from "react-router-dom";
 
-export default function RouteErrorElement() {
+export function RouteErrorElement() {
   const error = useRouteError() as CustomError;
 
   return (
