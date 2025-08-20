@@ -5,7 +5,7 @@ import { UserAvatar } from "@/components/ui/image";
 
 export interface NameplatePreviewProps {
   username: string;
-  displayName?: string;
+  displayName: string | null;
   asset: TAsset;
   className?: string;
 }
