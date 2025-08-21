@@ -32,7 +32,11 @@ export const useFilePreview = (
   }, [urlsToRevoke]);
 
   const state = useMemo(
-    () => ({ setFile, reset, asset: { images, url: objectUrl } }),
+    () => ({
+      setFile,
+      reset,
+      asset: { images, url: objectUrl, type: images?.[0].type },
+    }),
     [images, objectUrl, reset]
   );
 
@@ -59,11 +63,13 @@ export const useFilePreview = (
     handleCompression().then((res) => {
       setImages((prev) => {
         const lowResUrl = URL.createObjectURL(res);
+        const format = res.type.split("/")[1];
 
-        const image = {
+        const image: Image = {
+          format,
           url: lowResUrl,
           size: res.size,
-          format: res.type.split("/")[1],
+          type: format === "epub" ? "Epub" : format === "pdf" ? "Pdf" : "Image",
         };
 
         urlsToRevoke.push(lowResUrl);
