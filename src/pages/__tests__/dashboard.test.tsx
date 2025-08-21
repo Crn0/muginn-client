@@ -4,16 +4,16 @@ import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 import { screen, waitFor, within } from "@testing-library/react";
 import { faker } from "@faker-js/faker";
 
-import { paths } from "../../configs/index";
-import { getAuthUserQueryOptions } from "../../lib/auth";
-import { getChatQueryOptions, getChatsQueryOptions } from "../../features/chats/api";
+import { paths } from "@/configs/index";
+import { getAuthUserQueryOptions } from "@/lib/auth";
+import { getChatQueryOptions, getChatsQueryOptions } from "@/features/chats/api";
 import { generateAccessToken } from "../../../test/utils/data-generator";
 import { createChats } from "./data";
-import { setToken } from "../../stores";
-import setupRouter from "./mocks/utils/setup-router";
-import DashBoard from "../dashboard";
-import GroupChatView from "../../features/chats/components/group-chat-view";
-import DashBoardMe from "../../features/dashboard/components/dashboard-me";
+import { setToken } from "@/stores";
+import { setupRouter } from "./mocks/utils/setup-router";
+import { GroupChatView } from "@/features/chats/components";
+import { DashBoardMe } from "@/features/dashboard/components";
+import { DashBoard } from "..";
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
@@ -24,7 +24,7 @@ const groupChat = createChats({
   length: 5,
 });
 
-const directChat = createChats({ type: "DirectChat", length: 5 });
+const directChat = createChats({ type: "DirectChat", length: 5, isPrivate: true, ownerId: "" });
 
 const chats = [...groupChat, ...directChat];
 
@@ -38,7 +38,7 @@ const routes = [
     ),
     children: [
       {
-        index: paths.protected.dashboard.me.path,
+        index: true,
         element: <DashBoardMe />,
       },
       {
@@ -59,9 +59,11 @@ beforeAll(() => {
     username: ".crno.",
     email: null,
     accountLevel: 1,
-    createdAt: new Date().toISOString(),
+    status: "Online",
+    joinedAt: new Date().toISOString(),
     updatedAt: null,
     lastSeenAt: new Date().toISOString(),
+    openIds: [],
     profile: {
       avatar: null,
       backgroundAvatar: null,
@@ -129,11 +131,12 @@ describe("Dashboard page", () => {
       const groupChatContainer = screen.getByTestId("group-chat-list");
 
       expect(groupChatContainer).toBeInTheDocument();
-
-      expect(screen.getByRole("heading", { level: 1, name: chat.name })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { level: 1, name: chat.name as string })
+      ).toBeInTheDocument();
       expect(screen.getByTestId("chat-drop-down-trigger")).toBeInTheDocument();
       expect(screen.getByRole("note")).toBeInTheDocument();
-      expect(screen.getByTestId("create-message-form")).toBeInTheDocument();
+      expect(screen.getByRole("form")).toBeInTheDocument();
     });
 
     it("should open the chat form dialog on open trigger click and close it on cancel trigger click", async () => {

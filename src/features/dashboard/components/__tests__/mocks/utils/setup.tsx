@@ -1,9 +1,12 @@
-import { RouterProvider } from "react-router-dom";
-import { QueryClientProvider } from "@tanstack/react-query";
+import type { JSXElementConstructor } from "react";
+import { RouterProvider, type RouterProviderProps } from "react-router-dom";
+import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-export function setupRouter(router, queryClient) {
+type TRouter = RouterProviderProps["router"];
+
+export function setupRouter(router: TRouter, queryClient: QueryClient) {
   return {
     user: userEvent.setup(),
     ...render(
@@ -14,7 +17,10 @@ export function setupRouter(router, queryClient) {
   };
 }
 
-export function renderComponent(Component, queryClient) {
+export function renderComponent(
+  Component: JSXElementConstructor<unknown>,
+  queryClient: QueryClient
+) {
   return {
     user: userEvent.setup(),
     ...render(

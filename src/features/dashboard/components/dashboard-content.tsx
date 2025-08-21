@@ -1,22 +1,24 @@
-import { Outlet, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Outlet, useParams } from "react-router-dom";
 
-import { hasTouchSupport } from "../../../lib";
-import { useChat } from "../../chats/api";
-import { useDashboardDrawer } from "../../../components/layouts/context";
-import { Spinner } from "../../../components/ui/spinner";
+import { hasTouchSupport } from "@/lib";
+import { getChatQueryOptions } from "@/features/chats/api";
+import { useDashboardDrawer } from "@/components/layouts/context";
+import { Spinner } from "@/components/ui/spinner";
 
-export default function DashboardContent() {
+export function DashboardContent() {
   const params = useParams();
 
-  const chatQuery = useChat(params.chatId, {
+  const chatQuery = useQuery({
+    ...getChatQueryOptions(params.chatId ?? ""),
     enabled: !!params.chatId && params.chatId !== "me",
   });
 
-  const drawer = useDashboardDrawer(DashboardContent);
+  const drawer = useDashboardDrawer();
 
   useEffect(() => {
-    if (chatQuery.data && hasTouchSupport() && drawer.isAutoDrawer) {
+    if (chatQuery.data && drawer.isAutoDrawer && hasTouchSupport()) {
       drawer.manual();
       drawer.close();
     }
