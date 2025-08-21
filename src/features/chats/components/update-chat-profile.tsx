@@ -21,14 +21,18 @@ import { Button } from "@/components/ui/button";
 import { ChatProfilePreview } from "@/components/ui/preview";
 import { Spinner } from "@/components/ui/spinner";
 
+const isAsset = (asset: any): asset is TAsset => {
+  return (asset as TAsset)?.url !== null;
+};
+
 const getAsset = (
   shouldRender: boolean,
-  previewAsset: { url: string | null; images: Image[] },
+  previewAsset: { url: string | null; images: Image[]; type: "Image" | "Pdf" | "Epub" },
   avatarAsset: TAsset
 ) => {
   if (!shouldRender) return null;
 
-  return previewAsset?.url ? previewAsset : avatarAsset;
+  return isAsset(previewAsset) ? (previewAsset satisfies TAsset) : avatarAsset;
 };
 
 function FormChildren({
@@ -43,7 +47,7 @@ function FormChildren({
   parentId: string;
   chat: TChat;
   memberCount: number;
-  serverError: InstanceType<typeof ValidationError>;
+  serverError: InstanceType<typeof ValidationError> | null;
   isPending: boolean;
   isSuccess: boolean;
   onReset: () => void;
@@ -163,7 +167,7 @@ export function UpdateChatProfile() {
 
   const chat = chatQuery.data;
 
-  const memberCount = membersQuery.data?.pages?.[0]?.memberCount;
+  const memberCount = membersQuery.data?.pages?.[0]?.memberCount as number;
 
   return (
     <div id={`chat-profile-${chat.id}`} className='grid flex-1 gap-5 p-2 sm:flex'>
