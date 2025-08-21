@@ -20,9 +20,6 @@ interface LoginRequestBody {
 }
 
 export const authHandlers = [
-  http.get("", (r) => {
-    r;
-  }),
   http.post<any, RegisterRequestBody>(`${baseUrl}/register`, async ({ request }) => {
     try {
       await networkDelay();
