@@ -8,11 +8,13 @@ import { tryCatch } from "@/lib/try-catch";
 import { errorHandler } from "@/lib/errors/error-handler";
 
 export type TAuthUser = z.infer<typeof authUserSchema>;
+export type TUserAvatar = z.infer<typeof avatarSchema>;
 
 export const authProviders = z.enum(["google"]);
 
 export const avatarSchema = z.object({
   url: z.string(),
+  type: z.enum(["Image", "Epub", "Pdf"]),
   images: z.array(
     z.object({
       url: z.string(),
