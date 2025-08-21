@@ -1,11 +1,11 @@
 import z, { type ZodIssue } from "zod";
-import { http, HttpResponse, PathParams } from "msw";
+import { http, HttpResponse, type PathParams } from "msw";
 
 import type { BaseResponse } from "./handlers.types";
 
-import { db, GetEntity, GetValue } from "../db";
+import { db, type GetEntity } from "../db";
 import { env } from "../../../src/configs";
-import { withAuth, withUser } from "./middleware";
+import { withAuth } from "./middleware";
 import { networkDelay } from "../utils";
 import { getAuthUser } from "./get-user";
 
@@ -105,11 +105,11 @@ export const chatHandlers = [
               ? {
                   id: chat.id,
                   name: chat.name ?? "",
-                  avatar: chat.avatar ?? null,
+                  avatar: null,
                   type: chat.type,
                   isPrivate: chat.isPrivate,
                   createdAt: chat.createdAt,
-                  updatedAt: chat.updatedAt,
+                  updatedAt: null,
                   ownerId: chat?.owner?.id ?? null,
                 }
               : null;
