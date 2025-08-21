@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 
 import type { Image, TAsset } from "@/types";
-import type { TUpdateChat, TChat } from "../api";
+import type { TUpdateChat, TChat, TChatAvatar } from "../api";
 
 import { ValidationError } from "@/errors";
 import { useFilePreview } from "@/hooks";
@@ -27,12 +27,12 @@ const isAsset = (asset: any): asset is TAsset => {
 
 const getAsset = (
   shouldRender: boolean,
-  previewAsset: { url: string | null; images: Image[]; type: "Image" | "Pdf" | "Epub" },
-  avatarAsset: TAsset
+  previewAsset: { url: string | null; images: Image[] },
+  avatarAsset: TChatAvatar | null
 ) => {
   if (!shouldRender) return null;
 
-  return isAsset(previewAsset) ? (previewAsset satisfies TAsset) : avatarAsset;
+  return isAsset(previewAsset) ? (previewAsset satisfies TChatAvatar) : avatarAsset;
 };
 
 function FormChildren({

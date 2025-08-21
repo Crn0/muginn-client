@@ -1,6 +1,6 @@
 import { FaCircle } from "react-icons/fa6";
 
-import type { TAsset } from "@/types";
+import type { TChatAvatar } from "@/features/chats/api";
 
 import { formatDate } from "@/utils";
 
@@ -8,7 +8,7 @@ import { GroupChatAvatar } from "@/components/ui/image";
 
 export interface ChatProfilePreviewProps {
   name: string;
-  avatar: TAsset;
+  avatar: TChatAvatar | null;
   memberCount: number;
   createdAt: string;
   className?: string;

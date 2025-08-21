@@ -14,12 +14,10 @@ export const authProviders = z.enum(["google"]);
 
 export const avatarSchema = z.object({
   url: z.string(),
-  type: z.literal("Image"),
   images: z.array(
     z.object({
       url: z.string(),
       format: z.string(),
-      type: z.literal("Image"),
       size: z.number(),
     })
   ),

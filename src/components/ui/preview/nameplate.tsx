@@ -1,12 +1,12 @@
-import type { TAsset } from "@/types";
+import type { TUserAvatar } from "@/lib";
 
-import { cn } from "../../../utils";
+import { cn } from "@/utils";
 import { UserAvatar } from "@/components/ui/image";
 
 export interface NameplatePreviewProps {
   username: string;
   displayName: string | null;
-  asset: TAsset;
+  asset: TUserAvatar | null;
   className?: string;
 }
 

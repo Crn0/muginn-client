@@ -1,6 +1,7 @@
 import { cva } from "class-variance-authority";
 
 import type { BaseImageProps } from "./images.types";
+import type { TChatAvatar } from "@/features/chats/api";
 import type { VariantPropKeys } from "@/types";
 
 import { cn } from "@/utils";
@@ -8,7 +9,7 @@ import { getAvatar } from "./get-avatar";
 import { LazyImage } from "./lazy-image";
 
 export interface GroupChatAvatarProps
-  extends BaseImageProps,
+  extends BaseImageProps<TChatAvatar | null>,
     VariantPropKeys<typeof avatarVariants> {}
 
 const avatarVariants = cva("", {

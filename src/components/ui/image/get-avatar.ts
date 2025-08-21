@@ -1,6 +1,8 @@
-import type { TAsset, TFallback } from "@/types";
+import type { TChatAvatar } from "@/features/chats/api";
+import type { TUserAvatar } from "@/lib";
+import type { TFallback } from "@/types";
 
-export const getAvatar = (asset: TAsset | null, fallback: TFallback) => {
+export const getAvatar = (asset: TChatAvatar | TUserAvatar | null, fallback: TFallback) => {
   if (!asset && !fallback) {
     return;
   }
