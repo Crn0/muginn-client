@@ -1,15 +1,14 @@
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 import { useInfiniteMessages } from "../api/get-messages";
-import Message from "./message";
-import { InfiniteScroll } from "../../../lib";
-import { Spinner } from "../../../components/ui/spinner";
+import { InfiniteScroll } from "@/lib";
+import { Spinner } from "@/components/ui/spinner";
+import { Message } from "./message";
 
-export default function MessageList({ chatId }) {
+export function MessageList({ chatId }: { chatId: string }) {
   const messagesQuery = useInfiniteMessages(chatId);
 
-  const [messageNode, setMessageNode] = useState(null);
+  const [messageNode, setMessageNode] = useState<HTMLElement | null>(null);
 
   const messages = messagesQuery.data?.pages?.flatMap((page) => page.messages) ?? [];
 
@@ -52,7 +51,3 @@ export default function MessageList({ chatId }) {
     </>
   );
 }
-
-MessageList.propTypes = {
-  chatId: PropTypes.string.isRequired,
-};

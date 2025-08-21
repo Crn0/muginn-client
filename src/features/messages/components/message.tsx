@@ -1,17 +1,18 @@
-import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 
-import { formatDate } from "../../../utils";
-import { NameplatePreview } from "../../../components/ui/preview";
-import { DropDownMenu } from "../../../components/ui/dropdown";
-import { Button } from "../../../components/ui/button";
-import DeleteMessage from "./delete-message";
-import MessageAttachments from "./message-attachments";
+import type { TMessage } from "../api";
 
-export default function Message({ message }) {
-  const ref = useRef();
-  const timeoutRef = useRef(null);
+import { formatDate } from "@/utils";
+import { NameplatePreview } from "@/components/ui/preview";
+import { DropDownMenu } from "@/components/ui/dropdown";
+import { Button } from "@/components/ui/button";
+import { DeleteMessage } from "./delete-message";
+import { MessageAttachments } from "./message-attachments";
+
+export function Message({ message }: { message: TMessage }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [isHover, setIsHover] = useState(false);
 
@@ -88,56 +89,3 @@ export default function Message({ message }) {
     </div>
   );
 }
-
-Message.propTypes = {
-  message: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    chatId: PropTypes.string.isRequired,
-    content: PropTypes.string,
-    createdAt: PropTypes.string,
-    updatedAt: PropTypes.string,
-    deletedAt: PropTypes.string,
-    user: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
-      profile: PropTypes.shape({
-        displayName: PropTypes.string,
-        avatar: PropTypes.shape({
-          url: PropTypes.string,
-          images: PropTypes.arrayOf(
-            PropTypes.shape({
-              url: PropTypes.string,
-              size: PropTypes.number,
-              format: PropTypes.string,
-            })
-          ),
-        }),
-        backgroundAvatar: PropTypes.shape({
-          url: PropTypes.string,
-          images: PropTypes.arrayOf(
-            PropTypes.shape({
-              url: PropTypes.string,
-              size: PropTypes.number,
-              format: PropTypes.string,
-            })
-          ),
-        }),
-      }),
-    }),
-    replyTo: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-    attachments: PropTypes.arrayOf(
-      PropTypes.shape({
-        url: PropTypes.string,
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            size: PropTypes.number,
-            format: PropTypes.string,
-          })
-        ),
-      })
-    ),
-  }),
-};

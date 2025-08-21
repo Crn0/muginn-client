@@ -2,11 +2,11 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import { createMessages } from "./mocks/data";
-import Message from "../message";
+import { Message } from "..";
 
 describe("Message Component", () => {
   it("should render the messages user avatar, created date, content and attachments", () => {
-    const message = createMessages({ length: 1 });
+    const message = createMessages({ length: 1 })[0];
 
     render(<Message message={message} />);
 

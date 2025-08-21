@@ -1,9 +1,19 @@
 import z from "zod";
 import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 
-import { ApiClient, tryCatch, errorHandler } from "../../../lib";
+import { CustomError, ValidationError } from "@/errors";
+import { ApiClient, tryCatch, errorHandler } from "@/lib";
 
-const messageSchema = z.object({
+export type TMessage = z.infer<typeof messageSchema>;
+export type TMessageList = TMessage[];
+export type MessagePagination = z.infer<typeof paginationSchema>;
+
+export type MessageResponse = {
+  messages: TMessageList;
+  pagination: MessagePagination;
+};
+
+export const messageSchema = z.object({
   id: z.string().uuid(),
   chatId: z.string().uuid(),
   content: z.string().nullable(),
@@ -18,15 +28,14 @@ const messageSchema = z.object({
       avatar: z
         .object({
           url: z.string(),
-          images: z
-            .array(
-              z.object({
-                url: z.string(),
-                size: z.number(),
-                format: z.string(),
-              })
-            )
-            .optional(),
+          type: z.enum(["Image", "Epub", "Pdf"]),
+          images: z.array(
+            z.object({
+              url: z.string(),
+              size: z.number(),
+              format: z.string(),
+            })
+          ),
         })
         .nullable(),
     }),
@@ -42,15 +51,13 @@ const messageSchema = z.object({
       id: z.string(),
       url: z.string(),
       type: z.enum(["Image", "Epub", "Pdf"]),
-      images: z
-        .array(
-          z.object({
-            url: z.string(),
-            size: z.number(),
-            format: z.string(),
-          })
-        )
-        .nullable(),
+      images: z.array(
+        z.object({
+          url: z.string(),
+          size: z.number(),
+          format: z.string(),
+        })
+      ),
     })
   ),
 });
@@ -65,8 +72,8 @@ export const messagesResponseSchema = z.object({
   pagination: paginationSchema,
 });
 
-export const getMessages = async (chatId, cursor) => {
-  const resource = !cursor ? `chats/${chatId}/messages` : `chats/${chatId}${cursor}`;
+export const getMessages = async (chatId: string, pageParam: string | null) => {
+  const resource = !pageParam ? `chats/${chatId}/messages` : `chats/${chatId}${pageParam}`;
 
   const { error, data: res } = await tryCatch(
     ApiClient.callApi(resource, {
@@ -82,22 +89,22 @@ export const getMessages = async (chatId, cursor) => {
   const parsedData = messagesResponseSchema.safeParse(resData);
 
   if (!parsedData.success) {
-    errorHandler(res, {
-      code: 422,
-      data: resData,
-      message: `Validation failed: ${parsedData.error.issues.length} errors detected in body`,
-      ...parsedData.error,
-    });
+    const parsedError = parsedData.error;
+
+    const message = `Validation failed: ${parsedError.issues.length} errors detected in user data`;
+    const zodError = new ValidationError({ message, fields: parsedError.issues });
+
+    throw errorHandler(zodError);
   }
 
   return parsedData.data;
 };
 
-export const getInfiniteMessagesQueryOptions = (chatId) =>
-  infiniteQueryOptions({
+export const getInfiniteMessagesQueryOptions = (chatId: string) =>
+  infiniteQueryOptions<MessageResponse, CustomError>({
     initialPageParam: null,
     queryKey: ["chats", chatId, "messages"],
-    queryFn: ({ pageParam: cursorHref }) => getMessages(chatId, cursorHref),
+    queryFn: ({ pageParam }) => getMessages(chatId, pageParam as string | null),
     select: (data) => ({
       pages: [...data.pages].reverse(),
       pageParams: [...data.pageParams].reverse(),
@@ -106,5 +113,5 @@ export const getInfiniteMessagesQueryOptions = (chatId) =>
     getPreviousPageParam: ({ pagination }) => pagination.prevHref,
   });
 
-export const useInfiniteMessages = (chatId) =>
+export const useInfiniteMessages = (chatId: string) =>
   useInfiniteQuery({ ...getInfiniteMessagesQueryOptions(chatId) });

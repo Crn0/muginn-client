@@ -1,19 +1,35 @@
-import PropTypes from "prop-types";
 import { useFormContext } from "react-hook-form";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { IoIosSend, IoMdAddCircleOutline } from "react-icons/io";
 
-import { CustomError } from "../../../errors";
-import { generateId } from "../../../lib";
-import { createMessageSchema, ACCEPTED_ATTACHMENTS_TYPES, MAX_CONTENT_LENGTH } from "../schema";
-import { useCreateMessage } from "../api/create-message";
-import { File as InputFile, Form, FormError, TextArea } from "../../../components/ui/form";
-import { FileAttachment } from "../../../components/ui/preview";
-import { Button } from "../../../components/ui/button";
+import { ValidationError } from "@/errors";
+import { generateId } from "@/lib";
+import {
+  useCreateMessage,
+  createMessageSchema,
+  ACCEPTED_ATTACHMENTS_TYPES,
+  MAX_CONTENT_LENGTH,
+  type TCreateMessage,
+} from "../api";
+import { File as InputFile, Form, ErrorMessage, TextArea } from "@/components/ui/form";
+import { FileAttachment } from "@/components/ui/preview";
+import { Button } from "@/components/ui/button";
 
 const TEXTAREA_MAX_LEN = MAX_CONTENT_LENGTH;
 
-function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending, isSuccess }) {
+function FormChildren({
+  selectedFiles,
+  setSelectedFiles,
+  serverError,
+  isPending,
+  isSuccess,
+}: {
+  selectedFiles: { id: string; file: File }[];
+  setSelectedFiles: Dispatch<SetStateAction<{ id: string; file: File }[]>>;
+  serverError: InstanceType<typeof ValidationError> | null;
+  isPending: boolean;
+  isSuccess: boolean;
+}) {
   const {
     reset,
     setValue,
@@ -21,7 +37,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
     formState: { errors },
   } = useFormContext();
 
-  const fileRef = useRef();
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isSuccess) {
@@ -56,7 +72,7 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
 
           <div>
             {errors?.attachments && (
-              <FormError errorMessage={errors.attachments.message} className='text-lg' />
+              <ErrorMessage message={errors.attachments.message?.toString()} className='text-lg' />
             )}
           </div>
         </>
@@ -69,12 +85,14 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
           className='flex h-9 items-center justify-center rounded-md text-3xl font-medium whitespace-nowrap text-white transition-colors hover:opacity-75 focus-visible:ring-4 focus-visible:ring-blue-500 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50'
           label={<IoMdAddCircleOutline />}
           accept={ACCEPTED_ATTACHMENTS_TYPES.join(",")}
-          onKeyDown={(e) => e.code === "Enter" && fileRef.current.click()}
+          pressKey={(e) => e.code === "Enter" && fileRef.current?.click()}
           onChange={(e) => {
-            const files = Array.from(e.target.files).map((file) => ({
-              file,
-              id: generateId(),
-            }));
+            const files = e.currentTarget.files
+              ? Array.from(e.currentTarget.files).map((file) => ({
+                  file,
+                  id: generateId(),
+                }))
+              : [];
 
             setValue(
               "attachments",
@@ -90,11 +108,11 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
         />
 
         <TextArea
-          type='text'
+          label={null}
           name='content'
           placeholder='Message'
           className='w-full'
-          rows='1'
+          rows={1}
           maxLength={TEXTAREA_MAX_LEN}
           variant='message'
           serverError={serverError}
@@ -114,25 +132,12 @@ function FormChildren({ selectedFiles, setSelectedFiles, serverError, isPending,
   );
 }
 
-export default function CreateMessage({ chatId }) {
+export function CreateMessage({ chatId }: { chatId: string }) {
   const createMessage = useCreateMessage(chatId);
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState<{ id: string; file: File }[]>([]);
 
-  const onSubmit = (data) => {
-    const formData = new FormData();
-
-    Object.entries(data).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        return value.forEach((v) => formData.append(key, v));
-      }
-      if (typeof value === "object") {
-        return formData.append(key, JSON.stringify(value));
-      }
-
-      return formData.append(key, value);
-    });
-
-    createMessage.mutate(formData);
+  const onSubmit = (data: TCreateMessage) => {
+    createMessage.mutate(data);
   };
 
   return (
@@ -147,20 +152,3 @@ export default function CreateMessage({ chatId }) {
     </Form>
   );
 }
-
-CreateMessage.propTypes = {
-  chatId: PropTypes.string.isRequired,
-};
-
-FormChildren.propTypes = {
-  selectedFiles: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      file: PropTypes.instanceOf(File),
-    })
-  ),
-  setSelectedFiles: PropTypes.func.isRequired,
-  serverError: PropTypes.instanceOf(CustomError),
-  isSuccess: PropTypes.bool.isRequired,
-  isPending: PropTypes.bool.isRequired,
-};
