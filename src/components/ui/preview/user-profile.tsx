@@ -1,19 +1,19 @@
 import type { PropsWithChildren, ReactNode } from "react";
-import type { TAsset } from "@/types";
+import type { TUserAvatar } from "@/lib";
 
 import { UserAvatar, BackgroundAvatar } from "@/components/ui/image";
 
-export interface UserProfilePreview extends PropsWithChildren {
+export interface UserProfilePreviewProps extends PropsWithChildren {
   username: string;
   displayName: string;
-  avatar: TAsset;
-  backgroundAvatar: TAsset;
+  avatar: TUserAvatar | null;
+  backgroundAvatar: TUserAvatar | null;
   renderProfileButton: () => ReactNode;
   aboutMe?: string;
   className?: string;
 }
 
-export default function UserProfilePreview({
+export function UserProfilePreview({
   username,
   displayName,
   avatar,
@@ -22,7 +22,7 @@ export default function UserProfilePreview({
   children,
   aboutMe = "",
   className = "",
-}: UserProfilePreview) {
+}: UserProfilePreviewProps) {
   const profileButton = renderProfileButton();
 
   return (

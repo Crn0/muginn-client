@@ -35,7 +35,7 @@ export const useFilePreview = (
     () => ({
       setFile,
       reset,
-      asset: { images, url: objectUrl, type: images?.[0].type },
+      asset: { images, url: objectUrl },
     }),
     [images, objectUrl, reset]
   );
@@ -69,7 +69,6 @@ export const useFilePreview = (
           format,
           url: lowResUrl,
           size: res.size,
-          type: format === "epub" ? "Epub" : format === "pdf" ? "Pdf" : "Image",
         };
 
         urlsToRevoke.push(lowResUrl);

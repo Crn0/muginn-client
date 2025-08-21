@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { faker } from "@faker-js/faker";
 
-import UserProfilePreview from "../user-profile";
+import { UserProfilePreview } from "../user-profile";
 
 const renderProfileButton = () => <button type='button'>Example Button</button>;
 

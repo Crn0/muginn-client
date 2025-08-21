@@ -7,6 +7,18 @@ import { ApiClient, generateHeader, queryConfig, tryCatch, errorHandler } from "
 export type TChat = z.infer<typeof chatSchema>;
 export type TGroupChat = TChat & { name: string; type: "GroupChat" };
 export type TDirectChat = TChat & { type: "DirectChat" };
+export type TChatAvatar = z.infer<typeof chatAvatarSchema>;
+
+export const chatAvatarSchema = z.object({
+  url: z.string(),
+  images: z.array(
+    z.object({
+      url: z.string(),
+      format: z.string(),
+      size: z.number(),
+    })
+  ),
+});
 
 export const chatSchema = z.object({
   id: z.string().uuid(),
@@ -16,20 +28,7 @@ export const chatSchema = z.object({
   isPrivate: z.boolean(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime().nullable(),
-  avatar: z
-    .object({
-      url: z.string(),
-      type: z.literal("Image"),
-      images: z.array(
-        z.object({
-          url: z.string(),
-          size: z.number(),
-          type: z.literal("Image"),
-          format: z.string(),
-        })
-      ),
-    })
-    .nullable(),
+  avatar: chatAvatarSchema.nullable(),
 });
 
 export const getChat = async (chatId: string) => {

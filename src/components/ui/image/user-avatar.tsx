@@ -1,4 +1,5 @@
 import type { BaseImageProps } from "./images.types";
+import type { TUserAvatar } from "@/lib";
 
 import { cn } from "@/utils";
 
@@ -8,7 +9,7 @@ import avatarLazy from "@/assets/avatar-lazy.png";
 import { getAvatar } from "./get-avatar";
 import { LazyImage } from "./lazy-image";
 
-export interface UserAvatarProps extends BaseImageProps {}
+export interface UserAvatarProps extends BaseImageProps<TUserAvatar | null> {}
 
 const fallback = {
   main: avatarMain,
