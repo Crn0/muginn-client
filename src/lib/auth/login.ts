@@ -8,7 +8,7 @@ import { passwordRegex, usernameRegex } from "./regex";
 import { getAuthUserQueryOptions } from "./get-user";
 import { generateHeader } from "@/lib/api/generate-header";
 import { ApiClient } from "@/lib/api-client";
-import { tryCatch } from "@/lib";
+import { tryCatch } from "@/lib/try-catch";
 
 export interface LoginResponse {
   token: string;
