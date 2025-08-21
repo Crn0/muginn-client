@@ -1,6 +1,12 @@
+import type { CustomError } from "@/errors";
+import { useMutation, useQueryClient, type UseMutationOptions } from "@tanstack/react-query";
+
 import { ApiClient } from "@/lib/api-client";
-import { tryCatch } from "@/lib";
-import { errorHandler } from "@/lib/errors";
+import { tryCatch } from "@/lib/try-catch";
+import { errorHandler } from "@/lib/errors/error-handler";
+import { resetStore } from "@/stores";
+
+export type UseLogoutOptions = UseMutationOptions<Response, CustomError>;
 
 export const logout = async () => {
   const { error, data: res } = await tryCatch(
@@ -17,4 +23,23 @@ export const logout = async () => {
   }
 
   return res;
+};
+
+export const useLogout = (options?: UseLogoutOptions) => {
+  const queryClient = useQueryClient();
+
+  const { onSuccess, onError, ...rest } = options || {};
+
+  return useMutation({
+    ...rest,
+    mutationFn: logout,
+    onSuccess: (...args) => {
+      queryClient.clear();
+      resetStore();
+      onSuccess?.(...args);
+    },
+    onError: (...args) => {
+      onError?.(...args);
+    },
+  });
 };
