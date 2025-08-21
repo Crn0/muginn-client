@@ -29,7 +29,7 @@ export const getChats = async () => {
   if (!parsedData.success) {
     const parsedError = parsedData.error;
 
-    const message = `Validation failed: ${parsedError.issues.length} errors detected in user data`;
+    const message = `Validation failed: ${parsedError.issues.length} errors detected in chats data`;
     const zodError = new ValidationError({ message, fields: parsedError.issues });
 
     throw errorHandler(zodError);
