@@ -3,47 +3,51 @@ import { useLocation, useParams } from "react-router-dom";
 import { IoIosAddCircleOutline, IoIosSettings } from "react-icons/io";
 import { GiRaven } from "react-icons/gi";
 
-import { paths } from "../../../configs";
-import { useGetUser } from "../../../lib";
-import { ErrorElement } from "../../../components/errors";
+import { paths } from "@/configs";
+import { useGetUser } from "@/lib";
+import { ErrorElement } from "@/components/errors";
 
-import { ModalDialog } from "../../../components/ui/dialog";
-import { NameplatePreview } from "../../../components/ui/preview";
-import { Link } from "../../../components/ui/link";
-import { Button } from "../../../components/ui/button";
-import GroupChatList from "../../chats/components/group-chat-list";
-import CreateGroupChat from "../../chats/components/create-group-chat";
-import DirectChatList from "../../chats/components/direct-chat-list";
-import JoinGroupChat from "../../chats/components/join-group-chat";
-import GroupChatHeader from "../../chats/components/group-chat-header";
+import { ModalDialog } from "@/components/ui/dialog";
+import { NameplatePreview } from "@/components/ui/preview";
+import { Link } from "@/components/ui/link";
+import { Button } from "@/components/ui/button";
+import {
+  CreateGroupChat,
+  DirectChatList,
+  GroupChatList,
+  GroupChatHeader,
+  JoinGroupChat,
+} from "@/features/chats/components";
 
-const initCondition = (chatId, location) => (type) => {
-  if (type === "direct:list") {
-    return location.pathname === "/chats/me";
-  }
+const initCondition =
+  (location: { pathname: string }, chatId?: string) =>
+  (type: "direct:list" | "direct:view" | "group:view") => {
+    if (type === "direct:list") {
+      return location.pathname === "/chats/me";
+    }
 
-  if (type === "direct:view") {
-    return location.pathname.startsWith("/chats/me/") && !!chatId;
-  }
+    if (type === "direct:view") {
+      return location.pathname.startsWith("/chats/me/") && !!chatId;
+    }
 
-  if (type === "group:view") {
-    return (
-      location.pathname.startsWith("/chats/") &&
-      !location.pathname.startsWith("/chats/me") &&
-      !!chatId
-    );
-  }
+    if (type === "group:view") {
+      return location.pathname.startsWith("/chats/") && !location.pathname.startsWith("/chats/me");
+    }
 
-  return false;
-};
+    return false;
+  };
 
-export default function DashboardSidebarContent() {
+export function DashboardSidebarContent() {
   const location = useLocation();
   const params = useParams();
 
-  const { data: user } = useGetUser();
+  const userQuery = useGetUser();
 
-  const condition = initCondition(params.chatId, location);
+  const condition = initCondition(location, params.chatId);
+
+  if (!userQuery.isSuccess && !userQuery.data) return;
+
+  const user = userQuery.data;
 
   return (
     <>
@@ -62,6 +66,7 @@ export default function DashboardSidebarContent() {
 
         <ErrorBoundary FallbackComponent={ErrorElement}>
           <ModalDialog
+            id='dashboard-sidebar'
             parentId='dashboard-main'
             title='Create Your Group Chat'
             descriptions={[
@@ -133,7 +138,7 @@ export default function DashboardSidebarContent() {
         </ErrorBoundary>
       )}
 
-      {condition("group:view") && (
+      {condition("group:view") && params.chatId && (
         <ErrorBoundary fallbackRender={ErrorElement}>
           <GroupChatHeader chatId={params.chatId} />
         </ErrorBoundary>
