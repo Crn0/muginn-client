@@ -1,20 +1,24 @@
-import PropTypes from "prop-types";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, type PropsWithChildren } from "react";
 import { useLocation } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 
-import { cn } from "../../utils";
-import { DashboardDrawerContext } from "./context";
-import { useResponsiveDrawer } from "../../hooks";
-import { Drawer } from "../ui/drawer";
-import { Button } from "../ui/button";
-import DashboardSidebarContent from "../../features/dashboard/components/dashboard-sidebar-content";
+import { cn } from "@/utils";
 
-export default function DashboardLayout({ title, children }) {
+import { DashboardDrawerContext } from "./context";
+import { useResponsiveDrawer } from "@/hooks";
+import { Drawer } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { DashboardSidebarContent } from "@/features/dashboard/components";
+
+export interface DashboardLayoutProps extends PropsWithChildren {
+  title: string;
+}
+
+export function DashboardLayout({ title, children }: DashboardLayoutProps) {
   const location = useLocation();
   const drawer = useResponsiveDrawer(640);
-  const containerRef = useRef();
-  const triggerRef = useRef();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const contextValue = useMemo(
     () => ({
@@ -64,8 +68,3 @@ export default function DashboardLayout({ title, children }) {
     </DashboardDrawerContext.Provider>
   );
 }
-
-DashboardLayout.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.element.isRequired,
-};
