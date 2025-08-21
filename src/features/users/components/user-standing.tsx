@@ -1,21 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { getAuthUserQueryOptions } from "../../../lib";
-import { Spinner } from "../../../components/ui/spinner";
+import { useGetUser } from "@/lib";
+import { Spinner } from "@/components/ui/spinner";
 
 const reasons = [
   "Changing your username is not allowed ❌",
   "Changing your email is not allowed ❌",
   "Changing your password is not allowed ❌",
   "Account deletion is not allowed ❌",
-];
+] as const;
 
-export default function UserStanding() {
-  const { isLoading, data: user } = useQuery({ ...getAuthUserQueryOptions() });
+export function UserStanding() {
+  const userQuery = useGetUser();
 
-  if (isLoading && !user) {
+  if (!userQuery.isSuccess && !userQuery.data) {
     return <Spinner />;
   }
+
+  const user = userQuery.data;
 
   const isFullMember = typeof user.accountLevel === "number" && user.accountLevel > 0;
 

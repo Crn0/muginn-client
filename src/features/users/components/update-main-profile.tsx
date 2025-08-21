@@ -1,34 +1,55 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
-import PropTypes from "prop-types";
 import { useFormContext } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 
-import { CustomError } from "../../../errors";
-import { useFilePreview } from "../../../hooks";
-import { Portal, useGetUser } from "../../../lib";
-import { useUpdateMainProfile } from "../api";
+import type { Image } from "@/types";
+
+import { ValidationError } from "@/errors";
+import { useFilePreview } from "@/hooks";
+import { Portal, useGetUser, type TAuthUser, type TUserAvatar } from "@/lib";
+import { useUpdateMainProfile, type TUpdateAccountProfile } from "../api";
 import {
   userMainProfileSchema,
   ACCEPTED_IMAGE_TYPES,
   MAX_ABOUT_ME_LEN,
   MAX_DISPLAY_NAME_LEN,
-} from "../schema";
-import { Form, Input, File, TextArea, FormConfirmation } from "../../../components/ui/form/index";
-import { Button } from "../../../components/ui/button";
-import { NameplatePreview, UserProfilePreview } from "../../../components/ui/preview";
-import RemoveAvatar from "./remove-avatar";
+} from "../api";
+import { Form, Input, File, TextArea, FormConfirmation } from "@/components/ui/form/index";
+import { Button } from "@/components/ui/button";
+import { NameplatePreview, UserProfilePreview } from "@/components/ui/preview";
+import { RemoveAvatar } from "./remove-avatar";
 
-const getAsset = (shouldRender, previewAsset, avatarAsset) => {
-  if (!shouldRender) return null;
-
-  return previewAsset?.url ? previewAsset : avatarAsset;
+const isAsset = (asset: any): asset is TUserAvatar => {
+  return (asset as TUserAvatar)?.url !== null;
 };
 
-function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
+const getAsset = (
+  shouldRender: boolean,
+  previewAsset: { url: string | null; images: Image[] },
+  avatarAsset: TUserAvatar | null
+) => {
+  if (!shouldRender) return null;
+
+  return isAsset(previewAsset) ? previewAsset : avatarAsset;
+};
+
+function FormChildren({
+  user,
+  serverError,
+  isPending,
+  isSuccess,
+  onReset,
+}: {
+  user: TAuthUser;
+  serverError: InstanceType<typeof ValidationError> | null;
+  isPending: boolean;
+  isSuccess: boolean;
+  onReset: () => void;
+}) {
   const { reset, watch, register } = useFormContext();
 
-  const avatarRef = useRef();
-  const backgroundAvatarRef = useRef();
+  const avatarRef = useRef<HTMLInputElement>(null);
+  const backgroundAvatarRef = useRef<HTMLInputElement>(null);
 
   const [previewState, setPreviewState] = useState({
     background: true,
@@ -77,11 +98,13 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
           label='Avatar'
           testId='user-avatar'
           accept={ACCEPTED_IMAGE_TYPES.join(",")}
-          onKeyDown={(e) => e.code === "Enter" && avatarRef.current.click()}
+          pressKey={(e) => e.code === "Enter" && avatarRef.current?.click()}
           onChange={(e) => {
             const { files } = e.target;
 
-            avatarPreview.setFile(files[0]);
+            const file = files?.[0] ?? null;
+
+            avatarPreview.setFile(file);
           }}
           serverError={serverError}
           renderFieldButton={() => (
@@ -89,7 +112,7 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
               className='w-50'
               type='button'
               size='sm'
-              onClick={() => avatarRef.current.click()}
+              onClick={() => avatarRef.current?.click()}
               tabIndex={1}
             >
               Change Avatar
@@ -113,18 +136,19 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
           label='Banner'
           testId='user-background-avatar'
           accept={ACCEPTED_IMAGE_TYPES.join(",")}
-          onKeyDown={(e) => e.code === "Enter" && backgroundAvatarRef.current.click()}
+          pressKey={(e) => e.code === "Enter" && backgroundAvatarRef.current?.click()}
           onChange={(e) => {
             const { files } = e.target;
+            const file = files?.[0] ?? null;
 
-            backgroundAvatarPreview.setFile(files[0]);
+            backgroundAvatarPreview.setFile(file);
           }}
           serverError={serverError}
           renderFieldButton={() => (
             <Button
               className='w-50'
               type='button'
-              onClick={() => backgroundAvatarRef.current.click()}
+              onClick={() => backgroundAvatarRef.current?.click()}
               tabIndex={1}
             >
               Change Banner
@@ -196,26 +220,18 @@ function FormChildren({ user, serverError, isPending, isSuccess, onReset }) {
   );
 }
 
-export default function UpdateUserMainProfile() {
+export function UpdateMainProfile() {
   const userQuery = useGetUser();
 
   const accountMutation = useUpdateMainProfile();
 
   const user = userQuery.data;
 
-  const onSubmit = (data) => {
-    const formData = new FormData();
-
-    Object.entries(data).forEach(([key, value]) => {
-      if (["avatar", "backgroundAvatar"].includes(key)) {
-        formData.append(key, value[0]);
-      } else {
-        formData.append(key, value);
-      }
-    });
-
-    accountMutation.mutate(formData);
+  const onSubmit = (data: TUpdateAccountProfile) => {
+    accountMutation.mutate(data);
   };
+
+  if (!user) return null;
 
   return (
     <div id='main-profile' className='grid flex-1 gap-5 sm:flex'>
@@ -239,37 +255,3 @@ export default function UpdateUserMainProfile() {
     </div>
   );
 }
-
-FormChildren.propTypes = {
-  serverError: PropTypes.instanceOf(CustomError),
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    profile: PropTypes.shape({
-      displayName: PropTypes.string,
-      aboutMe: PropTypes.string,
-      avatar: PropTypes.shape({
-        url: PropTypes.string,
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            size: PropTypes.number,
-            format: PropTypes.string,
-          })
-        ),
-      }),
-      backgroundAvatar: PropTypes.shape({
-        url: PropTypes.string,
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            size: PropTypes.number,
-            format: PropTypes.string,
-          })
-        ),
-      }),
-    }).isRequired,
-  }).isRequired,
-  isSuccess: PropTypes.bool.isRequired,
-  isPending: PropTypes.bool.isRequired,
-  onReset: PropTypes.func.isRequired,
-};

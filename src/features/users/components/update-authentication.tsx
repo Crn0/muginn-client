@@ -1,13 +1,20 @@
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-import { paths } from "../../../configs";
-import { passwordSchema } from "../schema";
-import { useUpdateAccountProfile } from "../api/update-account-profile";
-import { FormDialog, Input } from "../../../components/ui/form";
-import { Button } from "../../../components/ui/button";
+import type { TAuthUser } from "@/lib";
+import type { TUpdatePassword } from "../api/update-account-profile";
 
-export default function UpdateAuthentication({ user, isUserFetching }) {
+import { paths } from "@/configs";
+import { useUpdateAccountProfile, passwordSchema } from "../api";
+import { FormDialog, Input } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+
+export function UpdateAuthentication({
+  user,
+  isUserFetching,
+}: {
+  user: TAuthUser;
+  isUserFetching: boolean;
+}) {
   const navigate = useNavigate();
 
   const accountMutation = useUpdateAccountProfile({
@@ -18,7 +25,7 @@ export default function UpdateAuthentication({ user, isUserFetching }) {
   const isFormDone = !isUserFetching && accountMutation.isSuccess;
   const isFormBusy = isUserFetching || accountMutation.isPending;
 
-  const onSubmit = (data) => accountMutation.mutate(data);
+  const onSubmit = (data: TUpdatePassword) => accountMutation.mutate(data);
 
   return (
     <div
@@ -99,11 +106,3 @@ export default function UpdateAuthentication({ user, isUserFetching }) {
     </div>
   );
 }
-
-UpdateAuthentication.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    accountLevel: PropTypes.number.isRequired,
-  }).isRequired,
-  isUserFetching: PropTypes.bool.isRequired,
-};
