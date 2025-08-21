@@ -1,11 +1,38 @@
-import PropTypes from "prop-types";
+import type { JSXElementConstructor, PropsWithChildren, ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { SlClose } from "react-icons/sl";
 
-import { paths } from "../../configs";
-import { Link } from "../ui/link";
+import type { ButtonTabProps } from "@/components/ui/button";
+import type { ISettingsTabStore } from "@/stores/settings-tab";
 
-export default function SettingLayout({
+import { paths } from "@/configs";
+import { Link } from "@/components/ui/link";
+
+export interface SettingLayoutProps extends PropsWithChildren, Partial<ISettingsTabStore> {
+  id: string;
+  title: string;
+  leftTab: string;
+  rightTab: string;
+  setLeftTab: (tab: string) => void;
+  setRightTab: (tab: string) => void;
+  headerContent: ReactNode;
+  leftNavButtons: {
+    name: string;
+    buttonText: string;
+    defaultContent: string;
+    button: JSXElementConstructor<ButtonTabProps>;
+    intent: Pick<ButtonTabProps, "intent">["intent"];
+  }[];
+  rightNavButtons: {
+    name: string;
+    buttonText: string;
+    section: string;
+    button: JSXElementConstructor<ButtonTabProps>;
+    intent: Pick<ButtonTabProps, "intent">["intent"];
+  }[];
+}
+
+export function SettingLayout({
   id,
   title,
   leftTab,
@@ -16,7 +43,7 @@ export default function SettingLayout({
   rightNavButtons,
   headerContent,
   children,
-}) {
+}: SettingLayoutProps) {
   const location = useLocation();
 
   const visibleRightNavButtons = rightNavButtons.filter((btn) => btn.section === leftTab);
@@ -37,12 +64,17 @@ export default function SettingLayout({
           {leftNavButtons.map(({ name, defaultContent, intent, buttonText, button: Component }) => (
             <Component
               key={name}
+              testId={`tab-${name}`}
               name={name}
               tab={leftTab}
               intent={intent}
-              buttonText={buttonText}
-              setTab={() => setLeftTab(name, defaultContent)}
-            />
+              setTab={() => {
+                setLeftTab(name);
+                setRightTab(defaultContent);
+              }}
+            >
+              <span>{buttonText}</span>
+            </Component>
           ))}
 
           <div>{headerContent}</div>
@@ -55,47 +87,20 @@ export default function SettingLayout({
             {visibleRightNavButtons.map(({ name, intent, buttonText, button: Component }) => (
               <Component
                 key={name}
+                testId={`tab-${name}`}
                 name={name}
                 tab={rightTab}
                 intent={intent}
-                buttonText={buttonText}
                 setTab={setRightTab}
-              />
+              >
+                <span>{buttonText}</span>
+              </Component>
             ))}
           </nav>
         </aside>
 
-        <section className='flex flex-1'>
-          {typeof children === "function" ? children() : children}
-        </section>
+        <section className='flex flex-1'>{children}</section>
       </main>
     </div>
   );
 }
-
-SettingLayout.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  leftTab: PropTypes.string.isRequired,
-  rightTab: PropTypes.string.isRequired,
-  setRightTab: PropTypes.func.isRequired,
-  setLeftTab: PropTypes.func,
-  leftNavButtons: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      defaultContent: PropTypes.string.isRequired,
-      buttonText: PropTypes.string.isRequired,
-      button: PropTypes.elementType.isRequired,
-    })
-  ).isRequired,
-  rightNavButtons: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      buttonText: PropTypes.string.isRequired,
-      button: PropTypes.elementType.isRequired,
-      section: PropTypes.elementType.isRequired,
-    })
-  ).isRequired,
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-  headerContent: PropTypes.element,
-};
