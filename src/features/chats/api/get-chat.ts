@@ -24,6 +24,7 @@ export const chatSchema = z.object({
         z.object({
           url: z.string(),
           size: z.number(),
+          type: z.literal("Image"),
           format: z.string(),
         })
       ),
