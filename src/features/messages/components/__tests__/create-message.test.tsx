@@ -5,17 +5,22 @@ import { faker } from "@faker-js/faker";
 
 import { renderComponent } from "./mocks/utils/setup";
 import { createChats } from "./mocks/data";
-import CreateMessage from "../create-message";
+import { CreateMessage } from "..";
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
-const chat = createChats({ ownerId: faker.string.uuid(), length: 1 })[0];
+const chat = createChats({
+  ownerId: faker.string.uuid(),
+  length: 1,
+  isPrivate: false,
+  type: "GroupChat",
+})[0];
 
 describe("Message Creation", () => {
   it("should render the Form component", () => {
     renderComponent(<CreateMessage chatId={chat.id} />, queryClient);
 
-    const form = screen.queryByRole("form");
+    const form = screen.getByRole("form");
 
     expect(form).toBeInTheDocument();
 

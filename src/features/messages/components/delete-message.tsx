@@ -1,24 +1,25 @@
-import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
+import type { TMessage } from "../api";
 
-import { formatDate } from "../../../utils";
+import { formatDate } from "@/utils";
 import { useChat, useMyMembership } from "../../chats/api";
-import { Authorization, permissions, policies } from "../../../lib";
+import { Authorization, permissions, policy } from "@/lib";
 import { useDeleteMessage } from "../api/delete-message";
-import { useDropDownMenu } from "../../../components/ui/dropdown/context/dropdown-menu-context";
-import { ConfirmationDialog } from "../../../components/ui/dialog";
-import { Button } from "../../../components/ui/button";
-import { NameplatePreview } from "../../../components/ui/preview";
-import { Spinner } from "../../../components/ui/spinner";
-import MessageAttachments from "./message-attachments";
+import { useDropDownMenu } from "@/components/ui/dropdown/context/dropdown-menu-context";
+import { ConfirmationDialog } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { NameplatePreview } from "@/components/ui/preview";
+import { Spinner } from "@/components/ui/spinner";
+import { MessageAttachments } from "./message-attachments";
 
-export default function DeleteMessage({ message }) {
-  const { chatId } = useParams();
+export function DeleteMessage({ message }: { message: TMessage }) {
+  const chatQuery = useChat(message.chatId);
 
-  const { data: chat } = useChat(chatId);
+  if (!chatQuery.isSuccess) return null;
+
+  const chat = chatQuery.data;
 
   const membershipQuery = useMyMembership(chat.id);
-  const deleteMessage = useDeleteMessage({ chatId: message.chatId, messageId: message.id });
+  const deleteMessage = useDeleteMessage(chat.id);
 
   const { hide, reset } = useDropDownMenu();
 
@@ -32,7 +33,7 @@ export default function DeleteMessage({ message }) {
 
   return (
     <Authorization
-      policies={policies}
+      policy={policy}
       user={membershipQuery.data}
       resource='message'
       action='delete'
@@ -95,56 +96,3 @@ export default function DeleteMessage({ message }) {
     </Authorization>
   );
 }
-
-DeleteMessage.propTypes = {
-  message: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    chatId: PropTypes.string.isRequired,
-    content: PropTypes.string,
-    createdAt: PropTypes.string,
-    updatedAt: PropTypes.string,
-    deletedAt: PropTypes.string,
-    user: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
-      profile: PropTypes.shape({
-        displayName: PropTypes.string,
-        avatar: PropTypes.shape({
-          url: PropTypes.string,
-          images: PropTypes.arrayOf(
-            PropTypes.shape({
-              url: PropTypes.string,
-              size: PropTypes.number,
-              format: PropTypes.string,
-            })
-          ),
-        }),
-        backgroundAvatar: PropTypes.shape({
-          url: PropTypes.string,
-          images: PropTypes.arrayOf(
-            PropTypes.shape({
-              url: PropTypes.string,
-              size: PropTypes.number,
-              format: PropTypes.string,
-            })
-          ),
-        }),
-      }),
-    }),
-    replyTo: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-    attachments: PropTypes.arrayOf(
-      PropTypes.shape({
-        url: PropTypes.string,
-        images: PropTypes.arrayOf(
-          PropTypes.shape({
-            url: PropTypes.string,
-            size: PropTypes.number,
-            format: PropTypes.string,
-          })
-        ),
-      })
-    ),
-  }),
-};
