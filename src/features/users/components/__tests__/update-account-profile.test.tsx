@@ -3,10 +3,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, it, expect, beforeAll } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 
-import UpdateAccountProfile from "../update-account-profile";
-import { userData as user } from "./data";
-import { paths } from "../../../../configs";
-import { getAuthUserQueryOptions } from "../../../../lib";
+import { UpdateAccountProfile } from "..";
+import { user } from "./data";
+import { paths } from "@/configs";
+import { getAuthUserQueryOptions } from "@/lib";
 
 const queryClient = new QueryClient();
 

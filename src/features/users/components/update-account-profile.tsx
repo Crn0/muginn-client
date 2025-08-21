@@ -1,18 +1,20 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
-import { useGetUser } from "../../../lib";
-import { useUserSettingsTabStore } from "../../../stores";
-import { UserAvatar, BackgroundAvatar } from "../../../components/ui/image";
-import { Button } from "../../../components/ui/button";
-import UpdateUsername from "./update-username";
-import UpdateAuthentication from "./update-authentication";
-import DeleteAccount from "./delete-account";
+import { useGetUser } from "@/lib";
+import { useUserSettingsTabStore } from "@/stores";
+import { UserAvatar, BackgroundAvatar } from "@/components/ui/image";
+import { Button } from "@/components/ui/button";
+import { UpdateUsername } from "./update-username";
+import { UpdateAuthentication } from "./update-authentication";
+import { DeleteAccount } from "./delete-account";
 
-export default function UpdateAccountProfile() {
+export function UpdateAccountProfile() {
   const userQuery = useGetUser();
 
   const user = userQuery.data;
 
   const setTabs = useUserSettingsTabStore((state) => state.setTabs);
+
+  if (!user) return null;
 
   return (
     <div className='flex flex-1 flex-col justify-center-safe gap-5 sm:items-center-safe'>

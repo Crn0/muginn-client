@@ -2,9 +2,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, it, expect, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 
-import { userData as user } from "./data";
-import UserStanding from "../user-standing";
-import { getAuthUserQueryOptions } from "../../../../lib";
+import { user } from "./data";
+import { getAuthUserQueryOptions } from "@/lib";
+import { UserStanding } from "..";
 
 const reasons = [
   "Changing your username is not allowed ❌",

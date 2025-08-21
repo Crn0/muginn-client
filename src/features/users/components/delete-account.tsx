@@ -1,18 +1,18 @@
-import { Authorization, policies, useGetUser } from "../../../lib";
+import { Authorization, policy, useGetUser } from "../../../lib";
 import { useChats } from "../../chats/api";
 import { useDeleteAccount } from "../api";
 import { useDropDownMenu } from "../../../components/ui/dropdown/context/dropdown-menu-context";
 import { ConfirmationDialog } from "../../../components/ui/dialog";
 import { Button } from "../../../components/ui/button";
 
-export default function DeleteAccount() {
+export function DeleteAccount() {
   const { data: user } = useGetUser();
   const chatsQuery = useChats();
   const deleteAccount = useDeleteAccount();
 
   const { hide, reset } = useDropDownMenu();
 
-  if (!chatsQuery.data) return null;
+  if (!user || !chatsQuery.data) return null;
 
   return (
     <div
@@ -24,10 +24,10 @@ export default function DeleteAccount() {
 
       <Authorization
         user={user}
+        policy={policy}
         resource='user'
         action='delete'
         data={chatsQuery.data}
-        policies={policies}
         forbiddenFallback={
           <ConfirmationDialog
             parentId={`account-deletion-${user.id}`}

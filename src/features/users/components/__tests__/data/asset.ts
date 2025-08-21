@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
 
-export default Array.from({ length: 20 }, (_, i) => i).map((v) => ({
+export const asssets = Array.from({ length: 20 }, (_, i) => i).map((v) => ({
   key: v,
   asset: {
-    url: faker.image.avatar({ height: 250, width: 250 }),
+    url: faker.image.avatar(),
     images: [
       {
         url: faker.image.url({ height: 64, width: 64 }),

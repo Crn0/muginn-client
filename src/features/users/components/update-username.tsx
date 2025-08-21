@@ -1,18 +1,23 @@
-import PropTypes from "prop-types";
+import type { TAuthUser } from "@/lib";
 
-import { usernameSchema } from "../schema";
-import { useUpdateAccountProfile } from "../api/update-account-profile";
-import { FormDialog, Input } from "../../../components/ui/form";
-import { Button } from "../../../components/ui/button";
+import { usernameSchema, useUpdateAccountProfile, type TUpdateUsername } from "../api";
+import { FormDialog, Input } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 
-export default function UpdateUsername({ user, isUserFetching }) {
+export function UpdateUsername({
+  user,
+  isUserFetching,
+}: {
+  user: TAuthUser;
+  isUserFetching: boolean;
+}) {
   const accountMutation = useUpdateAccountProfile();
 
   const isFullMember = typeof user.accountLevel === "number" && user.accountLevel > 0;
   const isFormDone = !isUserFetching && accountMutation.isSuccess;
   const isFormBusy = isUserFetching || accountMutation.isPending;
 
-  const onSubmit = (data) => accountMutation.mutate(data);
+  const onSubmit = (data: TUpdateUsername) => accountMutation.mutate(data);
 
   return (
     <div data-testid='username' className='flex items-center-safe justify-between'>
@@ -75,11 +80,3 @@ export default function UpdateUsername({ user, isUserFetching }) {
     </div>
   );
 }
-
-UpdateUsername.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    accountLevel: PropTypes.number.isRequired,
-  }).isRequired,
-  isUserFetching: PropTypes.bool.isRequired,
-};

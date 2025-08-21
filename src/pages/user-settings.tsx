@@ -2,19 +2,15 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
 import { RxExit } from "react-icons/rx";
 
-import { paths } from "../configs";
-import { useLogout } from "../lib";
-import { chatSocket } from "../features/chats/socket";
-import { useUserSettingsTabStore } from "../stores";
-import { ErrorElement } from "../components/errors";
-import { SettingLayout } from "../components/layouts";
-import { ConfirmationDialog } from "../components/ui/dialog";
-import { Button, ButtonTab } from "../components/ui/button";
-import {
-  UpdateAccountProfile,
-  UserStanding,
-  UpdateMainProfile,
-} from "../features/users/components";
+import { paths } from "@/configs";
+import { useLogout } from "@/lib";
+import { chatSocket } from "@/features/chats/socket";
+import { useUserSettingsTabStore } from "@/stores";
+import { ErrorElement } from "@/components/errors";
+import { SettingLayout } from "@/components/layouts";
+import { ConfirmationDialog } from "@/components/ui/dialog";
+import { Button, ButtonTab } from "@/components/ui/button";
+import { UpdateAccountProfile, UserStanding, UpdateMainProfile } from "@/features/users/components";
 
 const leftNavButtons = [
   {
@@ -22,14 +18,14 @@ const leftNavButtons = [
     buttonText: "My Account",
     button: ButtonTab,
     defaultContent: "security",
-    intent: "primary",
+    intent: "primary" as "primary",
   },
   {
     name: "profiles",
     buttonText: "Profiles",
     button: ButtonTab,
     defaultContent: "mainProfile",
-    intent: "primary",
+    intent: "primary" as "primary",
   },
 ];
 
@@ -39,21 +35,21 @@ const rightNavButtons = [
     buttonText: "Security",
     section: "myAccount",
     button: ButtonTab,
-    intent: "secondary",
+    intent: "secondary" as "secondary",
   },
   {
     name: "userStanding",
     buttonText: "Standing",
     section: "myAccount",
     button: ButtonTab,
-    intent: "secondary",
+    intent: "secondary" as "secondary",
   },
   {
     name: "mainProfile",
     buttonText: "Main Profile",
     section: "profiles",
     button: ButtonTab,
-    intent: "secondary",
+    intent: "secondary" as "secondary",
   },
 ];
 
@@ -72,10 +68,10 @@ const contents = [
   },
 ];
 
-export default function UserSettingsPage() {
+export function UserSettingsPage() {
   const navigate = useNavigate();
 
-  const logout = useLogout({
+  const logoutMutation = useLogout({
     onSuccess: () => {
       if (chatSocket.connected) {
         chatSocket.disconnect();
@@ -85,14 +81,11 @@ export default function UserSettingsPage() {
   });
 
   const leftTab = useUserSettingsTabStore((s) => s.leftTab);
-  const setTabs = useUserSettingsTabStore((s) => s.setTabs);
   const rightTab = useUserSettingsTabStore((s) => s.rightTab);
+  const setleftTab = useUserSettingsTabStore((s) => s.setLeftTab);
   const setRightTab = useUserSettingsTabStore((s) => s.setRightTab);
 
   const ActiveContent = contents.find(({ section }) => section === rightTab)?.content;
-
-  const handleLeftTabChange = (name, defaultContent) =>
-    setTabs({ leftTab: name, rightTab: defaultContent });
 
   return (
     <ErrorBoundary FallbackComponent={ErrorElement}>
@@ -100,7 +93,7 @@ export default function UserSettingsPage() {
         id='user-settings'
         title='User Settings'
         leftTab={leftTab}
-        setLeftTab={handleLeftTabChange}
+        setLeftTab={setleftTab}
         rightTab={rightTab}
         setRightTab={setRightTab}
         leftNavButtons={leftNavButtons}
@@ -111,7 +104,7 @@ export default function UserSettingsPage() {
             icon='danger'
             title='Log Out'
             body='Are you sure you want to logut?'
-            isDone={logout.isSuccess}
+            isDone={logoutMutation.isSuccess}
             renderButtonTrigger={({ onClick }) => (
               <Button
                 className='flex gap-5'
@@ -128,8 +121,8 @@ export default function UserSettingsPage() {
                 className='flex gap-5'
                 type='button'
                 variant='destructive'
-                onClick={logout.mutate}
-                disabled={logout.isPending}
+                onClick={() => logoutMutation.mutate()}
+                disabled={logoutMutation.isPending}
               >
                 <p> Log Out </p>
               </Button>

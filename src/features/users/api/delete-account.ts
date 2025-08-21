@@ -1,12 +1,15 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, type UseMutationOptions } from "@tanstack/react-query";
 
-import { ApiClient, generateHeader, tryCatch } from "../../../lib";
-import { resetStore as resetAuthStore } from "../../../stores";
+import type { CustomError } from "@/errors";
+import { ApiClient, generateHeader, tryCatch } from "@/lib";
+import { resetStore as resetAuthStore } from "@/stores";
+
+export type UseDeleteAccountOptions = UseMutationOptions<void, CustomError>;
 
 export const deleteAccount = async () => {
   const headers = generateHeader(["Content-Type", "application/json"]);
 
-  const { error, data: res } = await tryCatch(
+  const { error } = await tryCatch(
     ApiClient.callApi("users/me", {
       headers,
       authenticatedRequest: true,
@@ -15,11 +18,9 @@ export const deleteAccount = async () => {
   );
 
   if (error) throw error;
-
-  return res;
 };
 
-export const useDeleteAccount = (options = {}) => {
+export const useDeleteAccount = (options?: UseDeleteAccountOptions) => {
   const queryClient = useQueryClient();
 
   const { onSuccess, onError, ...restConfig } = options || {};
@@ -31,8 +32,8 @@ export const useDeleteAccount = (options = {}) => {
       resetAuthStore();
       onSuccess?.(...args);
     },
-    onError: (e) => {
-      onError?.(e);
+    onError: (...args) => {
+      onError?.(...args);
     },
     mutationFn: deleteAccount,
   });
