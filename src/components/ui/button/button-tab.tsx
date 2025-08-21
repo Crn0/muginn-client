@@ -1,4 +1,4 @@
-import { forwardRef, type Dispatch, type SetStateAction } from "react";
+import { forwardRef } from "react";
 
 import type { BaseButtonProps, TButtonRef } from "./button.types";
 import type { VariantPropKeys } from "@/types";
@@ -10,7 +10,7 @@ export interface ButtonTabProps extends BaseButtonProps, VariantPropKeys<typeof 
   name: string;
   tab: string;
   testId: string;
-  setTab: Dispatch<SetStateAction<string>>;
+  setTab: (tab: string) => void;
   className?: string;
 }
 
