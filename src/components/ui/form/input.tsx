@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, type ComponentPropsWithRef, type ReactNode } from "react";
+import { forwardRef, type ComponentPropsWithRef, type ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 
 import type { ValidationError } from "@/errors";

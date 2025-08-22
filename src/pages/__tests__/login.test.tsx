@@ -4,11 +4,11 @@ import { screen, waitFor } from "@testing-library/react";
 import { QueryClient } from "@tanstack/react-query";
 
 import { setupRouter } from "./mocks/utils/setup-router";
-import { paths } from "../../configs/index";
-import LoginPage from "../login";
+import { paths } from "@/configs/index";
 import { DashBoard, dashBoardLoader } from "./mocks/dash-board";
-import { setToken } from "../../stores";
+import { setToken } from "@/stores";
 import { generateAccessToken } from "../../../test/utils";
+import { LoginPage } from "..";
 
 function ErrorBoundary() {
   const error = useRouteError() as Error;

@@ -6,6 +6,12 @@ import { permissionCheck } from "./permission-check";
 
 export const messagePolicy = {
   delete: (user: IUserWithRole, message: TMessage, { chat, permissions }: IPolicyEnvironment) => {
+    if (!permissions) {
+      throw new Error("Required permissions missing");
+    }
+    if (!chat) {
+      throw new Error("Required chat missing");
+    }
     if (isOwner(user, chat)) return true;
     if (isAuthor(user, message)) return true;
 

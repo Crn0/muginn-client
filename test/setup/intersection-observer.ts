@@ -19,11 +19,11 @@ export const setupIntersectionObserverMock = ({
     rootMargin: string;
     thresholds: readonly number[];
     disconnect(): void {}
-    observe(target: Element): void {}
+    observe(_target?: Element): void {}
     takeRecords(): IntersectionObserverEntry[] {
       return [];
     }
-    unobserve(target: Element): void {}
+    unobserve(_target?: Element): void {}
 
     constructor() {
       this.root = root;

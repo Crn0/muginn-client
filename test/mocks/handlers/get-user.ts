@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 
 import { env } from "../../../src/configs";
-import { db, GetEntity } from "../db";
+import { db, type GetEntity } from "../db";
 import { AuthError } from "../../../src/errors";
 import { tokenFactory } from "../utils";
 
@@ -27,7 +27,7 @@ export const getAuthUser = (headers: Headers) => {
 
   const verifiedToken = Token.verifyToken(accessToken);
 
-  const { sub } = verifiedToken;
+  const sub = verifiedToken as string;
 
   const user = db.user.findFirst({
     where: {

@@ -12,6 +12,7 @@ interface RegisterRequestBody {
   username: string;
   password: string;
   displayName?: string;
+  message?: string;
 }
 
 interface LoginRequestBody {
@@ -62,7 +63,9 @@ export const authHandlers = [
 
       return new HttpResponse(null, { status: 204 });
     } catch (e) {
-      return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+      const error = e as NodeJS.ErrnoException;
+
+      return HttpResponse.json({ message: error?.message || "Server Error" }, { status: 500 });
     }
   }),
   http.post<any, LoginRequestBody>(`${baseUrl}/login`, async ({ request }) => {
@@ -99,10 +102,11 @@ export const authHandlers = [
         }
       );
     } catch (e) {
-      return HttpResponse.json(
-        { message: e?.message ?? "Server Error" },
-        { status: e?.code ?? 500 }
-      );
+      const error = e as NodeJS.ErrnoException;
+
+      const status = Number.isNaN(Number(error?.code)) ? 500 : Number(error?.code);
+
+      return HttpResponse.json({ message: error?.message ?? "Server Error" }, { status });
     }
   }),
   http.post(`${baseUrl}/refresh-tokens`, async () => {
@@ -115,7 +119,7 @@ export const authHandlers = [
 
       const verifiedToken = Token.verifyToken(refreshTokenCookie);
 
-      const { sub } = verifiedToken;
+      const sub = verifiedToken?.sub as string;
 
       const refreshToken = Token.refreshToken(sub, 1);
       const token = Token.accessToken(sub, 5);
@@ -130,10 +134,10 @@ export const authHandlers = [
         }
       );
     } catch (e) {
-      return HttpResponse.json(
-        { message: e?.message ?? "Server Error" },
-        { status: e?.code ?? 500 }
-      );
+      const error = e as NodeJS.ErrnoException;
+      const status = Number.isNaN(Number(error?.code)) ? 500 : Number(error?.code);
+
+      return HttpResponse.json({ message: error?.message ?? "Server Error" }, { status });
     }
   }),
 ];

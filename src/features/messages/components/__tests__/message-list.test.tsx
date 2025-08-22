@@ -29,7 +29,7 @@ describe("Message List", () => {
   it("should render a list of messages", () => {
     renderComponent(<MessageList chatId={chatId} />, queryClient);
 
-    const ul = screen.queryByLabelText("messages");
+    const ul = screen.getByLabelText("messages");
 
     expect(ul).toBeInTheDocument();
 
