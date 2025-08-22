@@ -9,19 +9,20 @@ import {
 } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
-import { paths } from "../configs";
-import { getAuthUserQueryOptions } from "../lib";
-import { chatSocket } from "../features/chats/socket";
-import { RedirectErrorElement, ErrorElement } from "../components/errors";
-import { Spinner } from "../components/ui/spinner";
+import { paths } from "@/configs";
+import { getAuthUserQueryOptions } from "@/lib";
+import { chatSocket } from "@/features/chats/socket";
+import { RedirectErrorElement, ErrorElement } from "@/components/errors";
+import { Spinner } from "@/components/ui/spinner";
 
 function Wrapper() {
-  const token = useAsyncValue();
+  const token = useAsyncValue() as string | null;
 
   const user = useQuery({
     ...getAuthUserQueryOptions(),
     enabled: !!token,
-    throwOnError: (e) => e.response?.status >= 500 || e?.message === "Failed to Fetch",
+    throwOnError: (e) =>
+      (e.response && e.response?.status >= 500) || e?.message === "Failed to Fetch",
   });
 
   const navigate = useNavigate();
@@ -52,8 +53,8 @@ function Wrapper() {
   );
 }
 
-export default function SilentLogin() {
-  const { data: loaderData } = useLoaderData();
+export function SilentLoginPage() {
+  const loaderData = useLoaderData() as { data: Promise<string | null> };
 
   return (
     <Suspense
@@ -63,7 +64,7 @@ export default function SilentLogin() {
         </div>
       }
     >
-      <Await resolve={loaderData} errorElement={<RedirectErrorElement />}>
+      <Await resolve={loaderData?.data} errorElement={<RedirectErrorElement />}>
         <ErrorBoundary FallbackComponent={ErrorElement}>
           <Wrapper />
         </ErrorBoundary>
