@@ -2,7 +2,7 @@ import type { CustomError } from "@/errors/custom-error";
 import { useEffect } from "react";
 import { useAsyncError, useNavigate } from "react-router-dom";
 
-export default function RedirectErrorElement() {
+export function RedirectErrorElement() {
   const error = useAsyncError() as CustomError;
   const navigate = useNavigate();
 

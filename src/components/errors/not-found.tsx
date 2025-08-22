@@ -3,7 +3,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { paths } from "../../configs";
 import { Link } from "@/components/ui/link";
 
-export default function NotFound({
+export function NotFound({
   title = "Page Not Found",
   message = "The page you’re looking for doesn’t exist.",
 }) {
