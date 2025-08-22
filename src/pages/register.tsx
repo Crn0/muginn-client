@@ -6,7 +6,7 @@ import { ErrorElement } from "@/components/errors";
 import { AuthLayout } from "@/components/layouts";
 import { RegisterForm } from "@/features/auth/components";
 
-export default function RegisterPage() {
+export function RegisterPage() {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();

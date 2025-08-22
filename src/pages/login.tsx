@@ -7,7 +7,7 @@ import { ErrorElement } from "@/components/errors";
 import { AuthLayout } from "@/components/layouts";
 import { LoginForm } from "@/features/auth/components";
 
-export default function LoginPage() {
+export function LoginPage() {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
