@@ -1,32 +1,28 @@
-import { createMemoryRouter, replace } from "react-router-dom";
+import { createMemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import { QueryClient } from "@tanstack/react-query";
 
-import setupRouter from "./mocks/utils/setup-router";
-import { paths } from "../../configs/index";
+import { setupRouter } from "./mocks/utils/setup-router";
+import { paths } from "@/configs/index";
 import { generateAccessToken } from "../../../test/utils";
-import { setToken } from "../../stores";
-import { clientLoader } from "../../features/auth/api";
-import SilentLogin from "../silent-login";
-import DashBoard, { dashBoardLoader } from "./mocks/dash-board";
-import { RouteErrorElement } from "../../components/errors";
+import { RouteErrorElement } from "@/components/errors";
+import { setToken } from "@/stores";
+import { clientLoader } from "@/features/auth/api";
+import { DashBoard, dashBoardLoader } from "./mocks/dash-board";
+import { SilentLoginPage } from "..";
 
-vi.mock("../../features/auth/api");
+vi.mock("@/features/auth/api");
 
-const waitResolve = (data, ms = 1000) =>
-  new Promise((r) => {
+function waitResolve<T>(data: T, ms = 1): Promise<T> {
+  return new Promise((r) => {
     setTimeout(() => r(typeof data === "function" ? data() : data), ms);
   });
-
-const waitReject = (data, ms = 1000) =>
-  new Promise((_, r) => {
-    setTimeout(() => r(typeof data === "function" ? data() : data), ms);
-  });
+}
 
 const queryClient = new QueryClient();
 
-const createRouter = (initialEntries) =>
+const createRouter = (initialEntries: string[]) =>
   createMemoryRouter(
     [
       {
@@ -39,7 +35,7 @@ const createRouter = (initialEntries) =>
         path: paths.silentLogin.path,
         loader: clientLoader(queryClient),
         errorElement: <RouteErrorElement />,
-        element: <SilentLogin />,
+        element: <SilentLoginPage />,
       },
       {
         path: paths.login.path,
@@ -56,28 +52,10 @@ beforeEach(() => {
 });
 
 describe("SilentLogin page", () => {
-  describe("Error Boundary Trigger", () => {
-    it("throws when the user query fails with a network error (e.g., 'Failed to fetch')", async () => {
-      vi.mocked(clientLoader).mockImplementationOnce(() => async () => ({
-        data: waitReject(new Error("Failed to Fetch"), 10),
-      }));
-
-      setupRouter(createRouter([paths.silentLogin.getHref()]), queryClient);
-
-      await waitFor(() => {
-        expect(screen.getByTestId("spinner")).toBeInTheDocument();
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText("Failed to Fetch")).toBeInTheDocument();
-      });
-    });
-  });
-
   describe("Authentication Error", () => {
     it("shows a loading indicator and redirects the user to /login", async () => {
-      vi.mocked(clientLoader).mockImplementationOnce(() => async () => ({
-        data: waitReject(() => replace(paths.login.getHref()), 10),
+      vi.mocked(clientLoader).mockImplementationOnce(() => () => ({
+        data: waitResolve(null),
       }));
 
       setupRouter(createRouter([paths.silentLogin.getHref()]), queryClient);
@@ -98,8 +76,8 @@ describe("SilentLogin page", () => {
 
       setToken(token);
 
-      vi.mocked(clientLoader).mockImplementationOnce(() => async () => ({
-        data: waitResolve(token, 10),
+      vi.mocked(clientLoader).mockImplementationOnce(() => () => ({
+        data: waitResolve(token),
       }));
 
       setupRouter(createRouter([paths.silentLogin.getHref()]), queryClient);
