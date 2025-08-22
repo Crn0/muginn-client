@@ -16,7 +16,7 @@ export const initPolicyCheck =
     resource: TResource;
     action: TAction;
     data: TData;
-    environment: TEnv;
+    environment?: TEnv;
   }) => {
     const policy = policies[resource]?.[action];
 

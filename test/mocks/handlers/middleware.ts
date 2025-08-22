@@ -1,16 +1,13 @@
-import {
+import type {
   HttpResponseResolver,
-  type StrictRequest,
-  type DefaultBodyType,
-  type PathParams,
+  StrictRequest,
+  DefaultBodyType,
+  PathParams,
   JsonBodyType,
 } from "msw";
-import { faker } from "@faker-js/faker";
 
 import type { GetEntity } from "../db";
 
-import { env } from "../../../src/configs";
-import { tokenFactory } from "../utils";
 import { AuthError } from "../../../src/errors";
 
 export type TInput<Params, RequestBodyType extends JsonBodyType> = {
@@ -20,10 +17,6 @@ export type TInput<Params, RequestBodyType extends JsonBodyType> = {
   cookies: Record<string, string>;
   user: GetEntity<"user">;
 };
-
-const tokenSecret = env.TOKEN_SECRET;
-
-const Token = tokenFactory({ secret: tokenSecret, idGenerator: faker.string.uuid });
 
 export function withAuth<
   Params extends PathParams,

@@ -5,11 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { faker } from "@faker-js/faker";
 
 import { setupRouter } from "./mocks/utils/setup-router";
-import { paths } from "../../configs/index";
+import { paths } from "@/configs/index";
 import { createUser } from "../../../test/utils";
-import { getAuthUserQueryOptions } from "../../lib/auth";
-import { setToken } from "../../stores";
-import RegisterPage from "../register";
+import { getAuthUserQueryOptions } from "@/lib/auth";
+import { setToken } from "@/stores";
+import { RegisterPage } from "..";
 import { DashBoard, dashBoardLoader } from "./mocks/dash-board";
 
 const queryClient = new QueryClient({

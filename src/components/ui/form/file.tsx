@@ -2,7 +2,7 @@ import { forwardRef, type ComponentPropsWithRef, type ReactNode, type KeyboardEv
 
 import type { ValidationError } from "@/errors";
 
-import { useFormContext, type FieldError } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { FileWrapper } from "./file-wrapper";
 import { setInputRefs } from "./set-input-refs";
 import { useInputErrorHandler } from "@/hooks";

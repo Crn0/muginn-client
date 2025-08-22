@@ -1,4 +1,4 @@
-import z, { type ZodIssue } from "zod";
+import z, { type ZodIssue, type RefinementCtx } from "zod";
 import { http, HttpResponse, type PathParams } from "msw";
 
 import type { BaseResponse } from "./handlers.types";
@@ -35,7 +35,12 @@ const chatType = z.enum(["DirectChat", "GroupChat"]);
 
 const baseUrl = `${env.SERVER_URL}/api/v${env.API_VERSION}/chats`;
 
-const directChatCondition = (data, ctx) => {
+const directChatCondition = (
+  data: {
+    memberIds?: string[];
+  },
+  ctx: RefinementCtx
+) => {
   const dataSchema = z.object({
     memberIds: z.array(z.string().uuid()).min(2).max(2),
   });
@@ -47,7 +52,12 @@ const directChatCondition = (data, ctx) => {
   }
 };
 
-const groupChatCondition = (data, ctx) => {
+const groupChatCondition = (
+  data: {
+    name?: string;
+  },
+  ctx: RefinementCtx
+) => {
   const nameIsOverHundredCharacters =
     z
       .string()
@@ -149,7 +159,9 @@ export const chatHandlers = [
           }
         );
       } catch (e) {
-        return HttpResponse.json({ message: e?.message ?? "Server Error" }, { status: 500 });
+        const error = e as NodeJS.ErrnoException;
+
+        return HttpResponse.json({ message: error?.message ?? "Server Error" }, { status: 500 });
       }
     })
   ),
@@ -182,7 +194,9 @@ export const chatHandlers = [
           status: 200,
         });
       } catch (e) {
-        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        const error = e as NodeJS.ErrnoException;
+
+        return HttpResponse.json({ message: error?.message || "Server Error" }, { status: 500 });
       }
     })
   ),
@@ -234,7 +248,9 @@ export const chatHandlers = [
           }
         );
       } catch (e) {
-        return HttpResponse.json({ message: e?.message ?? "Server Error" }, { status: 500 });
+        const error = e as NodeJS.ErrnoException;
+
+        return HttpResponse.json({ message: error?.message ?? "Server Error" }, { status: 500 });
       }
     })
   ),
@@ -242,7 +258,7 @@ export const chatHandlers = [
     baseUrl,
     withAuth<never, ChatRequestBody, ChatResponseBody>(async ({ request }) => {
       await networkDelay();
-      let createdChat;
+
       try {
         const user = getAuthUser(request.headers);
 
@@ -270,7 +286,7 @@ export const chatHandlers = [
         });
 
         if (data.type === "GroupChat") {
-          createdChat = db.chat.create({
+          const createdChat = db.chat.create({
             owner: user,
             name: data.name,
             type: data.type,
@@ -289,8 +305,10 @@ export const chatHandlers = [
             roles,
             chat: createdChat,
           });
+
+          return HttpResponse.json({ id: createdChat.id }, { status: 200 });
         } else {
-          createdChat = db.chat.create({
+          const createdChat = db.chat.create({
             type: data.type,
             isPrivate: true,
           });
@@ -311,12 +329,14 @@ export const chatHandlers = [
               chat: createdChat,
             })
           );
+
+          return HttpResponse.json({ id: createdChat.id }, { status: 200 });
         }
       } catch (e) {
-        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
-      }
+        const error = e as NodeJS.ErrnoException;
 
-      return HttpResponse.json({ id: createdChat.id }, { status: 200 });
+        return HttpResponse.json({ message: error?.message || "Server Error" }, { status: 500 });
+      }
     })
   ),
   http.patch(
@@ -335,7 +355,9 @@ export const chatHandlers = [
 
         return HttpResponse.json({ id: chat?.id }, { status: 200 });
       } catch (e) {
-        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        const error = e as NodeJS.ErrnoException;
+
+        return HttpResponse.json({ message: error?.message || "Server Error" }, { status: 500 });
       }
     })
   ),

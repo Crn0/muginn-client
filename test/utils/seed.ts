@@ -1,4 +1,4 @@
-import { db, GetEntity } from "../mocks";
+import { db, type GetEntity } from "../mocks";
 
 export const seedUser = () => {
   const users = [

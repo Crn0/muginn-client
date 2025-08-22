@@ -49,7 +49,9 @@ export const userHandlers = [
           { status: 200 }
         );
       } catch (e) {
-        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        const error = e as NodeJS.ErrnoException;
+
+        return HttpResponse.json({ message: error?.message || "Server Error" }, { status: 500 });
       }
     })
   ),
@@ -79,7 +81,9 @@ export const userHandlers = [
           }
         );
       } catch (e) {
-        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        const error = e as NodeJS.ErrnoException;
+
+        return HttpResponse.json({ message: error?.message || "Server Error" }, { status: 500 });
       }
     })
   ),
@@ -122,7 +126,9 @@ export const userHandlers = [
 
         return new HttpResponse(null, { status: 204 });
       } catch (e) {
-        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        const error = e as NodeJS.ErrnoException;
+
+        return HttpResponse.json({ message: error?.message || "Server Error" }, { status: 500 });
       }
     })
   ),
@@ -158,7 +164,9 @@ export const userHandlers = [
           }
         );
       } catch (e) {
-        return HttpResponse.json({ message: e?.message || "Server Error" }, { status: 500 });
+        const error = e as NodeJS.ErrnoException;
+
+        return HttpResponse.json({ message: error?.message || "Server Error" }, { status: 500 });
       }
     })
   ),

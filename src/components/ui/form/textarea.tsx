@@ -4,13 +4,11 @@ import {
   type PropsWithChildren,
   type ReactNode,
 } from "react";
-import { useFormContext, type FieldError } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { cva } from "class-variance-authority";
 
 import type { VariantPropKeys } from "@/types";
 import type { ValidationError } from "@/errors";
-
-import { cn } from "@/utils";
 
 import { useInputErrorHandler } from "@/hooks";
 import { setInputRefs } from "./set-input-refs";

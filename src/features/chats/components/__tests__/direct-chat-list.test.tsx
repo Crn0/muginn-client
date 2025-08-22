@@ -32,7 +32,7 @@ const router = createMemoryRouter(
 beforeAll(() => {
   const { queryKey } = getChatsQueryOptions();
 
-  chats.push(...createChats({ type: "DirectChat", length: 10 }));
+  chats.push(...createChats({ type: "DirectChat", length: 10, isPrivate: false }));
 
   queryClient.setQueryData(queryKey, chats);
 
