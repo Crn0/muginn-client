@@ -3,12 +3,12 @@ import { Suspense, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { paths } from "../../configs";
-import { getAuthUserQueryOptions } from "../../lib";
-import { ErrorElement } from "../../components/errors";
-import { Spinner } from "../../components/ui/spinner";
+import { paths } from "@/configs";
+import { getAuthUserQueryOptions } from "@/lib";
+import { ErrorElement } from "@/components/errors";
+import { Spinner } from "@/components/ui/spinner";
 
-export default function ProtectedRoot() {
+export function ProtectedRoute() {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export default function ProtectedRoot() {
     }
 
     if (isError) {
-      navigate(paths.login.getHref(location.pathname));
+      navigate(paths.login.getHref({ redirectTo: location.pathname }));
     }
   }, [data, isError, navigate, location.pathname]);
 
