@@ -7,7 +7,7 @@ import { ErrorElement } from "@/components/errors";
 import { DashboardLayout } from "@/components/layouts";
 import { DashBoardSideBar, DashboardContent } from "@/features/dashboard/components";
 
-export function DashBoard() {
+export function DashBoardPage() {
   const params = useParams();
 
   const { data: chat } = useQuery({

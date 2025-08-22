@@ -13,7 +13,7 @@ import { setToken } from "@/stores";
 import { setupRouter } from "./mocks/utils/setup-router";
 import { GroupChatView } from "@/features/chats/components";
 import { DashBoardMe } from "@/features/dashboard/components";
-import { DashBoard } from "..";
+import { DashBoardPage } from "..";
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
@@ -33,7 +33,7 @@ const routes = [
     path: paths.protected.dashboard.root.getHref(),
     element: (
       <QueryClientProvider client={queryClient}>
-        <DashBoard />
+        <DashBoardPage />
       </QueryClientProvider>
     ),
     children: [
