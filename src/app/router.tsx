@@ -1,23 +1,25 @@
 import { ErrorBoundary } from "react-error-boundary";
 import { createBrowserRouter } from "react-router-dom";
 
-import { paths } from "../configs";
-import queryClient from "./query-client";
-import protectedLoader from "./root/loader";
-import { clientLoader as silentLoginLoader } from "../features/auth/api/index";
+import { paths } from "@/configs";
+import { queryClient } from "./query-client";
+import { loader as protectedLoader } from "./protected/loader";
+import { clientLoader as silentLoginLoader } from "@/features/auth/api";
 
-import { ErrorElement, RouteErrorElement } from "../components/errors";
-import ProtectedRoot from "./root";
-import LoginPage from "../pages/login";
-import RegisterPage from "../pages/register";
-import UserSettingsPage from "../pages/user-settings";
-import ChatSettingsPage from "../pages/chat-settings";
-import SilentLoginPage from "../pages/silent-login";
-import DashBoardPage from "../pages/dashboard";
-import DashBoardMe from "../features/dashboard/components/dashboard-me";
-import GroupChatView from "../features/chats/components/group-chat-view";
+import { ErrorElement, RouteErrorElement } from "@/components/errors";
+import { ProtectedRoute } from "./protected";
+import {
+  LoginPage,
+  RegisterPage,
+  UserSettingsPage,
+  ChatSettingsPage,
+  SilentLoginPage,
+  DashBoardPage,
+} from "@/pages";
+import { DashBoardMe } from "@/features/dashboard/components";
+import { GroupChatView } from "@/features/chats/components";
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: paths.register.path,
     errorElement: <RouteErrorElement />,
@@ -38,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: paths.silentLogin.path,
-    loader: silentLoginLoader,
+    loader: silentLoginLoader(queryClient),
     errorElement: <RouteErrorElement />,
     element: <SilentLoginPage />,
   },
@@ -47,7 +49,7 @@ const router = createBrowserRouter([
     loader: protectedLoader(queryClient),
     element: (
       <ErrorBoundary FallbackComponent={ErrorElement}>
-        <ProtectedRoot />
+        <ProtectedRoute />
       </ErrorBoundary>
     ),
     errorElement: <RouteErrorElement />,
@@ -80,5 +82,3 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
-export default router;

@@ -4,12 +4,20 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 
-import queryClient from "./query-client";
+import { queryClient } from "./query-client";
+import { ErrorElement } from "@/components/errors";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function App() {
   return (
-    <Suspense fallback={<p>loading....</p>}>
-      <ErrorBoundary fallback={<p>error</p>}>
+    <Suspense
+      fallback={
+        <div>
+          <Spinner />
+        </div>
+      }
+    >
+      <ErrorBoundary fallbackRender={ErrorElement}>
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools />
           <Outlet />
