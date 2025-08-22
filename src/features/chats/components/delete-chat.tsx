@@ -5,7 +5,7 @@ import { useDeleteChat } from "../api";
 import { ConfirmationDialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-export default function DeleteChat() {
+export function DeleteChat() {
   const navigate = useNavigate();
 
   const { chatId } = useParams();
