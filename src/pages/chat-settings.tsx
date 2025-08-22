@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { useChat } from "../features/chats/api";
-import { useChatSettingsTabStore } from "../stores";
-import { ErrorElement, NotFound } from "../components/errors";
-import { SettingLayout } from "../components/layouts";
-import { ButtonTab } from "../components/ui/button";
-import { Spinner } from "../components/ui/spinner";
-import { DeleteChat, UpdateChatProfile } from "../features/chats/components";
+import { useChat } from "@/features/chats/api";
+import { useChatSettingsTabStore } from "@/stores";
+import { ErrorElement, NotFound } from "@/components/errors";
+import { SettingLayout, type SettingLayoutProps } from "@/components/layouts";
+import { ButtonTab } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { DeleteChat, UpdateChatProfile } from "@/features/chats/components";
 
 const leftNavButtons = [
   {
@@ -17,7 +17,7 @@ const leftNavButtons = [
     defaultContent: "profile",
     intent: "primary",
   },
-];
+] satisfies Pick<SettingLayoutProps, "leftNavButtons">["leftNavButtons"];
 
 const rightNavButtons = [
   {
@@ -27,7 +27,7 @@ const rightNavButtons = [
     button: ButtonTab,
     intent: "secondary",
   },
-];
+] satisfies Pick<SettingLayoutProps, "rightNavButtons">["rightNavButtons"];
 
 const contents = [
   {
@@ -36,20 +36,17 @@ const contents = [
   },
 ];
 
-export default function ChatSettingsPage() {
-  const { chatId } = useParams();
+export function ChatSettingsPage() {
+  const params = useParams();
 
-  const chatQuery = useChat(chatId);
+  const chatQuery = useChat(params.chatId ?? "");
 
   const leftTab = useChatSettingsTabStore((s) => s.leftTab);
-  const setTabs = useChatSettingsTabStore((s) => s.setTabs);
   const rightTab = useChatSettingsTabStore((s) => s.rightTab);
+  const setleftTab = useChatSettingsTabStore((s) => s.setLeftTab);
   const setRightTab = useChatSettingsTabStore((s) => s.setRightTab);
 
   const ActiveContent = contents.find(({ section }) => section === rightTab)?.content;
-
-  const handleLeftTabChange = (name, defaultContent) =>
-    setTabs({ leftTab: name, rightTab: defaultContent });
 
   if (chatQuery.isError) {
     return <NotFound />;
@@ -69,7 +66,7 @@ export default function ChatSettingsPage() {
         id='chat-settings'
         title='Chat Settings'
         leftTab={leftTab}
-        setLeftTab={handleLeftTabChange}
+        setLeftTab={setleftTab}
         rightTab={rightTab}
         setRightTab={setRightTab}
         leftNavButtons={leftNavButtons}

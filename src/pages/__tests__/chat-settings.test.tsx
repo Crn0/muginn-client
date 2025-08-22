@@ -3,15 +3,15 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { screen, waitFor, within } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import setupRouter from "./mocks/utils/setup-router";
-import { useGetUser } from "../../lib/auth";
-import { getChatsQueryOptions } from "../../features/chats/api";
-import { paths } from "../../configs/index";
-import { setToken } from "../../stores";
+import { setupRouter } from "./mocks/utils/setup-router";
+import { useGetUser } from "@/lib/auth";
+import { getChatsQueryOptions, type TChat } from "@/features/chats/api";
+import { paths } from "@/configs/index";
+import { setToken } from "@/stores";
 import { generateAccessToken } from "../../../test/utils/data-generator";
 import { getChat } from "./data";
-import { Spinner } from "../../components/ui/spinner";
-import ChatSettingsPage from "../chat-settings";
+import { Spinner } from "@/components/ui/spinner";
+import { ChatSettingsPage } from "..";
 
 function Protected() {
   const userQuery = useGetUser();
@@ -23,7 +23,7 @@ function Protected() {
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
-let chat;
+let chat: TChat;
 
 const routes = [
   {
@@ -46,7 +46,7 @@ const routes = [
   },
 ];
 
-const createRouter = (chatId) =>
+const createRouter = (chatId: string) =>
   createMemoryRouter(routes, {
     initialEntries: [paths.protected.chatSettings.getHref({ chatId })],
   });
@@ -96,7 +96,7 @@ describe("Chat Settings Page", () => {
 
         expect(name).toBeTruthy();
 
-        expect(screen.getByText(name)).toBeInTheDocument();
+        expect(screen.getByText(name as string)).toBeInTheDocument();
       });
     });
 
