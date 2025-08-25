@@ -20,12 +20,9 @@ export const initPolicyCheck =
   }) => {
     const policy = policies[resource]?.[action];
 
-    if (!policy) {
-      throw new Error(`Invalid resource-action pair: ${String(resource)}.${String(action)}`);
-    }
     if (typeof policy === "boolean") return policy;
 
     if (typeof policy === "function") return policy(user, data, environment);
 
-    throw new Error(`Missing data for policy check on ${String(resource)}.${String(action)}`);
+    throw new Error(`Invalid resource-action pair: ${String(resource)}.${String(action)}`);
   };
